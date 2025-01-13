@@ -19,7 +19,6 @@ const Layout = () => {
     const links = navItems.map((item) => (
         <Link
             className={`flex items-center p-3 space-x-2 active:bg-blue-200/80 text-sm rounded transition-all  mb-2 ${item.label === active ? "text-blue-500 bg-blue-100" : "hover:bg-gray-100"}`}
-            data-active={item.label === active || undefined}
             to={item.link}
             key={item.label}
             onClick={() => {

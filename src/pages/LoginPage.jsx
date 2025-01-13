@@ -3,20 +3,24 @@ import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/Auth";
+import { useUserStore } from "../stores/UserStore";
 
 const LoginPage = () => {
+    const { isAuthenticated, setToken } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         const { email, password } = data;
+
         await AuthService.login(email, password)
-            .then(() => {
+            .then(({ token }) => {
                 notifications.show({
                     title: "Đăng nhập thành công!",
                 });
                 navigate("/main");
+                setToken(token);
             })
             .catch((err) => {
                 console.error(err);

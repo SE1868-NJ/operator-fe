@@ -8,6 +8,7 @@ import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <LoginPage />,
+        errorElement: <ErrorPage />,
     },
     {
         path: "/main/",
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/roles",
                 element: <RolesPage />,
+            },
+            {
+                path: "*",
+                element: <ErrorPage />,
             },
         ],
     },

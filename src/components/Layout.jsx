@@ -1,8 +1,11 @@
 import { AppShell } from "@mantine/core";
 import { People } from "iconsax-react";
 import { UserEdit } from "iconsax-react";
+import { ArrowLeft } from "iconsax-react";
+import { ArrowRight } from "iconsax-react";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useNavbarStore } from "../stores/NavbarStore";
 
 const navItems = [
     { link: "/main/users", label: "Users management", icon: UserEdit },
@@ -10,6 +13,7 @@ const navItems = [
 ];
 
 const Layout = () => {
+    const { isOpen, toggle } = useNavbarStore();
     const [active, setActive] = useState("Users management");
 
     const links = navItems.map((item) => (
@@ -23,7 +27,7 @@ const Layout = () => {
             }}
         >
             <item.icon className={""} stroke={1.5} />
-            <span>{item.label}</span>
+            {isOpen && <span>{item.label}</span>}
         </Link>
     ));
 
@@ -31,13 +35,26 @@ const Layout = () => {
         <AppShell
             padding="md"
             navbar={{
-                width: 300,
                 breakpoint: "sm",
+                width: isOpen ? 300 : 80,
             }}
         >
-            <AppShell.Navbar className="h-screen p-2">
+            {/* Navbar */}
+            <AppShell.Navbar className="h-screen p-2 relative">
+                {/* list link */}
                 <div className={""}>{links}</div>
+
+                {/* button toogle navbar */}
+                <button
+                    type="button"
+                    onClick={toggle}
+                    className="absolute bottom-0 flex items-center justify-center right-0 left-0 py-4 hover:bg-blue-200"
+                >
+                    {isOpen ? <ArrowLeft /> : <ArrowRight />}
+                </button>
             </AppShell.Navbar>
+
+            {/* Main App */}
             <AppShell.Main>
                 <Outlet />
             </AppShell.Main>

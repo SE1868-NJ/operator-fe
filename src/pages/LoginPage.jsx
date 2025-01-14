@@ -1,6 +1,5 @@
 import { Button, Input } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/Auth";
@@ -11,14 +10,14 @@ const LoginPage = () => {
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const navigate = useNavigate();
-    const { isAuthenticated } = useUserStore();
 
     //  if authenticated, navigate to dashboard
-    useEffect(() => {
-        if (!isAuthenticated) navigate("/main");
-    }, [isAuthenticated, navigate]);
+    // useEffect(() => {
+    //     if (!isAuthenticated) navigate("/main");
+    // }, [isAuthenticated, navigate]);
 
     const onSubmit = async (data) => {
+        // destructuring
         const { email, password } = data;
 
         await AuthService.login(email, password)
@@ -32,7 +31,9 @@ const LoginPage = () => {
             .catch((err) => {
                 console.error(err);
                 notifications.show({
-                    title: "Đã xảy ra lỗi trong quá trình đăng nhập!",
+                    color: "red",
+                    title: "Notification with custom styles",
+                    message: "It is red",
                 });
             });
     };
@@ -51,7 +52,9 @@ const LoginPage = () => {
                         required: "Không được để trống mục này!",
                     })}
                 />
-                {Boolean(errors?.email?.message) && errors?.email?.message}
+                <p className="text-blue-300">
+                    {Boolean(errors?.email?.message) && errors?.email?.message}
+                </p>
             </div>
             <div>
                 <label htmlFor="password">Password</label>

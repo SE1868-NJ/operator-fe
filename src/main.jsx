@@ -8,10 +8,10 @@ import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -22,15 +22,14 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <LoginPage />,
-        // errorElement: <ErrorPage />,
+    },
+    {
+        path: "/signup",
+        element: <SignUpPage />,
     },
     {
         path: "/main/",
-        element: (
-            <ProtectedRoute>
-                <Layout />
-            </ProtectedRoute>
-        ),
+        element: <Layout />,
         children: [
             {
                 path: "/main/",
@@ -56,9 +55,13 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
+        {/* khong can quan tam */}
         <QueryClientProvider client={queryClient}>
+            {/* provider cua thu vien ui */}
             <MantineProvider theme={theme}>
+                {/* toast thong bao */}
                 <Notifications />
+                {/* routes */}
                 <RouterProvider router={router} />
             </MantineProvider>
         </QueryClientProvider>

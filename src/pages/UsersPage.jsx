@@ -1,5 +1,5 @@
 const UsersPage = () => {
-    return <div>Users Management Page</div>;
+    return <div>Tran Van Khuyen</div>;
 };
 
 export default UsersPage;

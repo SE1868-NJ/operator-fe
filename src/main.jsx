@@ -10,6 +10,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import OperatorsDetailPage from "./pages/OperatorsDetailPage.jsx";
+import OperatorsPage from "./pages/OperatorsPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
             {
                 path: "/main/roles",
                 element: <RolesPage />,
+            },
+            {
+                path: "/main/operators",
+                element: <OperatorsPage />,
+            },
+            {
+                path: "/main/operators/:id", // Dynamic route with operator ID
+                element: <OperatorsDetailPage />,
             },
             {
                 path: "*",

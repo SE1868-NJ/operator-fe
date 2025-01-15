@@ -1,8 +1,3 @@
-// const SignUpPage = () => {
-//   return <div className="bg-blue-200">Sign up page.</div>;
-// };
-
-// export default SignUpPage;
 import { Button, Input } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
@@ -10,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "../services/Auth";
 import { useUserStore } from "../stores/UserStore";
 
-const SignUpPage = () => {
+const ChangePassPage = () => {
     const { setToken } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
@@ -23,12 +18,12 @@ const SignUpPage = () => {
 
     const onSubmit = async (data) => {
         // destructuring
-        const { name, email, password, passwordconfirmation } = data;
+        const { password, newpassword, passwordconfirmation } = data;
 
-        await AuthService.login(name, email, password, passwordconfirmation)
+        await AuthService.login(password, newpassword, passwordconfirmation)
             .then(({ token }) => {
                 notifications.show({
-                    title: "Đăng ký thành công!",
+                    title: "Đổi mật khẩu thành công!",
                 });
                 navigate("/main");
                 setToken(token);
@@ -37,7 +32,7 @@ const SignUpPage = () => {
                 console.error(err);
                 notifications.show({
                     color: "red",
-                    title: "Đăng ký thất bại!",
+                    title: "Đổi mật khẩu thất bại!",
                     message: "Vui lòng thử lại!",
                 });
             });
@@ -47,53 +42,12 @@ const SignUpPage = () => {
         <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 bg-white p-8 shadow-lg rounded-lg">
                 <h2 className="text-center text-2xl font-bold tracking-wide text-gray-800">
-                    Sign Up
+                    Change Password
                 </h2>
-                <p className="text-center text-sm text-gray-600 mt-2">
-                    You don't have an account?{" "}
-                    <a
-                        href="http://localhost:5173/"
-                        className="text-blue-600 hover:text-blue-700 hover:underline"
-                    >
-                        Sign in here
-                    </a>
-                </p>
                 <form onSubmit={handleSubmit(onSubmit)} className="my-8 text-sm">
                     <div className="flex flex-col my-4">
-                        <label htmlFor="name" className="text-gray-700">
-                            Name
-                        </label>
-                        <Input
-                            id="name"
-                            placeholder="Name"
-                            {...register("name", {
-                                required: "Không được để trống mục này!",
-                            })}
-                            className="mt-2"
-                        />
-                        <p className="text-red-500 text-xs mt-1">
-                            {Boolean(errors?.name?.message) && errors?.name?.message}
-                        </p>
-                    </div>
-                    <div className="flex flex-col my-4">
-                        <label htmlFor="email" className="text-gray-700">
-                            Email
-                        </label>
-                        <Input
-                            id="email"
-                            placeholder="abc@gmail.com"
-                            {...register("email", {
-                                required: "Không được để trống mục này!",
-                            })}
-                            className="mt-2"
-                        />
-                        <p className="text-red-500 text-xs mt-1">
-                            {Boolean(errors?.email?.message) && errors?.email?.message}
-                        </p>
-                    </div>
-                    <div className="flex flex-col my-4">
                         <label htmlFor="password" className="text-gray-700">
-                            Password
+                            Current Password
                         </label>
                         <Input
                             id="password"
@@ -109,13 +63,30 @@ const SignUpPage = () => {
                         </p>
                     </div>
                     <div className="flex flex-col my-4">
+                        <label htmlFor="newpassword" className="text-gray-700">
+                            New Password
+                        </label>
+                        <Input
+                            id="newpassword"
+                            type="newpassword"
+                            placeholder="Enter your password"
+                            {...register("newpassword", {
+                                required: "Không được để trống mục này!",
+                            })}
+                            className="mt-2"
+                        />
+                        <p className="text-red-500 text-xs mt-1">
+                            {Boolean(errors?.newpassword?.message) && errors?.newpassword?.message}
+                        </p>
+                    </div>
+                    <div className="flex flex-col my-4">
                         <label htmlFor="passwordconfirmation" className="text-gray-700">
                             Password Confirmation
                         </label>
                         <Input
                             id="passwordconfirmation"
                             type="passwordconfirmation"
-                            placeholder="Enter your password confirmation"
+                            placeholder="Enter your password again"
                             {...register("passwordconfirmation", {
                                 required: "Không được để trống mục này!",
                             })}
@@ -126,36 +97,12 @@ const SignUpPage = () => {
                                 errors?.passwordconfirmation?.message}
                         </p>
                     </div>
-                    <div className="flex items-center my-4">
-                        <input
-                            type="checkbox"
-                            id="remember_me"
-                            className="mr-2 focus:ring-0 rounded"
-                        />
-                        <label htmlFor="remember_me" className="text-gray-700">
-                            I accept the{" "}
-                            <a
-                                href="/"
-                                className="text-blue-600 hover:text-blue-700 hover:underline"
-                            >
-                                terms
-                            </a>{" "}
-                            and{" "}
-                            <a
-                                href="/"
-                                className="text-blue-600 hover:text-blue-700 hover:underline"
-                            >
-                                privacy policy
-                            </a>
-                        </label>
-                    </div>
-
                     <div className="my-4 flex items-center justify-end">
                         <Button
                             type="submit"
                             className="bg-blue-600 hover:bg-blue-700 px-8 py-2 text-white rounded-lg transition duration-150"
                         >
-                            Sign up
+                            Change Password
                         </Button>
                     </div>
                 </form>
@@ -199,7 +146,7 @@ const SignUpPage = () => {
                                 fill="#ea4335"
                             />
                         </svg>
-                        <span>Sign up with Google</span>
+                        <span>Sign in with Google</span>
                     </a>
                 </div>
             </div>
@@ -207,4 +154,4 @@ const SignUpPage = () => {
     );
 };
 
-export default SignUpPage;
+export default ChangePassPage;

@@ -32,8 +32,8 @@ const LoginPage = () => {
                 console.error(err);
                 notifications.show({
                     color: "red",
-                    title: "Notification with custom styles",
-                    message: "It is red",
+                    title: "Đăng nhập thất bại!",
+                    message: "Vui lòng thử lại!",
                 });
             });
     };
@@ -46,7 +46,10 @@ const LoginPage = () => {
                 </h2>
                 <p className="text-center text-sm text-gray-600 mt-2">
                     You don't have an account?{" "}
-                    <a href="/" className="text-blue-600 hover:text-blue-700 hover:underline">
+                    <a
+                        href="http://localhost:5173/signup"
+                        className="text-blue-600 hover:text-blue-700 hover:underline"
+                    >
                         Sign up here
                     </a>
                 </p>

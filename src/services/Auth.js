@@ -13,6 +13,12 @@ const AuthService = {
             });
         return token;
     },
+    async getSession() {
+        const payload = instance.get("/auth/session").then(({ data }) => {
+            return data;
+        });
+        return payload;
+    },
 };
 
 export default AuthService;

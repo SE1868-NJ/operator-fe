@@ -13,6 +13,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import OperatorsPage from "./pages/OperatorsPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/roles",
                 element: <RolesPage />,
+            },
+            {
+                path: "/main/operators",
+                element: <OperatorsPage />,
             },
             {
                 path: "*",

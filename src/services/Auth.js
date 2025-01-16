@@ -19,6 +19,23 @@ const AuthService = {
         });
         return payload;
     },
+    async register(data, date) {
+        const { email, firstname, lastname, password, phone, gender } = data;
+        const user = await instance
+            .post("/auth/register", {
+                email,
+                firstname,
+                lastname,
+                password,
+                phone,
+                dob: date,
+                gender,
+            })
+            .then(({ data }) => {
+                return data;
+            });
+        return user;
+    },
 };
 
 export default AuthService;

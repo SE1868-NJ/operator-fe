@@ -48,7 +48,7 @@ const LoginPage = () => {
                     Sign In
                 </h2>
                 <p className="text-center text-sm text-gray-600 mt-2">
-                    You don&apost have an account?{" "}
+                    You don&apost; have an account?{" "}
                     <a
                         href="http://localhost:5173/signup"
                         className="text-blue-600 hover:text-blue-700 hover:underline"

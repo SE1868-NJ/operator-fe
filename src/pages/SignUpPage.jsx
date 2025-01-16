@@ -1,80 +1,98 @@
-// const SignUpPage = () => {
-//   return <div className="bg-blue-200">Sign up page.</div>;
-// };
-
-// export default SignUpPage;
-import { Button, Input } from "@mantine/core";
+import { Button, Input, NativeSelect, Select } from "@mantine/core";
+import { DateInput, DatePicker } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../services/Auth";
 import { useUserStore } from "../stores/UserStore";
 
 const SignUpPage = () => {
+    const [date, setDate] = useState(null);
     const { setToken } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const navigate = useNavigate();
 
-    //  if authenticated, navigate to dashboard
-    // useEffect(() => {
-    //     if (!isAuthenticated) navigate("/main");
-    // }, [isAuthenticated, navigate]);
-
     const onSubmit = async (data) => {
-        // destructuring
-        const { name, email, password, passwordconfirmation } = data;
-
-        await AuthService.login(name, email, password, passwordconfirmation)
-            .then(({ token }) => {
+        const user = await AuthService.register(data, date)
+            .then((user) => {
                 notifications.show({
-                    title: "Đăng ký thành công!",
+                    title: "Đăng ký tải khoản thành công!",
+                    message: "Đang chuyển hướng đến trang đăng nhập!",
                 });
-                navigate("/main");
-                setToken(token);
+                // navigate to login page
+                navigate("/");
+                return user;
             })
             .catch((err) => {
-                console.error(err);
-                notifications.show({
-                    color: "red",
-                    title: "Đăng ký thất bại!",
-                    message: "Vui lòng thử lại!",
-                });
+                if (err.status === 409) {
+                    notifications.show({
+                        color: "red",
+                        title: "Email này đã được sử dụng để đăng ký!",
+                        message: "Vui lòng thử lại!",
+                    });
+                } else {
+                    notifications.show({
+                        color: "red",
+                        title: "Đã có lỗi xảy ra!",
+                        message: "Vui lòng thử lại!",
+                    });
+                    console.log(err);
+                }
             });
+        console.log(user);
     };
 
     return (
         <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 bg-white p-8 shadow-lg rounded-lg">
+            <div className="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 bg-white p-8 shadow-lg rounded-lg">
                 <h2 className="text-center text-2xl font-bold tracking-wide text-gray-800">
-                    Sign Up
+                    Đăng ký tài khoản
                 </h2>
                 <p className="text-center text-sm text-gray-600 mt-2">
-                    You don't have an account?{" "}
-                    <a
-                        href="http://localhost:5173/"
-                        className="text-blue-600 hover:text-blue-700 hover:underline"
-                    >
-                        Sign in here
-                    </a>
+                    Bạn đã có tài khoản?{" "}
+                    <Link to="/" className="text-blue-600 hover:text-blue-700 hover:underline">
+                        Đăng nhập
+                    </Link>
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)} className="my-8 text-sm">
-                    <div className="flex flex-col my-4">
-                        <label htmlFor="name" className="text-gray-700">
-                            Name
-                        </label>
-                        <Input
-                            id="name"
-                            placeholder="Name"
-                            {...register("name", {
-                                required: "Không được để trống mục này!",
-                            })}
-                            className="mt-2"
-                        />
-                        <p className="text-red-500 text-xs mt-1">
-                            {Boolean(errors?.name?.message) && errors?.name?.message}
-                        </p>
+                    {/* firstname + lastname fields */}
+                    <div className="grid grid-cols-2 gap-x-3">
+                        <div className="flex flex-col">
+                            <label htmlFor="lastname" className="text-gray-700">
+                                Họ
+                            </label>
+                            <Input
+                                id="lastname"
+                                placeholder="Nguyễn"
+                                {...register("lastname", {
+                                    required: "Không được để trống mục này!",
+                                })}
+                                className="mt-2"
+                            />
+                            <p className="text-red-500 text-xs mt-1">
+                                {Boolean(errors?.name?.message) && errors?.name?.message}
+                            </p>
+                        </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="firstname" className="text-gray-700">
+                                Tên
+                            </label>
+                            <Input
+                                id="firstname"
+                                placeholder="Khuyến"
+                                {...register("firstname", {
+                                    required: "Không được để trống mục này!",
+                                })}
+                                className="mt-2"
+                            />
+                            <p className="text-red-500 text-xs mt-1">
+                                {Boolean(errors?.name?.message) && errors?.name?.message}
+                            </p>
+                        </div>
                     </div>
+                    {/* email */}
                     <div className="flex flex-col my-4">
                         <label htmlFor="email" className="text-gray-700">
                             Email
@@ -91,9 +109,27 @@ const SignUpPage = () => {
                             {Boolean(errors?.email?.message) && errors?.email?.message}
                         </p>
                     </div>
+                    {/* phone */}
+                    <div className="flex flex-col my-4">
+                        <label htmlFor="phone" className="text-gray-700">
+                            Số điện thoại
+                        </label>
+                        <Input
+                            id="phone"
+                            placeholder="0912345678"
+                            type="number"
+                            {...register("phone", {
+                                required: "Không được để trống mục này!",
+                            })}
+                            className="mt-2"
+                        />
+                        <p className="text-red-500 text-xs mt-1">
+                            {Boolean(errors?.phone?.message) && errors?.phone?.message}
+                        </p>
+                    </div>
                     <div className="flex flex-col my-4">
                         <label htmlFor="password" className="text-gray-700">
-                            Password
+                            Mật khẩu
                         </label>
                         <Input
                             id="password"
@@ -108,23 +144,37 @@ const SignUpPage = () => {
                             {Boolean(errors?.password?.message) && errors?.password?.message}
                         </p>
                     </div>
-                    <div className="flex flex-col my-4">
-                        <label htmlFor="passwordconfirmation" className="text-gray-700">
-                            Password Confirmation
-                        </label>
-                        <Input
-                            id="passwordconfirmation"
-                            type="passwordconfirmation"
-                            placeholder="Enter your password confirmation"
-                            {...register("passwordconfirmation", {
-                                required: "Không được để trống mục này!",
-                            })}
-                            className="mt-2"
-                        />
-                        <p className="text-red-500 text-xs mt-1">
-                            {Boolean(errors?.passwordconfirmation?.message) &&
-                                errors?.passwordconfirmation?.message}
-                        </p>
+                    {/* gender + dob fields */}
+                    <div className="grid grid-cols-2 gap-x-3">
+                        <div className="flex flex-col my-4">
+                            <label htmlFor="gender" className="text-gray-700">
+                                Giới tính
+                            </label>
+                            <NativeSelect
+                                {...register("gender", {
+                                    required: "Không được để trống mục này!",
+                                })}
+                            >
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                                <option value="other">Khác</option>
+                            </NativeSelect>
+                            <p className="text-red-500 text-xs mt-1">
+                                {Boolean(errors?.gender?.message) && errors?.gender?.message}
+                            </p>
+                        </div>
+                        <div className="flex flex-col my-4">
+                            <label htmlFor="dob" className="text-gray-700">
+                                Ngày sinh
+                            </label>
+                            {/* <DateInput placeholder="01-01-2000" /> */}
+                            <DateInput value={date} onChange={setDate} />
+
+                            <p className="text-red-500 text-xs mt-1">
+                                {Boolean(errors?.passwordconfirmation?.message) &&
+                                    errors?.passwordconfirmation?.message}
+                            </p>
+                        </div>
                     </div>
                     <div className="flex items-center my-4">
                         <input
@@ -149,7 +199,6 @@ const SignUpPage = () => {
                             </a>
                         </label>
                     </div>
-
                     <div className="my-4 flex items-center justify-end">
                         <Button
                             type="submit"

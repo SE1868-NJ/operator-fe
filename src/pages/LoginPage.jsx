@@ -63,6 +63,7 @@ const LoginPage = () => {
                         </label>
                         <Input
                             id="email"
+                            type="email"
                             placeholder="abc@gmail.com"
                             {...register("email", {
                                 required: "Không được để trống mục này!",

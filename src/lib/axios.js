@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/api/v1";
+const baseURL = "https://auth-backend-core.onrender.com/api/v1";
 
 const instance = axios.create({
     baseURL: baseURL,

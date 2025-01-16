@@ -10,6 +10,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import ChangePassPage from "./pages/ChangePassPage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
     {
         path: "/otp",
         element: <OTPPage />,
+    },
+    {
+        path: "/forgotpass",
+        element: <ForgotPassPage />,
     },
     {
         path: "/main/",

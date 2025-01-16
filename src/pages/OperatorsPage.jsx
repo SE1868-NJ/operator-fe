@@ -4,8 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 const OperatorsPage = () => {
     const [operators, setOperators] = useState([
-        { id: 1, name: "NgaNT", email: "ngant@gmail.com", role: "Operator", status: "Active" },
-        { id: 2, name: "HongHV", email: "honghv@gmail.com", role: "Operator", status: "Deactive" },
+        {
+            id: 1,
+            name: "NgaNT",
+            email: "ngant@gmail.com",
+            role: "Operator",
+            status: "Active",
+        },
+        {
+            id: 2,
+            name: "HongHV",
+            email: "honghv@gmail.com",
+            role: "Operator",
+            status: "Deactive",
+        },
     ]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentOperator, setCurrentOperator] = useState(null);

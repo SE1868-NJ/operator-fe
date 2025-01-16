@@ -51,6 +51,17 @@ const OTPPage = () => {
                             })}
                             className="mt-2"
                         />
+                        <p>
+                            Mã OTP đã được gửi đến Mail của bạn.{" "}
+                            <a
+                                href="https://mail.google.com/mail"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-blue-500 underline"
+                            >
+                                Kiểm tra
+                            </a>
+                        </p>
                         <p className="text-red-500 text-xs mt-1">
                             {Boolean(errors?.password?.message) && errors?.password?.message}
                         </p>

@@ -8,8 +8,11 @@ import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
+import ChangePassPage from "./pages/ChangePassPage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import OTPPage from "./pages/OTPPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -26,6 +29,18 @@ const router = createBrowserRouter([
     {
         path: "/signup",
         element: <SignUpPage />,
+    },
+    {
+        path: "/changepassword",
+        element: <ChangePassPage />,
+    },
+    {
+        path: "/otp",
+        element: <OTPPage />,
+    },
+    {
+        path: "/forgotpass",
+        element: <ForgotPassPage />,
     },
     {
         path: "/main/",

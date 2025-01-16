@@ -2,7 +2,7 @@ import { Button, Input } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import AuthService from "../services/Auth";
 
@@ -46,12 +46,12 @@ const LoginPage = () => {
                 </h2>
                 <p className="text-center text-sm text-gray-600 mt-2">
                     You don&apost; have an account?{" "}
-                    <a
-                        href="http://localhost:5173/signup"
+                    <Link
+                        to="/signup"
                         className="text-blue-600 hover:text-blue-700 hover:underline"
                     >
                         Sign up here
-                    </a>
+                    </Link>
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)} className="my-8 text-sm">
                     <div className="flex flex-col my-4">

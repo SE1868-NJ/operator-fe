@@ -1,5 +1,6 @@
 import { Button, Input } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/Auth";
@@ -12,9 +13,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     //  if authenticated, navigate to dashboard
-    // useEffect(() => {
-    //     if (!isAuthenticated) navigate("/main");
-    // }, [isAuthenticated, navigate]);
+    useEffect(() => {}, []);
 
     const onSubmit = async (data) => {
         // destructuring

@@ -6,33 +6,27 @@ import AuthService from "../services/Auth";
 import { useUserStore } from "../stores/UserStore";
 
 const OTPPage = () => {
-    const { setToken } = useUserStore();
+    const { email } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const navigate = useNavigate();
 
-    //  if authenticated, navigate to dashboard
-    // useEffect(() => {
-    //     if (!isAuthenticated) navigate("/main");
-    // }, [isAuthenticated, navigate]);
-
     const onSubmit = async (data) => {
         // destructuring
-        const { email, password } = data;
+        const { otp } = data;
 
-        await AuthService.login(email, password)
-            .then(({ token }) => {
+        await AuthService.verifyOTP(email, otp)
+            .then(() => {
                 notifications.show({
-                    title: "Nhập mã OTP thành công!",
+                    title: "Xác minh OTP thành công!",
                 });
-                navigate("/main");
-                setToken(token);
+                navigate("/");
             })
             .catch((err) => {
                 console.error(err);
                 notifications.show({
                     color: "red",
-                    title: "Nhập mã OTP không thành công",
+                    title: "Mã OTP không chính xác!",
                     message: "Vui lòng thử lại!",
                 });
             });
@@ -46,14 +40,13 @@ const OTPPage = () => {
                 </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="my-8 text-sm">
                     <div className="flex flex-col my-4">
-                        <label htmlFor="password" className="text-gray-700">
+                        <label htmlFor="otp" className="text-gray-700">
                             Nhập mã OTP
                         </label>
                         <Input
-                            id="password"
-                            type="password"
-                            placeholder="Enter your OTP code"
-                            {...register("password", {
+                            id="otp"
+                            placeholder="Mã OTP"
+                            {...register("otp", {
                                 required: "Không được để trống mục này!",
                             })}
                             className="mt-2"
@@ -67,7 +60,7 @@ const OTPPage = () => {
                             type="submit"
                             className="bg-blue-600 hover:bg-blue-700 px-8 py-2 text-white rounded-lg transition duration-150"
                         >
-                            Confirm
+                            Xác nhận
                         </Button>
                     </div>
                 </form>

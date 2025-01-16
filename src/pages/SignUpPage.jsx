@@ -1,5 +1,5 @@
-import { Button, Input, NativeSelect, Select } from "@mantine/core";
-import { DateInput, DatePicker } from "@mantine/dates";
+import { Button, Input, NativeSelect } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -9,8 +9,8 @@ import { useUserStore } from "../stores/UserStore";
 
 const SignUpPage = () => {
     const [date, setDate] = useState(null);
-    const { setToken } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
+    const { setEmail } = useUserStore();
     const { errors } = formState;
     const navigate = useNavigate();
 
@@ -21,8 +21,9 @@ const SignUpPage = () => {
                     title: "Đăng ký tải khoản thành công!",
                     message: "Đang chuyển hướng đến trang đăng nhập!",
                 });
-                // navigate to login page
-                navigate("/");
+                setEmail(data?.email);
+                // navigate to otp page
+                navigate("/otp");
                 return user;
             })
             .catch((err) => {

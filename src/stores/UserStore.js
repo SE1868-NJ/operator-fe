@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
-    token: "",
-    setToken: (token) =>
+    email: "",
+    setEmail: (email) =>
         set(() => ({
-            token: token,
+            email: email,
         })),
-    removeToken: () =>
+    removeEmail: () =>
         set(() => ({
-            token: "",
+            email: "",
         })),
 }));

@@ -36,6 +36,16 @@ const AuthService = {
             });
         return user;
     },
+    async verifyOTP(email, otp) {
+        await instance
+            .post("/auth/verify-otp", {
+                email,
+                otp,
+            })
+            .then((res) => {
+                console.log(res);
+            });
+    },
 };
 
 export default AuthService;

@@ -5,11 +5,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import AuthService from "../services/Auth";
-import { useUserStore } from "../stores/UserStore";
 
 const LoginPage = () => {
     const { error } = useCurrentUser();
-    const { setToken } = useUserStore();
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const navigate = useNavigate();
@@ -24,12 +22,11 @@ const LoginPage = () => {
         const { email, password } = data;
 
         await AuthService.login(email, password)
-            .then(({ token }) => {
+            .then(() => {
                 notifications.show({
                     title: "Đăng nhập thành công!",
                 });
                 navigate("/main");
-                setToken(token);
             })
             .catch((err) => {
                 console.error(err);

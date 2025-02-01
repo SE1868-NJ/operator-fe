@@ -1,4 +1,4 @@
-# Auth-FrontEnd-Core
+# Operator-Dashboard
 
 ---
 
@@ -18,8 +18,8 @@ Follow these steps to clone and run the project locally:
 ### 1. Clone the Repository
 
 ```
-git clone https://github.com/SE1868-NJ/auth-frontend-core.git
-cd auth-frontend-core
+git clone https://github.com/SE1868-NJ/operator-fe.git
+cd operator-dashboard
 ```
 
 ### 2. Install Dependencies

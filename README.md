@@ -19,7 +19,7 @@ Follow these steps to clone and run the project locally:
 
 ```
 git clone https://github.com/SE1868-NJ/operator-fe.git
-cd operator-dashboard
+cd operator-fe
 ```
 
 ### 2. Install Dependencies

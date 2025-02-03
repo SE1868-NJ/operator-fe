@@ -7,8 +7,9 @@ const shopsData = [
     {
         id: 1,
         name: "Shop A",
-        ownner: "Owner A",
-        email: "nguyenvanA@gmai.com",
+        owner: "Owner A",
+        email: "nguyenvanA@gmail.com",
+        mobile: "0123456789",
         avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
         description: "Delicious food and drinks",
         address: "123 Main St",
@@ -18,8 +19,9 @@ const shopsData = [
     {
         id: 2,
         name: "Shop B",
-        ownner: "Owner B",
-        email: "nguyenvanB@gmai.com",
+        owner: "Owner B",
+        email: "nguyenvanB@gmail.com",
+        mobile: "0123456789",
         avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
         description: "Delicious food and drinks",
         address: "456 Elm St",
@@ -29,24 +31,26 @@ const shopsData = [
     {
         id: 3,
         name: "Shop C",
-        ownner: "Owner C",
-        email: "nguyenvanC@gmai.com",
+        owner: "Owner C",
+        email: "nguyenvanC@gmail.com",
+        mobile: "0123456789",
         avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
         description: "Delicious food and drinks",
         address: "789 Oak St",
         createdAt: "2023-03-01",
-        status: "Active",
+        status: "Deactive",
     },
     {
         id: 4,
         name: "Shop D",
-        ownner: "Owner D",
-        email: "nguyenvanD@gmai.com",
+        owner: "Owner D",
+        email: "nguyenvanD@gmail.com",
+        mobile: "0123456789",
         avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
         description: "Delicious food and drinks",
         address: "101 Pine St",
         createdAt: "2023-04-01",
-        status: "Active",
+        status: "Deactive",
     },
 ];
 
@@ -69,7 +73,7 @@ export default function ShopsPage() {
 
     return (
         <div className="flex h-screen">
-            <Sidebar />
+            <Sidebar className="fixed top-0 left-0 h-full" />
             <div className="flex-1 max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
                 <h1 className="text-2xl font-bold mb-4">All Shop List</h1>
 
@@ -121,12 +125,13 @@ export default function ShopsPage() {
                         <tr className="bg-gray-200">
                             <th className="border p-2">ID</th>
                             <th className="border p-2">Name</th>
-                            <th className="border p-2">Owner</th>
+                            <th className="border p-2">Seller</th>
                             <th className="border p-2">Email</th>
+                            <th className="border p-2">Mobile</th>
                             {/* <th className="border p-2">Avatar</th> */}
                             <th className="border p-2">Description</th>
                             <th className="border p-2">Address</th>
-                            <th className="border p-2">Created At</th>
+                            <th className="border p-2">Joined Date</th>
                             <th className="border p-2">Status</th>
                             <th className="border p-2">Actions</th>
                         </tr>
@@ -136,8 +141,9 @@ export default function ShopsPage() {
                             <tr key={shop.id} className="border">
                                 <td className="border p-2">{shop.id}</td>
                                 <td className="border p-2">{shop.name}</td>
-                                <td className="border p-2">{shop.ownner}</td>
+                                <td className="border p-2">{shop.owner}</td>
                                 <td className="border p-2">{shop.email}</td>
+                                <td className="border p-2">{shop.mobile}</td>
                                 {/* <td className="border p-2">
                                     <img
                                         src={shop.avatar}
@@ -152,8 +158,8 @@ export default function ShopsPage() {
                                     <span
                                         className={
                                             shop.status === "Active"
-                                                ? "text-green-500"
-                                                : "text-red-500"
+                                                ? "text-green-700 bg-green-100 p-1 rounded"
+                                                : "text-red-700 bg-red-100 p-1 rounded"
                                         }
                                     >
                                         {shop.status}
@@ -163,7 +169,7 @@ export default function ShopsPage() {
                                     <button
                                         type="button"
                                         className="text-blue-500 underline"
-                                        onClick={() => navigate(`/shops/${shop.id}`)}
+                                        onClick={() => navigate(`/shop/${shop.id}`)}
                                     >
                                         View
                                     </button>

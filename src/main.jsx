@@ -16,6 +16,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
     {
         path: "/shopmanagement",
         element: <ShopsPage />,
+    },
+    {
+        path: "/shop/:id",
+        element: <ShopProfileDetail />,
     },
     {
         path: "/main/",

@@ -10,14 +10,14 @@ export default function Sidebar() {
             <div className="p-4">
                 <div className="mb-2">
                     <Link
-                        to="/shop-management"
+                        to="/shopmanagement"
                         className="block py-2 px-4 hover:bg-gray-700 rounded"
                     >
                         Shop Management
                     </Link>
                     <div className="ml-4">
                         <Link
-                            to="/shop-management/all-shop"
+                            to="/shopmanagement"
                             className="block py-2 px-4 hover:bg-gray-700 rounded"
                         >
                             All Shop

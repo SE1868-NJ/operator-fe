@@ -86,7 +86,7 @@ const shopsData = [
     },
 ];
 
-export default function ShopManagementPage() {
+export default function ShopsPage() {
     const [searchName, setSearchName] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");

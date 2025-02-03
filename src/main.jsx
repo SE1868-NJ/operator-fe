@@ -16,7 +16,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
-import ShipperManagementPage from "./pages/ShopsPage.jsx";
+import ShopsPage from "./pages/ShopsPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -46,8 +46,8 @@ const router = createBrowserRouter([
         element: <ForgotPassPage />,
     },
     {
-        path: "/shippermanagement",
-        element: <ShipperManagementPage />,
+        path: "/shopmanagement",
+        element: <ShopsPage />,
     },
     {
         path: "/main/",

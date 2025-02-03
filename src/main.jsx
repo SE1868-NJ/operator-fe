@@ -16,6 +16,8 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
+import PendingShopListPage from "./pages/PendingShopListPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
     {
         path: "/forgotpass",
         element: <ForgotPassPage />,
+    },
+    {
+        path: "/pendingshoplist/",
+        element: <PendingShopListPage />,
+    },
+    {
+        path: "/pendingshoplist/:id",
+        element: <PendingShopDetail />,
     },
     {
         path: "/main/",
@@ -76,7 +86,11 @@ createRoot(document.getElementById("root")).render(
                 <Notifications />
                 {/* routes */}
                 <DatesProvider
-                    settings={{ locale: "vn", firstDayOfWeek: 1, timezone: "Asia/Ho_Chi_Minh" }}
+                    settings={{
+                        locale: "vn",
+                        firstDayOfWeek: 1,
+                        timezone: "Asia/Ho_Chi_Minh",
+                    }}
                 >
                     <RouterProvider router={router} />
                 </DatesProvider>

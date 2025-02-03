@@ -13,6 +13,7 @@ const navItems = [
     { link: "/main/users", label: "Users management", icon: UserEdit },
     { link: "/main/roles", label: "Roles management", icon: People },
     { link: "/main/operators", label: "Operators management", icon: People },
+    { link: "/pendingshoplist", label: "Pending shop list", icon: People },
 ];
 
 const Layout = () => {

@@ -50,10 +50,10 @@ const router = createBrowserRouter([
         path: "/pendingshoplist/",
         element: <PendingShopListPage />,
     },
-    {
-        path: "/pendingshoplist/:id",
-        element: <PendingShopDetail />,
-    },
+    // {
+    //     path: "/pendingshoplist/:id",
+    //     element: <PendingShopDetail />,
+    // },
     {
         path: "/main/",
         element: <Layout />,
@@ -65,6 +65,14 @@ const router = createBrowserRouter([
             {
                 path: "/main/users",
                 element: <UsersPage />,
+            },
+            {
+                path: "/main/pendingshoplist/",
+                element: <PendingShopListPage />,
+            },
+            {
+                path: "/main/pendingshoplist/:id",
+                element: <PendingShopDetail />,
             },
             {
                 path: "*",

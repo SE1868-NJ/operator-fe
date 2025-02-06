@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         element: <ShipperList />,
     },
     {
-        path: "/shippers/:id",
+        path: "/shipper/:id",
         element: <ShipperDetails />,
     },
     {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useShippers } from "../hooks/useShippers";
 
 const shippersData = [
     {
@@ -54,6 +55,9 @@ export default function ShipperList() {
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const navigate = useNavigate();
+
+    const { data: shippers, isLoading, error } = useShippers();
+    console.log(shippers);
 
     const applyFilters = () => {
         return shippersData.filter((shipper) => {
@@ -110,7 +114,7 @@ export default function ShipperList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {applyFilters().map((shipper) => (
+                    {shippers.map((shipper) => (
                         <tr key={shipper.id} className="border">
                             <td className="border p-2">{shipper.id}</td>
                             <td className="border p-2">{shipper.name}</td>

@@ -73,7 +73,7 @@ export default function ShipperList() {
 
     return (
         <div className="mx-auto bg-white p-6">
-            <h1 className="text-2xl font-bold mb-4">Shipper List</h1>
+            <h1 className="text-2xl font-bold mb-4">Danh sách tất cả người giao hàng</h1>
 
             {/* Tìm kiếm và lọc */}
             <div className="flex gap-4 mb-4">
@@ -113,26 +113,34 @@ export default function ShipperList() {
                         <th className="border p-2">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {shippers.map((shipper) => (
-                        <tr key={shipper.id} className="border">
-                            <td className="border p-2">{shipper.id}</td>
-                            <td className="border p-2">{shipper.name}</td>
-                            <td className="border p-2">{shipper.phone}</td>
-                            <td className="border p-2">{shipper.email}</td>
-                            <td className="border p-2">{shipper.status}</td>
-                            <td className="border p-2">
-                                <button
-                                    type="button"
-                                    className="text-blue-500 underline"
-                                    onClick={() => navigate(`/main/shipper/${shipper.id}`)}
-                                >
-                                    View Details
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+                {isLoading ? (
+                    <tr>
+                        <td colSpan="6" className="text-center">
+                            Loading...
+                        </td>
+                    </tr>
+                ) : (
+                    <tbody>
+                        {shippers?.map((shipper) => (
+                            <tr key={shipper.id} className="border">
+                                <td className="border p-2">{shipper.id}</td>
+                                <td className="border p-2">{shipper.name}</td>
+                                <td className="border p-2">{shipper.phone}</td>
+                                <td className="border p-2">{shipper.email}</td>
+                                <td className="border p-2">{shipper.status}</td>
+                                <td className="border p-2">
+                                    <button
+                                        type="button"
+                                        className="text-blue-500 underline"
+                                        onClick={() => navigate(`/main/shipper/${shipper.id}`)}
+                                    >
+                                        View Details
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                )}
             </table>
         </div>
     );

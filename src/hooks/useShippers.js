@@ -7,3 +7,10 @@ export const useShippers = () => {
         queryFn: () => ShipperServices.getAllShippers(),
     });
 };
+
+export const useShipper = (id) => {
+    return useQuery({
+        queryKey: ["shippers", id],
+        queryFn: () => ShipperServices.getOneShipper(id),
+    });
+};

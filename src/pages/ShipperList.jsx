@@ -68,7 +68,7 @@ export default function ShipperList() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div className="mx-auto bg-white p-6">
             <h1 className="text-2xl font-bold mb-4">Shipper List</h1>
 
             {/* Tìm kiếm và lọc */}
@@ -121,7 +121,7 @@ export default function ShipperList() {
                                 <button
                                     type="button"
                                     className="text-blue-500 underline"
-                                    onClick={() => navigate(`/shipper/${shipper.id}`)}
+                                    onClick={() => navigate(`/main/shipper/${shipper.id}`)}
                                 >
                                     View Details
                                 </button>

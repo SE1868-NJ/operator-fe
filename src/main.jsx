@@ -18,6 +18,10 @@ import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
+import ShipperDetails from "./pages/ShipperDetails.jsx";
+import ShipperList from "./pages/ShipperList.jsx";
+import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -45,6 +49,23 @@ const router = createBrowserRouter([
     {
         path: "/forgotpass",
         element: <ForgotPassPage />,
+    },
+
+    {
+        path: "/shipperslist",
+        element: <ShipperList />,
+    },
+    {
+        path: "/shipper/:id",
+        element: <ShipperDetails />,
+    },
+    {
+        path: "/shippermanagement",
+        element: <ShipperManagementPage />,
+    },
+    {
+        path: "/shipperview",
+        element: <ShipperViewPage />,
     },
     {
         path: "/pendingshoplist/",

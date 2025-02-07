@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 const shippersData = [
     {
         id: 1,
-        avatar: "https://via.placeholder.com/50",
+        avatar: "/images/shipper1.jpg",
         name: "Nguyen A",
         gender: "Male",
         birth: "1990-01-01",
@@ -60,18 +58,18 @@ export default function ShipperDetails() {
     }
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div className=" bg-white p-6">
             <h1 className="text-2xl font-bold mb-4">Shipper Details</h1>
             <div className="flex flex-col items-center">
                 <img
                     src={shipper.avatar}
                     alt={shipper.name}
-                    className="w-24 h-24 rounded-full mb-4 border shadow"
+                    className="w-24 h-24 rounded-full mb-4 border"
                 />
                 <h2 className="text-xl font-semibold">{shipper.name}</h2>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg shadow-md mb-4 grid grid-cols-2 gap-4">
+            <div className=" p-4  mb-4 grid grid-cols-2 gap-4">
                 <span className="font-bold">ID:</span>
                 <span>{shipper.id}</span>
                 <span className="font-bold">Gender:</span>
@@ -95,7 +93,7 @@ export default function ShipperDetails() {
             </div>
 
             <h2 className="mt-6 font-bold text-lg">Emergency Contact</h2>
-            <div className="bg-gray-50 p-4 rounded-lg shadow-md mb-6 grid grid-cols-2 gap-4">
+            <div className=" p-4 mb-6 grid grid-cols-2 gap-4">
                 <span className="font-bold">Name:</span>
                 <span>{shipper.emergencyContact.name}</span>
                 <span className="font-bold">Relationship:</span>

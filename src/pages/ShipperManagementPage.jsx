@@ -39,8 +39,9 @@ const ShipperManagementPage = () => {
     const pendingOperators = operators.filter((operator) => operator.status === "Pending");
 
     // Navigate to the shipper detail page
-    const handleViewDetails = (operator) => {
-        navigate(`/main/operators/${operator.id}`, { state: { operator } });
+    const handleViewDetails = (shipper) => {
+        console.log(shipper);
+        navigate(`/main/pendding-shippers/${shipper.id}`, { state: { shipper } });
     };
 
     return (

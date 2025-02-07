@@ -99,8 +99,8 @@ const ShopProfileDetail = () => {
 
     return (
         <div className="flex w-full bg-gray-100 min-h-screen">
-            <Sidebar />
-            <div className="w-full max-w-6xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-8">
+            {/* <Sidebar /> */}
+            <div className="w-full mx-auto p-8 bg-white mt-8">
                 <h1 className="text-4xl font-bold mb-8 text-gray-800">{shop.name}</h1>
                 <div className="flex gap-12 mb-8">
                     <div className="flex gap-6 items-center">

@@ -73,8 +73,8 @@ export default function ShopsPage() {
 
     return (
         <div className="flex h-screen">
-            <Sidebar className="fixed top-0 left-0 h-full" />
-            <div className="flex-1 max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            {/* <Sidebar className="fixed top-0 left-0 h-full" /> */}
+            <div className="flex-1 mx-auto bg-white p-6">
                 <h1 className="text-2xl font-bold mb-4">All Shop List</h1>
 
                 {/* Statistics */}
@@ -169,7 +169,7 @@ export default function ShopsPage() {
                                     <button
                                         type="button"
                                         className="text-blue-500 underline"
-                                        onClick={() => navigate(`/shop/${shop.id}`)}
+                                        onClick={() => navigate(`/main/shop/${shop.id}`)}
                                     >
                                         View
                                     </button>

@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import AuthService from "../services/Auth";
+import instance from "../lib/axios";
 
 const PendingShopDetail = () => {
     const { id } = useParams();
@@ -10,12 +10,27 @@ const PendingShopDetail = () => {
 
     const onSubmit = async (data) => {
         try {
-            await AuthService.updatePendingShop(data.id, data.status, data.description); // back-end updatePendingShop
-            notifications.show({
-                color: "green",
-                title: "Cập nhật thành công!",
-                message: `Shop đã được ${data.status === "accept" ? "chấp nhận" : "từ chối"}.`,
-            });
+            // back-end updatePendingShop
+            instance
+                .patch(`/pendingShopList/${data.id}`, data)
+                .then((res) => {
+                    console.log(res.data);
+                    notifications.show({
+                        color: "green",
+                        title: "Cập nhật thành công!",
+                        message: `Shop đã được ${
+                            data.status === "accept" ? "chấp nhận" : "từ chối"
+                        }.`,
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    notifications.show({
+                        color: "red",
+                        title: "Lỗi câp nhật!",
+                        message: "Vui lòng thử lại!",
+                    });
+                });
             navigate("/main/pendingshoplist");
         } catch (err) {
             console.error(err);

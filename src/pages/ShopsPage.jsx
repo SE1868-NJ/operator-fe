@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { useShops } from "../hooks/useShop";
 
 const shopsData = [
     {
@@ -59,6 +60,9 @@ export default function ShopsPage() {
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const navigate = useNavigate();
+
+    const { data: shops, isLoading, error } = useShops();
+    console.log(shops);
 
     const applyFilters = () => {
         return shopsData.filter((shop) => {

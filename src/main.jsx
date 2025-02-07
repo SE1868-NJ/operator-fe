@@ -16,6 +16,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
     {
         path: "/forgotpass",
         element: <ForgotPassPage />,
+    },
+    {
+        path: "/shippermanagement",
+        element: <ShipperManagementPage />,
     },
     {
         path: "/main/",
@@ -76,7 +81,11 @@ createRoot(document.getElementById("root")).render(
                 <Notifications />
                 {/* routes */}
                 <DatesProvider
-                    settings={{ locale: "vn", firstDayOfWeek: 1, timezone: "Asia/Ho_Chi_Minh" }}
+                    settings={{
+                        locale: "vn",
+                        firstDayOfWeek: 1,
+                        timezone: "Asia/Ho_Chi_Minh",
+                    }}
                 >
                     <RouterProvider router={router} />
                 </DatesProvider>

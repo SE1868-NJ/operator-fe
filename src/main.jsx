@@ -18,6 +18,12 @@ import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
+import ShipperDetails from "./pages/ShipperDetails.jsx";
+import ShipperList from "./pages/ShipperList.jsx";
+import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperViewPage from "./pages/ShipperViewPage.jsx";
+import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
+import ShopsPage from "./pages/ShopsPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -46,6 +52,7 @@ const router = createBrowserRouter([
         path: "/forgotpass",
         element: <ForgotPassPage />,
     },
+
     {
         path: "/pendingshoplist/",
         element: <PendingShopListPage />,
@@ -63,6 +70,22 @@ const router = createBrowserRouter([
                 element: <div>Home</div>,
             },
             {
+                path: "/main/shops",
+                element: <ShopsPage />,
+            },
+            {
+                path: "/main/shipperslist",
+                element: <ShipperList />,
+            },
+            {
+                path: "/main/shipper/:id",
+                element: <ShipperDetails />,
+            },
+            {
+                path: "/main/shop/:id",
+                element: <ShopProfileDetail />,
+            },
+            {
                 path: "/main/users",
                 element: <UsersPage />,
             },
@@ -73,6 +96,14 @@ const router = createBrowserRouter([
             {
                 path: "/main/pendingshoplist/:id",
                 element: <PendingShopDetail />,
+            },
+            {
+                path: "/main/pendding-shippers",
+                element: <ShipperManagementPage />,
+            },
+            {
+                path: "/main/pendding-shippers/:id",
+                element: <ShipperViewPage />,
             },
             {
                 path: "*",

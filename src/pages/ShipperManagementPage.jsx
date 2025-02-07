@@ -5,29 +5,29 @@ const ShipperManagementPage = () => {
     const [operators] = useState([
         {
             id: 1,
-            name: "TamNV",
-            email: "tamnv@gmail.com",
+            name: "Nguyễn Văn An",
+            email: "nguyenvanan@gmail.com",
             role: "Shipper",
-            status: "Pending", // Shipper with Pending status
+            status: "Pending",
         },
         {
             id: 2,
-            name: "TrangTT",
-            email: "trangtt@gmail.com",
+            name: "Trần Thị Bích",
+            email: "tranthibich@gmail.com",
             role: "Shipper",
             status: "Pending",
         },
         {
             id: 3,
-            name: "HoaVT",
-            email: "hoavt@gmail.com",
+            name: "Lê Văn Cần",
+            email: "levancan@gmail.com",
             role: "Shipper",
             status: "Pending",
         },
         {
             id: 4,
-            name: "TramNT",
-            email: "tramnt@gmail.com",
+            name: "Phạm Thị Dung",
+            email: "phamthidung@gmail.com",
             role: "Shipper",
             status: "Pending",
         },

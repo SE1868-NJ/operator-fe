@@ -128,7 +128,7 @@ const ShipperViewPage = () => {
                     marginBottom: 20,
                 }}
             >
-                Shipper Information
+                Thông tin của Shipper
             </h1>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
                 <img
@@ -151,16 +151,16 @@ const ShipperViewPage = () => {
                 }}
             >
                 <DetailRow label="ID" value={shipper.id} />
-                <DetailRow label="Full Name" value={shipper.fullName} />
-                <DetailRow label="Gender" value={shipper.gender} />
-                <DetailRow label="Date of Birth" value={shipper.dateOfBirth} />
-                <DetailRow label="Hometown" value={shipper.hometown} />
-                <DetailRow label="Temporary Address" value={shipper.temporaryAddress} />
+                <DetailRow label="Họ và Tên" value={shipper.fullName} />
+                <DetailRow label="Giới tính" value={shipper.gender} />
+                <DetailRow label="Ngày sinh" value={shipper.dateOfBirth} />
+                <DetailRow label="Quê quán" value={shipper.hometown} />
+                <DetailRow label="Địa chỉ thường trú" value={shipper.temporaryAddress} />
                 <DetailRow label="CCCD" value={shipper.cccd} />
-                <DetailRow label="Phone" value={shipper.phoneNumber} />
+                <DetailRow label="Số điện thoại" value={shipper.phoneNumber} />
                 <DetailRow label="Email" value={shipper.email} />
-                <DetailRow label="Activity" value={shipper.activityInformation} />
-                <DetailRow label="Shipping Method" value={shipper.shippingMethod} />
+                <DetailRow label="Phạm vi hoạt động" value={shipper.activityInformation} />
+                <DetailRow label="Phương thức vận chuyển" value={shipper.shippingMethod} />
             </div>
             <div
                 style={{
@@ -177,16 +177,16 @@ const ShipperViewPage = () => {
                         marginBottom: 10,
                     }}
                 >
-                    Emergency Contact
+                    Liên hệ khẩn cấp
                 </h2>
-                <DetailRow label="Name" value={shipper.emergencyContact.name} />
-                <DetailRow label="Relationship" value={shipper.emergencyContact.relationship} />
-                <DetailRow label="Phone" value={shipper.emergencyContact.phoneNumber} />
+                <DetailRow label="Họ và tên" value={shipper.emergencyContact.name} />
+                <DetailRow label="Mối quan hệ" value={shipper.emergencyContact.relationship} />
+                <DetailRow label="Số điện thoại" value={shipper.emergencyContact.phoneNumber} />
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 15 }}>
                 <button
                     type="button"
-                    onClick={() => alert("Shipper registration accepted.")}
+                    onClick={() => alert("Đăng ký người gửi hàng được chấp nhận.")}
                     style={{
                         padding: "12px 25px",
                         border: "none",
@@ -197,11 +197,11 @@ const ShipperViewPage = () => {
                         color: "#fff",
                     }}
                 >
-                    Accept
+                    Chấp nhận
                 </button>
                 <button
                     type="button"
-                    onClick={() => alert("Shipper registration rejected.")}
+                    onClick={() => alert("Đăng ký người gửi hàng bị từ chối.")}
                     style={{
                         padding: "12px 25px",
                         border: "none",
@@ -212,7 +212,7 @@ const ShipperViewPage = () => {
                         color: "#fff",
                     }}
                 >
-                    Reject
+                    Từ chối
                 </button>
                 <button
                     type="button"
@@ -227,7 +227,7 @@ const ShipperViewPage = () => {
                         color: "#fff",
                     }}
                 >
-                    Back
+                    Quay lại
                 </button>
             </div>
         </div>

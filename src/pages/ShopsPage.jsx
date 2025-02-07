@@ -1,61 +1,7 @@
-import { Button } from "@mantine/core";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import { useShops } from "../hooks/useShop";
-import ShopService from "../services/ShopService";
-
-const shopsData = [
-    {
-        id: 1,
-        name: "Shop A",
-        owner: "Owner A",
-        email: "nguyenvanA@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "123 Main St",
-        createdAt: "2023-01-01",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Shop B",
-        owner: "Owner B",
-        email: "nguyenvanB@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "456 Elm St",
-        createdAt: "2023-02-01",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Shop C",
-        owner: "Owner C",
-        email: "nguyenvanC@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "789 Oak St",
-        createdAt: "2023-03-01",
-        status: "Deactive",
-    },
-    {
-        id: 4,
-        name: "Shop D",
-        owner: "Owner D",
-        email: "nguyenvanD@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "101 Pine St",
-        createdAt: "2023-04-01",
-        status: "Deactive",
-    },
-];
 
 export default function ShopsPage() {
     const [searchName, setSearchName] = useState("");
@@ -67,7 +13,7 @@ export default function ShopsPage() {
     console.log(shops);
 
     const applyFilters = () => {
-        return shopsData.filter((shop) => {
+        return shops.filter((shop) => {
             const matchName = searchName
                 ? shop.name.toLowerCase().includes(searchName.toLowerCase())
                 : true;
@@ -150,13 +96,6 @@ export default function ShopsPage() {
                                 <td className="border p-2">{shop.owner}</td>
                                 <td className="border p-2">{shop.email}</td>
                                 <td className="border p-2">{shop.mobile}</td>
-                                {/* <td className="border p-2">
-                                    <img
-                                        src={shop.avatar}
-                                        alt={shop.name}
-                                        className="w-10 h-10 rounded-full"
-                                    />
-                                </td> */}
                                 <td className="border p-2">{shop.description}</td>
                                 <td className="border p-2">{shop.address}</td>
                                 <td className="border p-2">{shop.createdAt}</td>

@@ -13,7 +13,7 @@ export default function ShopsPage() {
     console.log(shops);
 
     const applyFilters = () => {
-        return shops.filter((shop) => {
+        return shops?.filter((shop) => {
             const matchName = searchName
                 ? shop.name.toLowerCase().includes(searchName.toLowerCase())
                 : true;
@@ -89,7 +89,7 @@ export default function ShopsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {applyFilters().map((shop) => (
+                        {applyFilters()?.map((shop) => (
                             <tr key={shop.id} className="border">
                                 <td className="border p-2">{shop.id}</td>
                                 <td className="border p-2">{shop.name}</td>

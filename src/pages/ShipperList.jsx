@@ -7,15 +7,15 @@ const shippersData = [
         avatar: "https://via.placeholder.com/50",
         name: "Nguyen A",
         gender: "Male",
-        birth: "1990-01-01",
+        dateOfBirth: "1990-01-01",
         hometown: "Ha Noi",
         address: "123 Street, Ha Noi",
         phone: "0123456789",
         cccd: "123456789012",
+        email: "0aM9X@example.com",
         status: "Active",
-        deliveries: 150,
-        date: "2025-02-01",
         activityArea: "Ha Noi",
+        shippingMethod: "Xe máy",
         emergencyContact: {
             name: "Nguyen Van B",
             relation: "Anh trai",
@@ -27,15 +27,15 @@ const shippersData = [
         avatar: "https://via.placeholder.com/50",
         name: "Nguyen B",
         gender: "Female",
-        birth: "1990-01-20",
+        dateOfBirth: "1995-02-02",
         hometown: "Hai Phong",
         address: "456 Street, Hai Phong",
         phone: "0976543210",
         cccd: "098765432109",
+        email: "V4r3t@example.com",
         status: "Deactive",
-        deliveries: 120,
-        date: "2025-01-25",
         activityArea: "Ha Noi",
+        shippingMethod: "Xe máy",
         emergencyContact: {
             name: "Nguyen Van C",
             relation: "Mẹ",
@@ -104,10 +104,8 @@ export default function ShipperList() {
                         <th className="border p-2">ID</th>
                         <th className="border p-2">Họ tên</th>
                         <th className="border p-2">SĐT</th>
-                        <th className="border p-2">CCCD</th>
+                        <th className="border p-2">Email</th>
                         <th className="border p-2">Trạng thái</th>
-                        <th className="border p-2">Số lần giao hàng</th>
-                        <th className="border p-2">Ngày tham gia</th>
                         <th className="border p-2">Actions</th>
                     </tr>
                 </thead>
@@ -117,10 +115,8 @@ export default function ShipperList() {
                             <td className="border p-2">{shipper.id}</td>
                             <td className="border p-2">{shipper.name}</td>
                             <td className="border p-2">{shipper.phone}</td>
-                            <td className="border p-2">{shipper.cccd}</td>
+                            <td className="border p-2">{shipper.email}</td>
                             <td className="border p-2">{shipper.status}</td>
-                            <td className="border p-2">{shipper.deliveries}</td>
-                            <td className="border p-2">{formatDate(shipper.date)}</td>
                             <td className="border p-2">
                                 <button
                                     type="button"

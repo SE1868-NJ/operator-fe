@@ -17,6 +17,7 @@ import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
     {
         path: "/shippermanagement",
         element: <ShipperManagementPage />,
+    },
+    {
+        path: "/shipperview",
+        element: <ShipperViewPage />,
     },
     {
         path: "/main/",

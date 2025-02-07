@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+
+import { useShop } from "../hooks/useShop";
 const shopsData = [
     {
         id: 1,
@@ -84,6 +86,9 @@ const ShopProfileDetail = () => {
     const navigate = useNavigate();
     const shop = shopsData.find((s) => s.id === Number.parseInt(id));
     const [status, setStatus] = useState(shop ? shop.status : "");
+
+    const { data: ashop, isLoading, error } = useShop(1);
+    console.log(ashop);
 
     if (!shop) {
         return (
@@ -197,7 +202,7 @@ const ShopProfileDetail = () => {
                 <button
                     type="button"
                     className="mb-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300"
-                    onClick={() => navigate("/shopmanagement")}
+                    onClick={() => navigate("/main/shops")}
                 >
                     Back to List
                 </button>

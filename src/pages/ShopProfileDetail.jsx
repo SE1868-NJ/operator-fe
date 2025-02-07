@@ -4,47 +4,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-const shopsData = [
-    {
-        id: 1,
-        name: "Shop A",
-        owner: "Owner A",
-        email: "nguyenvanA@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "123 Pickup St, District 1",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "123 Main St",
-        createdAt: "2023-01-01",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Shop B",
-        owner: "Owner B",
-        email: "nguyenvanB@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "456 Pickup Ave, District 2",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "456 Elm St",
-        createdAt: "2023-02-01",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Shop C",
-        owner: "Owner C",
-        email: "nguyenvanC@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "789 Pickup Blvd, District 3",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "789 Oak St",
-        createdAt: "2023-03-01",
-        status: "Deactive",
-    },
-];
+
+import { useShop } from "../hooks/useShop";
 
 const productsData = [
     {
@@ -82,10 +43,13 @@ const productsData = [
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const shop = shopsData.find((s) => s.id === Number.parseInt(id));
+
+    const { data: shop, isLoading, error } = useShop(id);
+    console.log(shop);
+
     const [status, setStatus] = useState(shop ? shop.status : "");
 
-    if (!shop) {
+    if (shop) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <p>Shop not found</p>
@@ -197,7 +161,7 @@ const ShopProfileDetail = () => {
                 <button
                     type="button"
                     className="mb-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300"
-                    onClick={() => navigate("/shopmanagement")}
+                    onClick={() => navigate("/main/shops")}
                 >
                     Back to List
                 </button>

@@ -1,8 +1,10 @@
+import { Button } from "@mantine/core";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { useShops } from "../hooks/useShop";
+import ShopService from "../services/ShopService";
 
 const shopsData = [
     {

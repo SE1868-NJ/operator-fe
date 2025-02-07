@@ -7,3 +7,10 @@ export const useShops = () => {
         queryFn: () => ShopService.getAllShops(),
     });
 };
+
+export const useShop = (id) => {
+    return useQuery({
+        queryKey: ["shop", id],
+        queryFn: () => ShopService.getOneShop(id),
+    });
+};

@@ -18,6 +18,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
+import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
         element: <ShipperDetails />,
     },
     {
+        path: "/shippermanagement",
+        element: <ShipperManagementPage />,
+    },
+    {
+        path: "/shipperview",
+        element: <ShipperViewPage />,
+    },
+    {
         path: "/main/",
         element: <Layout />,
         children: [
@@ -87,7 +97,11 @@ createRoot(document.getElementById("root")).render(
                 <Notifications />
                 {/* routes */}
                 <DatesProvider
-                    settings={{ locale: "vn", firstDayOfWeek: 1, timezone: "Asia/Ho_Chi_Minh" }}
+                    settings={{
+                        locale: "vn",
+                        firstDayOfWeek: 1,
+                        timezone: "Asia/Ho_Chi_Minh",
+                    }}
                 >
                     <RouterProvider router={router} />
                 </DatesProvider>

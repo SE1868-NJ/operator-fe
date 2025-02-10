@@ -42,4 +42,5 @@ export const NAVBAR_ITEMS = [
             { label: "Recovery codes", link: "/" },
         ],
     },
+    { label: "PendingShop", icon: IconNotes, link: "pendingshop" },
 ];

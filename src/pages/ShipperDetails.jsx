@@ -6,15 +6,15 @@ const shippersData = [
         avatar: "/images/shipper1.jpg",
         name: "Nguyen A",
         gender: "Male",
-        birth: "1990-01-01",
+        dateOfBirth: "1990-01-01",
         hometown: "Ha Noi",
         address: "123 Street, Ha Noi",
         phone: "0123456789",
         cccd: "123456789012",
+        email: "0aM9X@example.com",
         status: "Active",
-        deliveries: 150,
-        date: "2025-02-01",
         activityArea: "Ha Noi",
+        shippingMethod: "Xe máy",
         emergencyContact: {
             name: "Nguyen Van B",
             relation: "Anh trai",
@@ -26,15 +26,15 @@ const shippersData = [
         avatar: "https://via.placeholder.com/50",
         name: "Nguyen B",
         gender: "Female",
-        birth: "1990-01-20",
+        dateOfBirth: "1995-02-02",
         hometown: "Hai Phong",
         address: "456 Street, Hai Phong",
         phone: "0976543210",
         cccd: "098765432109",
+        email: "V4r3t@example.com",
         status: "Deactive",
-        deliveries: 120,
-        date: "2025-01-25",
         activityArea: "Ha Noi",
+        shippingMethod: "Xe máy",
         emergencyContact: {
             name: "Nguyen Van C",
             relation: "Mẹ",
@@ -72,33 +72,35 @@ export default function ShipperDetails() {
             <div className=" p-4  mb-4 grid grid-cols-2 gap-4">
                 <span className="font-bold">ID:</span>
                 <span>{shipper.id}</span>
-                <span className="font-bold">Gender:</span>
+                <span className="font-bold">Giới tính:</span>
                 <span>{shipper.gender}</span>
-                <span className="font-bold">Date of Birth:</span>
-                <span>{formatDate(shipper.birth)}</span>
-                <span className="font-bold">Hometown:</span>
+                <span className="font-bold">Ngày sinh:</span>
+                <span>{formatDate(shipper.dateOfBirth)}</span>
+                <span className="font-bold">Quê quán:</span>
                 <span>{shipper.hometown}</span>
-                <span className="font-bold">Address:</span>
+                <span className="font-bold">Địa chỉ:</span>
                 <span>{shipper.address}</span>
-                <span className="font-bold">Phone:</span>
+                <span className="font-bold">SDT:</span>
                 <span>{shipper.phone}</span>
                 <span className="font-bold">CCCD:</span>
                 <span>{shipper.cccd}</span>
-                <span className="font-bold">Deliveries:</span>
-                <span>{shipper.deliveries}</span>
-                <span className="font-bold">Join Date:</span>
-                <span>{formatDate(shipper.date)}</span>
-                <span className="font-bold">Activity Area:</span>
+                <span className="font-bold">Email:</span>
+                <span>{shipper.email}</span>
+                <span className="font-bold">Trạng thái:</span>
+                <span>{shipper.status}</span>
+                <span className="font-bold">Vị trí hoạt động:</span>
                 <span>{shipper.activityArea}</span>
+                <span className="font-bold">Phương tiện</span>
+                <span>{shipper.shippingMethod}</span>
             </div>
 
             <h2 className="mt-6 font-bold text-lg">Emergency Contact</h2>
             <div className=" p-4 mb-6 grid grid-cols-2 gap-4">
                 <span className="font-bold">Name:</span>
                 <span>{shipper.emergencyContact.name}</span>
-                <span className="font-bold">Relationship:</span>
+                <span className="font-bold">Mối quan hệ:</span>
                 <span>{shipper.emergencyContact.relation}</span>
-                <span className="font-bold">Phone:</span>
+                <span className="font-bold">SDt:</span>
                 <span>{shipper.emergencyContact.phone}</span>
             </div>
 

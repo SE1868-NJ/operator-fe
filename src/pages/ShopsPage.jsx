@@ -1,59 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import { useShops } from "../hooks/useShop";
-
-const shopsData = [
-    {
-        id: 1,
-        name: "Shop A",
-        owner: "Owner A",
-        email: "nguyenvanA@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "123 Main St",
-        createdAt: "2023-01-01",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Shop B",
-        owner: "Owner B",
-        email: "nguyenvanB@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "456 Elm St",
-        createdAt: "2023-02-01",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Shop C",
-        owner: "Owner C",
-        email: "nguyenvanC@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "789 Oak St",
-        createdAt: "2023-03-01",
-        status: "Deactive",
-    },
-    {
-        id: 4,
-        name: "Shop D",
-        owner: "Owner D",
-        email: "nguyenvanD@gmail.com",
-        mobile: "0123456789",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "101 Pine St",
-        createdAt: "2023-04-01",
-        status: "Deactive",
-    },
-];
+import { useShops } from "../hooks/useShop.js";
 
 export default function ShopsPage() {
     const [searchName, setSearchName] = useState("");
@@ -62,18 +10,14 @@ export default function ShopsPage() {
     const navigate = useNavigate();
 
     const { data: shops, isLoading, error } = useShops();
-    console.log(shops);
+    //console.log(shops);
 
-    const applyFilters = () => {
-        return shopsData.filter((shop) => {
-            const matchName = searchName
-                ? shop.name.toLowerCase().includes(searchName.toLowerCase())
-                : true;
-            const matchStatus = filterStatus ? shop.status === filterStatus : true;
-            const matchDate = filterDate ? shop.createdAt === filterDate : true;
-            return matchName && matchStatus && matchDate;
-        });
-    };
+    // Hàm lọc danh sách cửa hàng dựa trên tên và trạng thái
+    const filteredShops = shops?.filter((shop) => {
+        const matchesName = shop.shopName.toLowerCase().includes(searchName.toLowerCase());
+        const matchesStatus = filterStatus ? shop.shopStatus === filterStatus : true;
+        return matchesName && matchesStatus;
+    });
 
     return (
         <div className="flex h-screen">
@@ -112,8 +56,8 @@ export default function ShopsPage() {
                         onChange={(e) => setFilterStatus(e.target.value)}
                     >
                         <option value="">All Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Deactive">Deactive</option>
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
                     </select>
                     <input
                         type="date"
@@ -141,39 +85,34 @@ export default function ShopsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {applyFilters().map((shop) => (
+                        {filteredShops?.map((shop) => (
                             <tr key={shop.id} className="border">
-                                <td className="border p-2">{shop.id}</td>
-                                <td className="border p-2">{shop.name}</td>
-                                <td className="border p-2">{shop.owner}</td>
-                                <td className="border p-2">{shop.email}</td>
-                                <td className="border p-2">{shop.mobile}</td>
-                                {/* <td className="border p-2">
-                                    <img
-                                        src={shop.avatar}
-                                        alt={shop.name}
-                                        className="w-10 h-10 rounded-full"
-                                    />
-                                </td> */}
-                                <td className="border p-2">{shop.description}</td>
-                                <td className="border p-2">{shop.address}</td>
-                                <td className="border p-2">{shop.createdAt}</td>
+                                <td className="border p-2">{shop.shopID}</td>
+                                <td className="border p-2">{shop.shopName}</td>
+                                <td className="border p-2">{shop.Owner.fullName}</td>
+                                <td className="border p-2">{shop.shopEmail}</td>
+                                <td className="border p-2">{shop.shopPhone}</td>
+                                <td className="border p-2">{shop.shopDescription}</td>
+                                <td className="border p-2">{shop.shopPickUpAddress}</td>
+                                <td className="border p-2">
+                                    {new Date(shop.shopJoinedDate).toLocaleDateString()}
+                                </td>
                                 <td className="border p-2">
                                     <span
                                         className={
-                                            shop.status === "Active"
+                                            shop.shopStatus === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
                                                 : "text-red-700 bg-red-100 p-1 rounded"
                                         }
                                     >
-                                        {shop.status}
+                                        {shop.shopStatus}
                                     </span>
                                 </td>
                                 <td className="border p-2">
                                     <button
                                         type="button"
                                         className="text-blue-500 underline"
-                                        onClick={() => navigate(`/main/shop/${shop.id}`)}
+                                        onClick={() => navigate(`/main/shop/${shop.shopID}`)}
                                     >
                                         View
                                     </button>

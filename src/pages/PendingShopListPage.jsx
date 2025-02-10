@@ -1,7 +1,7 @@
-import { keys } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePendingShops } from "../hooks/useShop";
+import ErrorPage from "./ErrorPage.jsx";
 
 const PendingShopListPage = () => {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ const PendingShopListPage = () => {
     }
 
     if (err) {
-        return <div>Error</div>;
+        return <ErrorPage />;
     }
 
     const filterPendingShops = pendingShops.data?.filter((shop) => {
@@ -99,27 +99,14 @@ const PendingShopListPage = () => {
                     </thead>
                     <tbody>
                         {filterPendingShops?.length === 0 ? (
-                            pendingShops?.length === 0 ? (
-                                <tr>
-                                    <th
-                                        className="border border-gray-300 px-4 py-2 text-center text-3xl"
-                                        colSpan={8}
-                                    >
-                                        <p className="my-4">Không có của hàng nào đang chờ duyệt</p>
-                                    </th>
-                                </tr>
-                            ) : (
-                                <tr>
-                                    <th
-                                        className="border border-gray-300 px-4 py-2 text-center text-3xl"
-                                        colSpan={8}
-                                    >
-                                        <p className="my-4">
-                                            Không có của hàng nào thỏa mãn điều kiện tìm kiếm
-                                        </p>
-                                    </th>
-                                </tr>
-                            )
+                            <tr>
+                                <th
+                                    className="border border-gray-300 px-4 py-2 text-center text-xl"
+                                    colSpan={8}
+                                >
+                                    <p className="my-4">Không có của hàng nào!</p>
+                                </th>
+                            </tr>
                         ) : (
                             filterPendingShops?.map((shop, index) => (
                                 <tr key={shop.id}>

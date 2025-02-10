@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOnePendingShop } from "../hooks/useShop";
 import ShopService from "../services/ShopService";
+import ErrorPage from "./ErrorPage";
 
 const PendingShopDetail = () => {
     const { id } = useParams();
@@ -15,7 +16,7 @@ const PendingShopDetail = () => {
         return <div>Loading...</div>;
     }
     if (isError) {
-        return <div>Error</div>;
+        return <ErrorPage />;
     }
     const onSubmit = async (data) => {
         try {

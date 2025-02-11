@@ -16,7 +16,7 @@ export const NAVBAR_ITEMS = [
         initiallyOpened: true,
         links: [
             { label: "Danh sách tất cả cửa hàng", link: "/main/shops" },
-            { label: "Cửa hàng đang duyệt", link: "/main/pendingshoplist/" },
+            { label: "Cửa hàng đang duyệt", link: "/main/pendingshops/" },
             // { label: "Outlook", link: "/c" },
             // { label: "Real time", link: "/d" },
         ],
@@ -42,4 +42,5 @@ export const NAVBAR_ITEMS = [
             { label: "Recovery codes", link: "/" },
         ],
     },
+    { label: "PendingShop", icon: IconNotes, link: "pendingshops" },
 ];

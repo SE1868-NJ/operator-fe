@@ -25,3 +25,17 @@ export const useShop = (id) => {
 //         },
 //     });
 // };
+
+export const usePendingShops = () => {
+    return useQuery({
+        queryKey: ["pendingShops"],
+        queryFn: () => ShopService.getPendingShops(),
+    });
+};
+
+export const useOnePendingShop = (id) => {
+    return useQuery({
+        queryKey: ["onePendingShop", id],
+        queryFn: () => ShopService.getOnePendingShop(id),
+    });
+};

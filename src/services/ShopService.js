@@ -5,6 +5,17 @@ const ShopService = {
         const shops = await instance.get("/shops").then(({ data }) => {
             return data?.shops;
         });
+        return shops;
+    },
+    async getPendingShops() {
+        const shops = await instance
+            .get("/shop/pendingshops")
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
 
         return shops;
     },
@@ -20,6 +31,28 @@ const ShopService = {
     //     });
     //     return updatedShop;
     // },
+    async getOnePendingShop(id) {
+        const shop = await instance
+            .get(`/shop/pendingshop/${id}`)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shop;
+    },
+    async updatePendingShop(data) {
+        const shop = await instance
+            .patch(`/shop/pendingshop/${data.id}`, data)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shop;
+    },
 };
 
 export default ShopService;

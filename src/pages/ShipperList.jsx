@@ -44,12 +44,6 @@ const shippersData = [
         },
     },
 ];
-
-function formatDate(dateString) {
-    const [year, month, day] = dateString.split("-");
-    return `${day}-${month}-${year}`;
-}
-
 export default function ShipperList() {
     const [searchName, setSearchName] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
@@ -58,18 +52,6 @@ export default function ShipperList() {
 
     const { data: shippers, isLoading, error } = useShippers();
     console.log(shippers);
-
-    const applyFilters = () => {
-        return shippersData.filter((shipper) => {
-            const matchName = searchName
-                ? shipper.name.toLowerCase().includes(searchName.toLowerCase()) ||
-                  shipper.phone.includes(searchName)
-                : true;
-            const matchStatus = filterStatus ? shipper.status === filterStatus : true;
-            const matchDate = filterDate ? shipper.date === filterDate : true;
-            return matchName && matchStatus && matchDate;
-        });
-    };
 
     return (
         <div className="mx-auto bg-white p-6">

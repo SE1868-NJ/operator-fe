@@ -344,14 +344,14 @@ const PendingShopDetail = () => {
                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
                             onClick={() => handleDecision("accepted")}
                         >
-                            Accept
+                            Đồng ý
                         </button>
                         <button
                             type="button"
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                             onClick={() => handleDecision("rejected")}
                         >
-                            Reject
+                            Từ chối
                         </button>
                     </div>
                 </form>

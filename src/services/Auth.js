@@ -3,12 +3,13 @@ import instance from "../lib/axios";
 const AuthService = {
     async login(email, password) {
         const token = await instance
-            .post("/auth/login", {
+            .post("/auth/login/operator", {
                 email,
                 password,
             })
             .then(({ data }) => {
                 localStorage.setItem("token", data.token);
+                console.log(data);
                 return data;
             });
         return token;

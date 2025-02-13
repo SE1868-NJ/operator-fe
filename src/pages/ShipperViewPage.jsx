@@ -11,34 +11,6 @@ const DetailRow = ({ label, value }) => (
 const ShipperViewPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [shipper, setShipper] = useState({
-        id: "4",
-        fullName: "Phạm Thị Dung",
-        gender: "Nữ",
-        dateOfBirth: "04/04/2008",
-        hometown: "Hà Nội",
-        temporaryAddress: "Hà Nội",
-        cccd: "024789123456",
-        phoneNumber: "0901234567",
-        email: "phamthidung@gmail.com",
-        activityInformation: "Giao hàng chung cư The Link Ciputra",
-        shippingMethod: "Xe máy",
-        emergencyContact: {
-            name: "Phạm Thị Vân",
-            relationship: "Mẹ",
-            phoneNumber: "0969876543",
-        },
-        photoUrl: "/images/shipper4.jpg",
-    });
-
-    if (!shipper)
-        return (
-            <div style={{ textAlign: "center", marginTop: 40, fontSize: "1.25rem" }}>
-                Loading...
-            </div>
-        );
-
-    console.log(shipper);
 
     return (
         <div

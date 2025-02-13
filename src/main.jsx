@@ -24,7 +24,6 @@ import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -35,10 +34,6 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <LoginPage />,
-    },
-    {
-        path: "/signup",
-        element: <SignUpPage />,
     },
     {
         path: "/changepassword",
@@ -52,15 +47,6 @@ const router = createBrowserRouter([
         path: "/forgotpass",
         element: <ForgotPassPage />,
     },
-
-    {
-        path: "/pendingshop/",
-        element: <PendingShopListPage />,
-    },
-    // {
-    //     path: "/pendingshoplist/:id",
-    //     element: <PendingShopDetail />,
-    // },
     {
         path: "/main/",
         element: <Layout />,
@@ -78,7 +64,7 @@ const router = createBrowserRouter([
                 element: <ShipperList />,
             },
             {
-                path: "/main/shipper/:id",
+                path: "/main/shipperslist/:id",
                 element: <ShipperDetails />,
             },
             {

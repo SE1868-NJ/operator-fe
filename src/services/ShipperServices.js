@@ -16,6 +16,20 @@ const ShipperServices = {
 
         return shippers;
     },
+    async getAllPendingShippers() {
+        const shippers = await instance.get("/shippers/pending").then(({ data }) => {
+            return data;
+        });
+
+        return shippers;
+    },
+    async getOnePendingShipper(id) {
+        const shippers = await instance.get(`/shippers/pending/${id}`).then(({ data }) => {
+            return data;
+        });
+
+        return shippers;
+    },
 };
 
 export default ShipperServices;

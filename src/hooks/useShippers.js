@@ -14,3 +14,17 @@ export const useShipper = (id) => {
         queryFn: () => ShipperServices.getOneShipper(id),
     });
 };
+
+export const usePendingShippers = () => {
+    return useQuery({
+        queryKey: ["shippers", "pending"],
+        queryFn: () => ShipperServices.getAllPendingShippers(),
+    });
+};
+
+export const usePendingShipper = (id) => {
+    return useQuery({
+        queryKey: ["shippers", "pending", id],
+        queryFn: () => ShipperServices.getOnePendingShipper(id),
+    });
+};

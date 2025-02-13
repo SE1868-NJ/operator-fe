@@ -1,50 +1,6 @@
-import { id } from "date-fns/locale";
-import React from "react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-const shopsData = [
-    {
-        id: 1,
-        name: "Shop A",
-        owner: "Owner A",
-        email: "nguyenvanA@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "123 Pickup St, District 1",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "123 Main St",
-        createdAt: "2023-01-01",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Shop B",
-        owner: "Owner B",
-        email: "nguyenvanB@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "456 Pickup Ave, District 2",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "456 Elm St",
-        createdAt: "2023-02-01",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Shop C",
-        owner: "Owner C",
-        email: "nguyenvanC@gmail.com",
-        mobile: "0123456789",
-        pickUpAddress: "789 Pickup Blvd, District 3",
-        avatar: "https://i.pinimg.com/564x/91/9a/23/919a23a3ca777fb0eecc679b71fe8387.jpg",
-        description: "Delicious food and drinks",
-        address: "789 Oak St",
-        createdAt: "2023-03-01",
-        status: "Deactive",
-    },
-];
+// import React, {useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useShop } from "../hooks/useShop";
 
 const productsData = [
     {
@@ -82,44 +38,58 @@ const productsData = [
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const shop = shopsData.find((s) => s.id === Number.parseInt(id));
-    const [status, setStatus] = useState(shop ? shop.status : "");
+    const { data: shop, isLoading, error } = useShop(id);
 
-    if (!shop) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <p>Shop not found</p>
-            </div>
-        );
+    console.log(shop);
+    // const { mutate: updateShopStatus } = useUpdateShopStatus();
+    // const [status, setStatus] = useState(""); // Khởi tạo state 'status'
+
+    // useEffect(() => {
+    //     if (shop) {
+    //         setStatus(shop.shopStatus);
+    //     }
+    // }, [shop]);
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
 
-    const toggleStatus = () => {
-        setStatus((prevStatus) => (prevStatus === "Active" ? "Deactive" : "Active"));
-    };
+    if (error || !shop) {
+        return <div className="flex justify-center items-center h-screen">Shop not found</div>;
+    }
+
+    // const toggleStatus = () => {
+    //     const newStatus = status === "active" ? "suspended" : "active";
+    //     setStatus(newStatus); // Cập nhật state 'status' mới
+    //     updateShopStatus({ id, status: newStatus });
+    // };
 
     return (
         <div className="flex w-full bg-gray-100 min-h-screen">
-            {/* <Sidebar /> */}
             <div className="w-full mx-auto p-8 bg-white mt-8">
-                <h1 className="text-4xl font-bold mb-8 text-gray-800">{shop.name}</h1>
+                <h1 className="text-4xl font-bold mb-8 text-gray-800">{shop.shopName}</h1>
                 <div className="flex gap-12 mb-8">
                     <div className="flex gap-6 items-center">
                         <img
-                            src={shop.avatar}
-                            alt={shop.name}
+                            src={
+                                "https://img.lovepik.com/free-png/20210918/lovepik-e-shop-png-image_400245565_wh1200.png"
+                            }
+                            alt={shop.shopName}
                             className="w-40 h-40 rounded-full shadow-md"
                         />
                         <div>
                             <p className="text-xl font-semibold">Shop Description</p>
-                            <p className="text-gray-800 mt-2">{shop.description}</p>
+                            <p className="text-gray-800 mt-2">{shop.shopDescription}</p>
+                            <p className="text-xl font-semibold">Shop Rating</p>
+                            <p className="text-gray-800 mt-2">{shop.shopRating}</p>
                         </div>
                     </div>
                     <div className="flex gap-6">
-                        <div className="bg-blue-100 p-6 rounded-lg shadow-md w-1/2 text-center">
+                        <div className="bg-yellow-100 p-6 rounded-lg shadow-md w-1/2 text-center">
                             <h2 className="text-xl font-bold">Total Orders</h2>
                             <p className="text-2xl">8,282</p>
                         </div>
-                        <div className="bg-green-100 p-6 rounded-lg shadow-md w-1/2 text-center">
+                        <div className="bg-orange-100 p-6 rounded-lg shadow-md w-1/2 text-center">
                             <h2 className="text-xl font-bold">Total Revenue</h2>
                             <p className="text-2xl">$200,521</p>
                         </div>
@@ -127,83 +97,137 @@ const ShopProfileDetail = () => {
                 </div>
                 <table className="table-auto w-full mb-8">
                     <tbody>
+                        {/* Ownder in4 */}
+                        <tr>
+                            <td className="px-4 py-2 font-semibold text-lg">Owner Information</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Fullname</td>
+                            <td className="border px-4 py-2">{shop.Owner.fullName}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Date of birth</td>
+                            <td className="border px-4 py-2">{shop.Owner.dateOfBirth}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Gender</td>
+                            <td className="border px-4 py-2">{shop.Owner.gender}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Email</td>
+                            <td className="border px-4 py-2">{shop.Owner.userEmail}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Phone</td>
+                            <td className="border px-4 py-2">{shop.Owner.userPhone}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">CitizenID</td>
+                            <td className="border px-4 py-2">{shop.Owner.userCitizenID}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">
+                                Identification Number
+                            </td>
+                            <td className="border px-4 py-2">{shop.Owner.identificationNumber}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">idCardFrontFile</td>
+                            <td className="border px-4 py-2">
+                                <img
+                                    src={shop.Owner.idCardFrontFile}
+                                    alt="idCardFrontFile"
+                                    className="w-60 h-40 shadow-md"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">idCardBackFile</td>
+
+                            <td className="border px-4 py-2">
+                                <img
+                                    src={shop.Owner.idCardBackFile}
+                                    alt="idCardBackFile"
+                                    className="w-60 h-40 shadow-md"
+                                />
+                            </td>
+                        </tr>
+                        {/* Shop In4 */}
                         <tr>
                             <td className="px-4 py-2 font-semibold text-lg">Shop Information</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Owner</td>
-                            <td className="border px-4 py-2">{shop.owner}</td>
+                            <td className="border px-4 py-2 font-semibold">Operation Hours</td>
+                            <td className="border px-4 py-2">{shop.shopOperationHours}</td>
                         </tr>
                         <tr>
                             <td className="border px-4 py-2 font-semibold">Email</td>
-                            <td className="border px-4 py-2">{shop.email}</td>
+                            <td className="border px-4 py-2">{shop.shopEmail}</td>
                         </tr>
                         <tr>
                             <td className="border px-4 py-2 font-semibold">Phone</td>
-                            <td className="border px-4 py-2">{shop.mobile}</td>
+                            <td className="border px-4 py-2">{shop.shopPhone}</td>
                         </tr>
                         <tr>
                             <td className="border px-4 py-2 font-semibold">Pick Up Address</td>
-                            <td className="border px-4 py-2">{shop.pickUpAddress}</td>
+                            <td className="border px-4 py-2">{shop.shopPickUpAddress}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Shop Address</td>
-                            <td className="border px-4 py-2">{shop.address}</td>
+                            <td className="border px-4 py-2 font-semibold">Business Type</td>
+                            <td className="border px-4 py-2">{shop.businessType}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Bank Account Number</td>
+                            <td className="border px-4 py-2">{shop.shopBankAccountNumber}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Bank Name</td>
+                            <td className="border px-4 py-2">{shop.shopBankName}</td>
+                        </tr>
+                        <tr>
+                            <td className="border px-4 py-2 font-semibold">Tax Code</td>
+                            <td className="border px-4 py-2">{shop.taxCode}</td>
                         </tr>
                         <tr>
                             <td className="border px-4 py-2 font-semibold">Joined Date</td>
-                            <td className="border px-4 py-2">{shop.createdAt}</td>
+                            <td className="border px-4 py-2">
+                                {new Date(shop.shopJoinedDate).toLocaleDateString()}
+                            </td>
                         </tr>
                         <tr>
                             <td className="border px-4 py-2 font-semibold">Status</td>
                             <td className="border px-4 py-2">
                                 <span
                                     className={
-                                        status === "Active"
+                                        shop.shopStatus === "active"
                                             ? "text-green-700 bg-green-100 p-1 rounded"
                                             : "text-red-700 bg-red-100 p-1 rounded"
                                     }
                                 >
-                                    {status}
+                                    {shop.shopStatus}
                                 </span>
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={toggleStatus}
-                                    className="mb-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+                                    className="ml-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
                                 >
                                     Change Status
-                                </button>
+                                </button> */}
                             </td>
-                        </tr>
-                        <tr>
-                            <td className="px-4 py-2 font-semibold text-lg">Tax Information</td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2 font-semibold">Business Type</td>
-                            <td className="border px-4 py-2">Individual/Household/Company</td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2 font-semibold">Tax Code</td>
-                            <td className="border px-4 py-2">73889332</td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2 font-semibold">
-                                Identification Info (CCCD)
-                            </td>
-                            <td className="border px-4 py-2">075204000024</td>
                         </tr>
                     </tbody>
                 </table>
                 <button
                     type="button"
                     className="mb-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300"
-                    onClick={() => navigate("/shopmanagement")}
+                    onClick={() => navigate("/main/shops")}
                 >
                     Back to List
                 </button>
-                <div className="w-full max-w-6xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+                {/* <div className="w-full mx-auto p-8 bg-white mt-8"></div> */}
+                <div className="w-full mx-auto p-8 bg-white mt-8">
                     <h1 className="text-4xl font-bold mb-8 text-gray-800">List of Products</h1>
-                    <table className="table-auto w-full">
+                    <table className="table-auto w-full mb-8">
                         <thead>
                             <tr>
                                 <th className="border px-4 py-2">Product Name</th>

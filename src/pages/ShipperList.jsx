@@ -127,7 +127,17 @@ export default function ShipperList() {
                                 <td className="border p-2">{shipper.name}</td>
                                 <td className="border p-2">{shipper.phone}</td>
                                 <td className="border p-2">{shipper.email}</td>
-                                <td className="border p-2">{shipper.status}</td>
+                                <td className="border p-2">
+                                    <span
+                                        className={
+                                            shipper.status === "Active"
+                                                ? "text-green-700 bg-green-100 p-1 rounded"
+                                                : "text-red-700 bg-red-100 p-1 rounded"
+                                        }
+                                    >
+                                        {shipper.status}
+                                    </span>
+                                </td>
                                 <td className="border p-2">
                                     <button
                                         type="button"

@@ -2,41 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ShipperManagementPage = () => {
-    const [shippers] = useState([
-        {
-            id: 1,
-            name: "Nguyễn Văn An",
-            phone: "0923457789",
-            activityInformation: "Giao hàng chung cư Vincom Park Place",
-            shippingMethod: "Xe máy",
-            status: "Đang hoạt động",
-        },
-        {
-            id: 2,
-            name: "Trần Thị Bích",
-            phone: "0987654321",
-            activityInformation: "Giao hàng chung cư Keangnam Hanoi Landmark Tower",
-            shippingMethod: "Xe đạp",
-            status: "Đang hoạt động",
-        },
-        {
-            id: 3,
-            name: "Lê Văn Cần",
-            phone: "0912345678",
-            activityInformation: "Giao hàng chung cư Royal City",
-            shippingMethod: "Xe máy",
-            status: "Đang hoạt động",
-        },
-        {
-            id: 4,
-            name: "Phạm Thị Dung",
-            phone: "0901234567",
-            activityInformation: "Giao hàng chung cư The Link Ciputra",
-            shippingMethod: "Xe máy",
-            status: "Đang hoạt động",
-        },
-    ]);
-
     const navigate = useNavigate();
 
     const handleViewDetails = (shipper) => {

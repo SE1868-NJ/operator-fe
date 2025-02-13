@@ -8,7 +8,7 @@ function formatDate(dateString) {
 }
 
 export default function ShipperList() {
-    const [searchName, setSearchName] = useState("");
+    const [search, setSearch] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,11 +18,16 @@ export default function ShipperList() {
     const offset = (currentPage - 1) * itemsPerPage;
     console.log(offset);
 
-    const { data, isLoading } = useShippers(offset, itemsPerPage);
+    const { data, isLoading } = useShippers(offset, itemsPerPage, search);
 
     console.log(data);
 
-    const totalPages = data?.totalCount / itemsPerPage;
+    const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+    };
 
     return (
         <div className="p-6 mx-auto bg-white">
@@ -34,8 +39,8 @@ export default function ShipperList() {
                     type="text"
                     placeholder="Search by name or phone"
                     className="w-1/3 p-2 border rounded"
-                    value={searchName}
-                    onChange={(e) => setSearchName(e.target.value)}
+                    value={search}
+                    onChange={handleSearchChange}
                 />
                 <select
                     className="w-1/4 p-2 border rounded"

@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 
 export const NAVBAR_ITEMS = [
-    { label: "Trang chủ", icon: IconGauge, link: "/products/test" },
+    { label: "Trang chủ", icon: IconGauge, link: "/main" },
     {
         label: "Cửa hàng",
         icon: IconNotes,

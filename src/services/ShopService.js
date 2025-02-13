@@ -11,7 +11,7 @@ const ShopService = {
         const shops = await instance
             .get("/shops/pendingshops")
             .then(({ data }) => {
-                return data;
+                return data.data;
             })
             .catch((err) => {
                 console.error(err);

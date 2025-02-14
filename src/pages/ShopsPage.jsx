@@ -2,27 +2,72 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useShops } from "../hooks/useShop.js";
 
+import React from "react";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
+const data = [
+    { quarter: "2023-Q1", shop_count: 12 },
+    { quarter: "2023-Q2", shop_count: 18 },
+    { quarter: "2023-Q3", shop_count: 25 },
+    { quarter: "2023-Q4", shop_count: 20 },
+    { quarter: "2024-Q1", shop_count: 30 },
+];
+
+const ShopStatistics = () => {
+    return (
+        <div className="w-full h-96 p-4 bg-white rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Số lượng shop mới theo quý</h2>
+            <ResponsiveContainer width="100%" height="90%">
+                <BarChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="quarter" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="shop_count" fill="#4F46E5" barSize={50} />
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};
+
 export default function ShopsPage() {
     const [searchName, setSearchName] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const navigate = useNavigate();
 
-    const { data: shops, isLoading, error } = useShops();
-    //console.log(shops);
+    const [page, setPage] = useState(1);
+    const limit = 3;
 
-    // Hàm lọc danh sách cửa hàng dựa trên tên và trạng thái
-    const filteredShops = shops?.filter((shop) => {
-        const matchesName = shop.shopName.toLowerCase().includes(searchName.toLowerCase());
-        const matchesStatus = filterStatus ? shop.shopStatus === filterStatus : true;
-        return matchesName && matchesStatus;
-    });
+    const { data, isLoading, error } = useShops(page, limit);
+    console.log(data?.shops);
+
+    const offset = (page - 1) * limit;
+    console.log(offset);
+
+    console.log(data);
+
+    const totalPages = Number.parseInt(data?.totalShops / limit) + 1;
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
+
+    if (error || !data?.shops) {
+        return <div className="flex justify-center items-center h-screen">Shop not found</div>;
+    }
+    // // Hàm lọc danh sách cửa hàng dựa trên tên và trạng thái
+    // const filteredShops = shops?.filter((shop) => {
+    //     const matchesName = shop.shopName.toLowerCase().includes(searchName.toLowerCase());
+    //     const matchesStatus = filterStatus ? shop.shopStatus === filterStatus : true;
+    //     return matchesName && matchesStatus;
+    // });
 
     return (
         <div className="flex h-screen">
             {/* <Sidebar className="fixed top-0 left-0 h-full" /> */}
             <div className="flex-1 mx-auto bg-white p-6">
-                <h1 className="text-2xl font-bold mb-4">All Shop List</h1>
+                <h1 className="text-2xl font-bold mb-4">Danh sách các shop</h1>
 
                 {/* Statistics */}
                 <div className="flex gap-4 mb-4">
@@ -40,6 +85,10 @@ export default function ShopsPage() {
                     </div>
                 </div>
 
+                <ShopStatistics />
+                <div>
+                    <h1 className="text-2xl font-bold mb-4">Tìm kiếm</h1>
+                </div>
                 {/* Tìm kiếm và lọc */}
                 <div className="flex gap-4 mb-4">
                     <input
@@ -84,8 +133,8 @@ export default function ShopsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredShops?.map((shop) => (
-                            <tr key={shop.id} className="border">
+                        {data?.shops?.map((shop) => (
+                            <tr key={shop.shopID} className="border">
                                 <td className="border p-2">{shop.shopID}</td>
                                 <td className="border p-2">{shop.shopName}</td>
                                 <td className="border p-2">{shop.Owner.fullName}</td>
@@ -120,6 +169,28 @@ export default function ShopsPage() {
                         ))}
                     </tbody>
                 </table>
+                {/* Phân trang */}
+                <div className="flex justify-between mt-4">
+                    <button
+                        type="button"
+                        className="px-4 py-2 text-white bg-gray-500 rounded disabled:opacity-50"
+                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={page === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="self-center">
+                        Page {page} of {totalPages}
+                    </span>
+                    <button
+                        type="button"
+                        className="px-4 py-2 text-white bg-gray-500 rounded disabled:opacity-50"
+                        onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={page === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </div>
     );

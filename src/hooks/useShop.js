@@ -2,10 +2,11 @@
 import { useQuery } from "@tanstack/react-query";
 import ShopService from "../services/ShopService";
 
-export const useShops = () => {
+export const useShops = (page, limit) => {
+    const offset = (page - 1) * limit;
     return useQuery({
-        queryKey: ["shops"],
-        queryFn: () => ShopService.getAllShops(),
+        queryKey: ["shops", page, limit],
+        queryFn: () => ShopService.getAllShops(offset, limit),
     });
 };
 

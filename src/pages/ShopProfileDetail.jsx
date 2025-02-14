@@ -1,7 +1,7 @@
 // import React, {useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShop } from "../hooks/useShop";
-
+import ShopService from "../services/ShopService.js";
 const productsData = [
     {
         id: 1,
@@ -41,14 +41,6 @@ const ShopProfileDetail = () => {
     const { data: shop, isLoading, error } = useShop(id);
 
     console.log(shop);
-    // const { mutate: updateShopStatus } = useUpdateShopStatus();
-    // const [status, setStatus] = useState(""); // Khởi tạo state 'status'
-
-    // useEffect(() => {
-    //     if (shop) {
-    //         setStatus(shop.shopStatus);
-    //     }
-    // }, [shop]);
 
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -57,12 +49,6 @@ const ShopProfileDetail = () => {
     if (error || !shop) {
         return <div className="flex justify-center items-center h-screen">Shop not found</div>;
     }
-
-    // const toggleStatus = () => {
-    //     const newStatus = status === "active" ? "suspended" : "active";
-    //     setStatus(newStatus); // Cập nhật state 'status' mới
-    //     updateShopStatus({ id, status: newStatus });
-    // };
 
     return (
         <div className="flex w-full bg-gray-100 min-h-screen">
@@ -206,13 +192,33 @@ const ShopProfileDetail = () => {
                                 >
                                     {shop.shopStatus}
                                 </span>
-                                {/* <button
-                                    type="button"
-                                    onClick={toggleStatus}
-                                    className="ml-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-                                >
-                                    Change Status
-                                </button> */}
+                                {/* <div>
+                                    <form
+                                        onSubmit={handleSubmit(onSubmit)}
+                                        className="mt-8 border border-black p-6 w-5/6"
+                                    >
+                                        <p className="font-semibold mb-2">Đánh giá của Operator:</p>
+                                        <textarea
+                                            {...register("description", {
+                                                required: "Vui lòng nhập đánh giá của bạn",
+                                            })}
+                                            type="text"
+                                            name="description"
+                                            id="description"
+                                            placeholder="Hãy nhập đánh giá của bạn"
+                                            className="w-full p-2 rounded border border-gray-300 h-28"
+                                        />
+                                        <div className="mt-4 flex justify-end">
+                                            <button
+                                                type="button"
+                                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                                onClick={() => handleDecision("accepted")}
+                                            >
+                                                Change Status
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div> */}
                             </td>
                         </tr>
                     </tbody>

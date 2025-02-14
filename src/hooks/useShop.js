@@ -26,10 +26,10 @@ export const useShop = (id) => {
 //     });
 // };
 
-export const usePendingShops = () => {
+export const usePendingShops = (limit = 10, page = 1, filterData = {}) => {
     return useQuery({
-        queryKey: ["pendingShops"],
-        queryFn: () => ShopService.getPendingShops(),
+        queryKey: ["pendingShops", limit, page, filterData],
+        queryFn: () => ShopService.getPendingShops(limit, page, filterData),
     });
 };
 

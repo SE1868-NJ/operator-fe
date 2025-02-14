@@ -7,10 +7,23 @@ const ShopService = {
         });
         return shops;
     },
-    async getPendingShops() {
+    async getPendingShops(limit = 10, page = 1, filterData = {}) {
+        const offset = (page - 1) * limit;
+        const { shopName, ownerName, shopEmail, shopPhone } = filterData;
+
         const shops = await instance
-            .get("/shops/pendingshops")
+            .get("/shops/pendingshops", {
+                params: {
+                    offset,
+                    limit,
+                    shopName,
+                    ownerName,
+                    shopEmail,
+                    shopPhone,
+                },
+            })
             .then(({ data }) => {
+                console.log(data.data);
                 return data.data;
             })
             .catch((err) => {

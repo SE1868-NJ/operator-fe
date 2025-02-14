@@ -245,7 +245,11 @@ const PendingShopDetail = () => {
                                 Số giấy phép kinh doanh:
                             </th>
                             <td className="border border-gray-300 px-4 py-2">
-                                {shop.businessLicenseNumber}
+                                <img
+                                    className="w-96 h-auto object-cover"
+                                    src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                                    alt=""
+                                />
                             </td>
                         </tr>
                         <tr>

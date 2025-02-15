@@ -1,12 +1,28 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUsers } from "../hooks/useUser";
 
 const UserList = () => {
+    // Lấy giá trị từ URL
+    //const page = Number(searchParams.get("page")) || 1;
+    // const search = searchParams.get("search") || "";
+    // const phoneSearch = searchParams.get("phoneSearch") || "";
+    // const statusFilter = searchParams.get("statusFilter") || "";
+
+    const navigate = useNavigate();
+
+    const [whereCondition, setWhereCondition] = useState("name=&phone=&status=");
+
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState(""); // State cho tìm kiếm
-    const [statusFilter, setStatusFilter] = useState(""); // State cho filter
-    const { data, isLoading, error } = useUsers(page);
+
+    const [name, setName] = useState("");
+
+    const [phone, setPhone] = useState("");
+
+    const [status, setStatus] = useState("");
+
+    // Fetch dữ liệu dựa trên page + filter
+    const { data, isLoading, error } = useUsers(page, whereCondition);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading users</p>;
@@ -14,28 +30,66 @@ const UserList = () => {
     const users = data?.users || [];
     const totalPages = data?.totalPages || 1;
 
+    // ✅ Xử lý khi nhấn "Tìm kiếm"
+    const handleSearch = () => {
+        setPage(1); // Reset về trang 1 khi tìm kiếm
+        setWhereCondition(`name=${name}&phone=${phone}&status=${status}`);
+
+        //console.log("Params after update:", setWhereCondition);
+    };
+
+    const handleReset = () => {
+        setPage(1); // Reset về trang 1 khi tìm kiếm
+        setWhereCondition("name=&phone=&status=");
+
+        //console.log("Params after update:", setWhereCondition);
+    };
+
     return (
         <div className="max-w-4xl mx-auto mt-10 p-4 bg-white shadow-md rounded-lg">
             {/* 🔎 Search và Filter */}
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-between mb-4 gap-2">
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="border p-2 rounded w-1/2"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="border p-2 rounded w-1/4"
+                />
+                <input
+                    type="text"
+                    placeholder="Tìm kiếm theo SĐT..."
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="border p-2 rounded w-1/4"
                 />
                 <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="border p-2 rounded"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="border p-2 rounded w-1/4"
                 >
                     <option value="">Tất cả trạng thái</option>
                     <option value="Hoạt động">Hoạt động</option>
                     <option value="Không hoạt động">Không hoạt động</option>
                     <option value="Đình chỉ">Đình chỉ</option>
                 </select>
+                <button
+                    type="button"
+                    onClick={handleSearch}
+                    className="bg-blue-500 text-white px-4 py-2 rounded text-sm"
+                >
+                    Tìm kiếm
+                </button>
+                {/* ✅ Nút Reset */}
+                <button
+                    type="button"
+                    onClick={handleReset}
+                    className="bg-gray-500 text-white px-4 py-2 rounded text-sm"
+                >
+                    Làm mới
+                </button>
             </div>
+
             <h2 className="text-2xl font-bold mb-4">Danh sách người dùng</h2>
             <table className="min-w-full border border-gray-300">
                 <thead>
@@ -87,12 +141,14 @@ const UserList = () => {
                 </tbody>
             </table>
 
-            {/* Pagination Controls */}
+            {/*Pagination giữ nguyên bộ lọc */}
             <div className="flex justify-center mt-4">
                 <button
                     type="button"
                     disabled={page === 1}
-                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                    onClick={() => {
+                        setPage((prevPage) => prevPage - 1);
+                    }}
                     className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
                 >
                     Trước
@@ -103,7 +159,7 @@ const UserList = () => {
                 <button
                     type="button"
                     disabled={page >= totalPages}
-                    onClick={() => setPage((prev) => prev + 1)}
+                    onClick={() => setPage((prevPage) => prevPage + 1)}
                     className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
                 >
                     Tiếp

@@ -1,10 +1,13 @@
 import instance from "../lib/axios.js";
 
 const UserService = {
-    async getAllUsers(page = 1, limit = 10) {
-        const users = await instance
-            .get(`/user?page=${page}&limit=${limit}`)
-            .then(({ data }) => data.data);
+    async getAllUsers(page = 1, whereCondition = "", limit = 10) {
+        console.log(whereCondition);
+
+        const query = `page=${page}&limit=${limit}&${whereCondition}`;
+
+        const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
+
         return users;
     },
     async getUserById(id) {
@@ -27,6 +30,10 @@ const UserService = {
             .then(({ data }) => data.data);
 
         return user;
+    },
+    async filterUser(query) {
+        const users = await instance.get(`user/${query}`).then(({ data }) => data.data);
+        return users;
     },
 };
 

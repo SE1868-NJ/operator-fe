@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import UserService from "../services/UserService";
 
-export const useUsers = (page) => {
+export const useUsers = (page, whereCondition) => {
     return useQuery({
-        queryKey: ["users", page],
-        queryFn: () => UserService.getAllUsers(page),
+        queryKey: ["users", page, whereCondition],
+        queryFn: () => UserService.getAllUsers(page, whereCondition),
     });
 };
 

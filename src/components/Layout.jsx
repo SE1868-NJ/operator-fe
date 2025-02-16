@@ -1,21 +1,24 @@
 import { AppShell } from "@mantine/core";
-import { People } from "iconsax-react";
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useNavbarStore } from "../stores/NavbarStore";
 import { NavbarNested } from "./layout/NavbarNested/NavbarNested";
 
-const navItems = [
-    { link: "/main/pendingshoplist", label: "Cửa hàng chờ duyệt", icon: People },
-    { link: "/main/shopmanagement", label: "Quản lý tất cả cửa hàng", icon: People },
-    { link: "/main/shipperslist", label: "Quản lý shippers", icon: People },
-    { link: "/main/pendding-shippers", label: "Shippers chờ duyệt", icon: People },
-];
-
 const Layout = () => {
-    const { isOpen, toggle } = useNavbarStore();
+    const { isOpen } = useNavbarStore();
+    // get session using useCurrentUser hook
+    const { session, isLoading } = useCurrentUser();
+
+    // useNavigate hook to navigate page
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // If session is null, navigate to login page
+        if (!isLoading && !session) navigate("/");
+    }, [session, navigate, isLoading]);
 
     return (
-        // <AuthWrapper>
         <AppShell
             header={{ height: 60 }}
             navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !isOpen } }}
@@ -36,7 +39,6 @@ const Layout = () => {
                 <Outlet />
             </AppShell.Main>
         </AppShell>
-        // </AuthWrapper>
     );
 };
 

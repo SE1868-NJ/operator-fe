@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
 import { memo } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 
@@ -11,16 +11,13 @@ const AuthWrapper = ({ children }) => {
     // useNavigate hook to navigate page
     const navigate = useNavigate();
 
-    // Redirect to the home page if user is not authenticated
-    // useEffect(() => {
-    //     if (!isLoading && !session) {
-    //         console.warn("Unauthorized access attempt detected. Redirecting to login page...");
-    //         // navigate("/");
-    //     }
-    // }, [session, isLoading, navigate]);
+    useEffect(() => {
+        // If session is null, navigate to login page
+        if (!isLoading && !session) navigate("/");
+    }, [session, navigate, isLoading]);
 
     // Render children only if session exists
-    if (!session) return null;
+    if (!session) navigate("/");
 
     return children;
 };

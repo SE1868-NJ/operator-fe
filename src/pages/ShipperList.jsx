@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useShippers } from "../hooks/useShippers";
 
 const shippersData = [
     {
@@ -43,33 +44,18 @@ const shippersData = [
         },
     },
 ];
-
-function formatDate(dateString) {
-    const [year, month, day] = dateString.split("-");
-    return `${day}-${month}-${year}`;
-}
-
 export default function ShipperList() {
     const [searchName, setSearchName] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const navigate = useNavigate();
 
-    const applyFilters = () => {
-        return shippersData.filter((shipper) => {
-            const matchName = searchName
-                ? shipper.name.toLowerCase().includes(searchName.toLowerCase()) ||
-                  shipper.phone.includes(searchName)
-                : true;
-            const matchStatus = filterStatus ? shipper.status === filterStatus : true;
-            const matchDate = filterDate ? shipper.date === filterDate : true;
-            return matchName && matchStatus && matchDate;
-        });
-    };
+    const { data: shippers, isLoading, error } = useShippers();
+    console.log(shippers);
 
     return (
         <div className="mx-auto bg-white p-6">
-            <h1 className="text-2xl font-bold mb-4">Shipper List</h1>
+            <h1 className="text-2xl font-bold mb-4">Danh sách tất cả người giao hàng</h1>
 
             {/* Tìm kiếm và lọc */}
             <div className="flex gap-4 mb-4">
@@ -109,26 +95,34 @@ export default function ShipperList() {
                         <th className="border p-2">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {applyFilters().map((shipper) => (
-                        <tr key={shipper.id} className="border">
-                            <td className="border p-2">{shipper.id}</td>
-                            <td className="border p-2">{shipper.name}</td>
-                            <td className="border p-2">{shipper.phone}</td>
-                            <td className="border p-2">{shipper.email}</td>
-                            <td className="border p-2">{shipper.status}</td>
-                            <td className="border p-2">
-                                <button
-                                    type="button"
-                                    className="text-blue-500 underline"
-                                    onClick={() => navigate(`/main/shipper/${shipper.id}`)}
-                                >
-                                    View Details
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+                {isLoading ? (
+                    <tr>
+                        <td colSpan="6" className="text-center">
+                            Loading...
+                        </td>
+                    </tr>
+                ) : (
+                    <tbody>
+                        {shippers?.map((shipper) => (
+                            <tr key={shipper.id} className="border">
+                                <td className="border p-2">{shipper.id}</td>
+                                <td className="border p-2">{shipper.name}</td>
+                                <td className="border p-2">{shipper.phone}</td>
+                                <td className="border p-2">{shipper.email}</td>
+                                <td className="border p-2">{shipper.status}</td>
+                                <td className="border p-2">
+                                    <button
+                                        type="button"
+                                        className="text-blue-500 underline"
+                                        onClick={() => navigate(`/main/shipper/${shipper.id}`)}
+                                    >
+                                        View Details
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                )}
             </table>
         </div>
     );

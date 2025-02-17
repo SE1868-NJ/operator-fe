@@ -1,4 +1,7 @@
+import { Button } from "@mantine/core";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useShipper } from "../hooks/useShippers";
 
 const shippersData = [
     {
@@ -44,25 +47,46 @@ const shippersData = [
 ];
 
 function formatDate(dateString) {
-    const [year, month, day] = dateString.split("-");
-    return `${day}-${month}-${year}`;
+    const [year, month, day] = dateString.split("/");
+    return `${day}/${month}/${year}`;
 }
 
 export default function ShipperDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const shipper = shippersData.find((s) => s.id === Number.parseInt(id));
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { data: shipper, error } = useShipper(id);
+    console.log(shipper);
 
     if (!shipper) {
         return <div className="text-center text-red-500">Shipper not found</div>;
     }
 
+    const handleChangeStatus = (status) => {
+        setIsLoading(true);
+        fetch(`http://localhost:3000/shippers/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: status }),
+        })
+            .then(() => {
+                setIsLoading(false);
+                navigate("/main/shipperslist");
+            })
+            .catch(() => {
+                setIsLoading(false);
+            });
+    };
+
     return (
         <div className=" bg-white p-6">
-            <h1 className="text-2xl font-bold mb-4">Shipper Details</h1>
+            <h1 className="text-2xl font-bold mb-4">Thông tin người giao hàng</h1>
             <div className="flex flex-col items-center">
                 <img
-                    src={shipper.avatar}
+                    src={"/images/shipper1.jpg"}
                     alt={shipper.name}
                     className="w-24 h-24 rounded-full mb-4 border"
                 />
@@ -75,7 +99,7 @@ export default function ShipperDetails() {
                 <span className="font-bold">Giới tính:</span>
                 <span>{shipper.gender}</span>
                 <span className="font-bold">Ngày sinh:</span>
-                <span>{formatDate(shipper.dateOfBirth)}</span>
+                <span>{shipper.dateOfBirth.split("T")[0]}</span>
                 <span className="font-bold">Quê quán:</span>
                 <span>{shipper.hometown}</span>
                 <span className="font-bold">Địa chỉ:</span>
@@ -94,23 +118,30 @@ export default function ShipperDetails() {
                 <span>{shipper.shippingMethod}</span>
             </div>
 
-            <h2 className="mt-6 font-bold text-lg">Emergency Contact</h2>
+            <h2 className="mt-6 font-bold text-lg">Liên lạc khẩn cấpcấp</h2>
             <div className=" p-4 mb-6 grid grid-cols-2 gap-4">
-                <span className="font-bold">Name:</span>
-                <span>{shipper.emergencyContact.name}</span>
+                <span className="font-bold">Họ và tên:</span>
+                <span>{shipper.emergencyContact?.name}</span>
                 <span className="font-bold">Mối quan hệ:</span>
-                <span>{shipper.emergencyContact.relation}</span>
-                <span className="font-bold">SDt:</span>
-                <span>{shipper.emergencyContact.phone}</span>
+                <span>{shipper.emergencyContact?.relation}</span>
+                <span className="font-bold">SDT:</span>
+                <span>{shipper.emergencyContact?.phone}</span>
             </div>
 
-            <button
-                type="button"
-                className="mt-4 bg-blue-500 text-white p-2 rounded"
-                onClick={() => navigate("/shipperslist")}
+            <Button
+                color={shipper?.status === "Active" ? "red" : "teal"}
+                onClick={() =>
+                    handleChangeStatus(shipper?.status === "Active" ? "Inactive" : "Active")
+                }
             >
-                Back to List
-            </button>
+                {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-t-2 border-b-2 border-red-500 rounded-full animate-spin" />
+                        <span>Đang xử lý...</span>
+                    </div>
+                ) : null}
+                {shipper?.status === "Active" ? "Dừng hoạt động" : "Kích hoạt"}
+            </Button>
         </div>
     );
 }

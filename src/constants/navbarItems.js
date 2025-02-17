@@ -9,14 +9,14 @@ import {
 } from "@tabler/icons-react";
 
 export const NAVBAR_ITEMS = [
-    { label: "Trang chủ", icon: IconGauge, link: "/products/test" },
+    { label: "Trang chủ", icon: IconGauge, link: "/main" },
     {
         label: "Cửa hàng",
         icon: IconNotes,
         initiallyOpened: true,
         links: [
             { label: "Danh sách tất cả cửa hàng", link: "/main/shops" },
-            { label: "Cửa hàng đang duyệt", link: "/main/pendingshoplist/" },
+            { label: "Cửa hàng đang duyệt", link: "/main/pendingshops/" },
             // { label: "Outlook", link: "/c" },
             // { label: "Real time", link: "/d" },
         ],

@@ -1,4 +1,4 @@
-import instance from "../lib/axios";
+import { instance } from "../lib/axios";
 
 const ShopService = {
     async getAllShops() {
@@ -9,9 +9,9 @@ const ShopService = {
     },
     async getPendingShops() {
         const shops = await instance
-            .get("/shop/pendingshops")
+            .get("/shops/pendingshops")
             .then(({ data }) => {
-                return data;
+                return data.data;
             })
             .catch((err) => {
                 console.error(err);
@@ -33,7 +33,7 @@ const ShopService = {
     // },
     async getOnePendingShop(id) {
         const shop = await instance
-            .get(`/shop/pendingshop/${id}`)
+            .get(`/shops/pendingshop/${id}`)
             .then(({ data }) => {
                 return data;
             })
@@ -44,7 +44,7 @@ const ShopService = {
     },
     async updatePendingShop(data) {
         const shop = await instance
-            .patch(`/shop/pendingshop/${data.id}`, data)
+            .patch(`/shops/pendingshop/${data.id}`, data)
             .then(({ data }) => {
                 return data;
             })

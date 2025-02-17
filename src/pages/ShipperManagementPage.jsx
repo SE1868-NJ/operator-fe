@@ -1,49 +1,11 @@
+import { Button } from "@mantine/core";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { usePendingShippers } from "../hooks/useShippers";
 
 const ShipperManagementPage = () => {
-    const [operators] = useState([
-        {
-            id: 1,
-            name: "Nguyễn Văn An",
-            email: "nguyenvanan@gmail.com",
-            role: "Shipper",
-            status: "Pending",
-        },
-        {
-            id: 2,
-            name: "Trần Thị Bích",
-            email: "tranthibich@gmail.com",
-            role: "Shipper",
-            status: "Pending",
-        },
-        {
-            id: 3,
-            name: "Lê Văn Cần",
-            email: "levancan@gmail.com",
-            role: "Shipper",
-            status: "Pending",
-        },
-        {
-            id: 4,
-            name: "Phạm Thị Dung",
-            email: "phamthidung@gmail.com",
-            role: "Shipper",
-            status: "Pending",
-        },
-    ]);
-
-    const navigate = useNavigate();
-
-    // Filter out only the shippers with "Pending" status
-    const pendingOperators = operators.filter((operator) => operator.status === "Pending");
-
-    // Navigate to the shipper detail page
-    const handleViewDetails = (shipper) => {
-        console.log(shipper);
-        navigate(`/main/pendding-shippers/${shipper.id}`, { state: { shipper } });
-    };
-
+    const { id } = useParams();
+    const { data: pendingShippers } = usePendingShippers();
     return (
         <div className="container mx-auto p-6">
             <h1 className="text-2xl font-bold mb-4">List of Shippers in Pending Status</h1>
@@ -59,7 +21,7 @@ const ShipperManagementPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {pendingOperators.map((operator) => (
+                    {pendingShippers?.map((operator) => (
                         <tr key={operator.id}>
                             <td className="border px-4 py-2 text-center">{operator.id}</td>
                             <td className="border px-4 py-2">{operator.name}</td>
@@ -67,13 +29,13 @@ const ShipperManagementPage = () => {
                             <td className="border px-4 py-2">{operator.role}</td>
                             <td className="border px-4 py-2">{operator.status}</td>
                             <td className="border px-4 py-2 flex justify-center space-x-4">
-                                <button
+                                <Button
                                     type="button"
-                                    onClick={() => handleViewDetails(operator)}
-                                    className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
+                                    component={Link}
+                                    to={`/main/pendding-shippers/${id}`}
                                 >
                                     View
-                                </button>
+                                </Button>
                             </td>
                         </tr>
                     ))}

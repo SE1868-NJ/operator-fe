@@ -39,6 +39,8 @@ const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { data: shop, isLoading, error } = useShop(id);
+
+    console.log(shop);
     // const { mutate: updateShopStatus } = useUpdateShopStatus();
     // const [status, setStatus] = useState(""); // Khởi tạo state 'status'
 
@@ -69,7 +71,9 @@ const ShopProfileDetail = () => {
                 <div className="flex gap-12 mb-8">
                     <div className="flex gap-6 items-center">
                         <img
-                            src={shop.shopAvatar}
+                            src={
+                                "https://img.lovepik.com/free-png/20210918/lovepik-e-shop-png-image_400245565_wh1200.png"
+                            }
                             alt={shop.shopName}
                             className="w-40 h-40 rounded-full shadow-md"
                         />

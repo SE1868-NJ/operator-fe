@@ -1,6 +1,8 @@
+import { ActionIcon, Modal } from "@mantine/core";
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
-import { useMemo, useState } from "react";
+import { useDebouncedState, useDisclosure } from "@mantine/hooks"; // keep useDebouncedState
+import { IconEye } from "@tabler/icons-react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApprovedShops, usePendingShops } from "../hooks/useShop";
 
@@ -9,6 +11,7 @@ const PendingShopListPage = () => {
     const limit = 10;
     const timeOut = 200;
     const [page, setPage] = useState(1);
+    const [reason, setReason] = useState("");
 
     const [searchShopName, setSearchShopName] = useDebouncedState("", timeOut);
     const [searchOwnerName, setSearchOwnerName] = useDebouncedState("", timeOut);
@@ -16,6 +19,8 @@ const PendingShopListPage = () => {
     const [searchPhone, setSearchPhone] = useDebouncedState("", timeOut);
 
     const [activeButton, setActiveButton] = useState("pending");
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     const filterData = useMemo(
         () => ({
@@ -46,9 +51,14 @@ const PendingShopListPage = () => {
     const approvedShops = approvedShopsData?.approvedShops || [];
     const totalApproved = approvedShopsData?.totalApprovedShops || 0;
 
-    const handleButtonClick = (buttonName) => {
+    const handleToggleButton = (buttonName) => {
         setPage(1); // Reset page to 1 when switching tabs
         setActiveButton(buttonName);
+    };
+
+    const handleOpenModal = (reason) => {
+        setReason(reason);
+        open();
     };
 
     // Determine which list to display based on active button
@@ -151,7 +161,7 @@ const PendingShopListPage = () => {
                       : "border-gray-300" // Không Active: border xám
               }`}
                             type="button"
-                            onClick={() => handleButtonClick("pending")}
+                            onClick={() => handleToggleButton("pending")}
                         >
                             Đang chờ duyệt
                         </button>
@@ -162,7 +172,7 @@ const PendingShopListPage = () => {
                                     : "border-gray-300"
                             }`}
                             type="button"
-                            onClick={() => handleButtonClick("approved")}
+                            onClick={() => handleToggleButton("approved")}
                         >
                             Đã duyệt bởi tôi
                         </button>
@@ -247,24 +257,34 @@ const PendingShopListPage = () => {
                                                 {page * limit - limit + index + 1}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.shopName}
+                                                {activeButton === "pending"
+                                                    ? shop.shopName
+                                                    : shop.shop.shopName}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.Owner.fullName}
+                                                {activeButton === "pending"
+                                                    ? shop.Owner.fullName
+                                                    : shop.shop.Owner.fullName}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.shopEmail}
+                                                {activeButton === "pending"
+                                                    ? shop.shopEmail
+                                                    : shop.shop.shopEmail}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.shopPhone}
+                                                {activeButton === "pending"
+                                                    ? shop.shopPhone
+                                                    : shop.shop.shopPhone}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.shopPickUpAddress}
+                                                {activeButton === "pending"
+                                                    ? shop.shopPickUpAddress
+                                                    : shop.shop.shopPickUpAddress}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 {activeButton === "pending"
                                                     ? shop.shopJoinedDate
-                                                    : shop.reasonTemp.createAt}
+                                                    : shop.createAt}
                                             </td>
                                             <td
                                                 hidden={activeButton === "pending"}
@@ -277,30 +297,71 @@ const PendingShopListPage = () => {
                                                         type="button"
                                                         disabled
                                                         className={`rounded py-2 px-4 font-bold text-white
-              ${
-                  shop.reasonTemp.changedStatus === "accepted"
-                      ? "bg-green-500" // Xanh lá cây
-                      : "bg-red-500" // Đỏ
-              }
-              cursor-not-allowed`} // Vô hiệu hóa
-                                                        value={shop.reasonTemp.changedStatus}
+                            ${
+                                shop.changedStatus === "accepted"
+                                    ? "bg-green-500" // Xanh lá cây
+                                    : "bg-red-500" // Đỏ
+                            }
+                            cursor-not-allowed`} // Vô hiệu hóa
+                                                        value={shop.changedStatus}
                                                     />
                                                 )}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <button
-                                                    onClick={() =>
-                                                        navigate(`/main/pendingshop/${shop.shopID}`)
-                                                    }
-                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                                    type="button"
-                                                >
-                                                    Xem chi tiết
-                                                </button>
+                                                {activeButton === "pending" ? (
+                                                    <button
+                                                        hidden={activeButton !== "pending"}
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/main/pendingshop/${shop.shopID}`,
+                                                            )
+                                                        }
+                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                                        type="button"
+                                                    >
+                                                        Xem chi tiết
+                                                    </button>
+                                                ) : (
+                                                    <ActionIcon
+                                                        variant="default"
+                                                        onClick={() => handleOpenModal(shop.reason)}
+                                                    >
+                                                        <IconEye />
+                                                    </ActionIcon>
+                                                )}
                                             </td>
                                         </tr>
                                     ))
                                 )}
+                                {/* Modal hien thi ly do */}
+                                <Modal
+                                    opened={opened}
+                                    onClose={close}
+                                    withCloseButton={false}
+                                    centered
+                                    classNames={{
+                                        modal: "max-w-lg w-full p-6 rounded-lg shadow-xl bg-white", // Adding padding, rounded corners, and shadow for the modal
+                                        title: "text-2xl font-semibold text-gray-800 mb-4", // Larger, more prominent title with better color contrast
+                                    }}
+                                >
+                                    <p className="font-semibold text-xl text-gray-800 mb-6">
+                                        Lý do từ chối
+                                    </p>
+                                    <textarea
+                                        className="w-full border border-gray-300 rounded-lg p-4 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
+                                        disabled
+                                        value={reason}
+                                    />
+                                    <div className="flex justify-end mt-4">
+                                        <button
+                                            type="button"
+                                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
+                                            onClick={close}
+                                        >
+                                            Đóng
+                                        </button>
+                                    </div>
+                                </Modal>
                             </tbody>
                         </table>
                     </div>

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useNavbarStore } from "../stores/NavbarStore";
+import Header from "./layout/Header";
 import { NavbarNested } from "./layout/NavbarNested/NavbarNested";
 
 const Layout = () => {
@@ -29,9 +30,7 @@ const Layout = () => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Header>
-                <div className="flex items-center h-full px-4">
-                    <p className="text-2xl font-bold text-primary">eCMarket</p>
-                </div>
+                <Header />
             </AppShell.Header>
             {/* Main App */}
             <AppShell.Main bg={"gray.0"}>

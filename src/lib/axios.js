@@ -1,7 +1,5 @@
 import axios from "axios";
-
-const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3050";
-const authURL = import.meta.env.VITE_AUTH_URL || "https://auth-backend-core.onrender.com/api/v1";
+import { authURL, baseURL } from "../constants";
 
 export const instance = axios.create({
     baseURL: baseURL,

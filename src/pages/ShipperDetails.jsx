@@ -120,7 +120,7 @@ export default function ShipperDetails() {
 
             <h2 className="mt-6 font-bold text-lg">Liên lạc khẩn cấpcấp</h2>
             <div className=" p-4 mb-6 grid grid-cols-2 gap-4">
-                <span className="font-bold">Họ và têntên:</span>
+                <span className="font-bold">Họ và tên:</span>
                 <span>{shipper.emergencyContact?.name}</span>
                 <span className="font-bold">Mối quan hệ:</span>
                 <span>{shipper.emergencyContact?.relation}</span>

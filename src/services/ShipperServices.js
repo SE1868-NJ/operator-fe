@@ -1,10 +1,12 @@
 import { instance } from "../lib/axios";
 
 const ShipperServices = {
-    async getAllShippers() {
-        const shippers = await instance.get("/shippers").then(({ data }) => {
-            return data;
-        });
+    async getAllShippers(offset, limit) {
+        const shippers = await instance
+            .get("/shippers", {
+                params: { offset, limit },
+            })
+            .then(({ data }) => data);
 
         return shippers;
     },

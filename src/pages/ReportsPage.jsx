@@ -1,22 +1,21 @@
-import { Container, Table, Tabs, Text, Title } from "@mantine/core";
-import axios from "axios";
+import { Button, Container, Table, Tabs, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3050");
 
 const ReportsPage = () => {
-    const [reports, setReports] = useState({ shippers: [], shops: [], customers: [] });
-    const [loading, setLoading] = useState(true);
+    const [reports] = useState({ shippers: [], shops: [], customers: [] });
+    const [loading] = useState(true);
 
     useEffect(() => {
-        const fetchReports = async () => {
-            try {
-                const { data } = await axios.get("/api/reports");
-                // setReports(data);
-            } catch (error) {
-                console.error("Failed to fetch reports:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        socket.on("new_notif", (data) => {
+            console.log(data);
+        });
+    }, []);
+
+    useEffect(() => {
+        const fetchReports = async () => {};
 
         fetchReports();
     }, []);
@@ -46,7 +45,16 @@ const ReportsPage = () => {
         </Table>
     );
 
-    if (loading) return <Text>Loading reports...</Text>;
+    if (loading)
+        return (
+            <Button
+                onClick={() => {
+                    socket.emit("custom_event", "Hello");
+                }}
+            >
+                Emit
+            </Button>
+        );
 
     return (
         <Container fluid py={20}>

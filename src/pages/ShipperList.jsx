@@ -18,7 +18,7 @@ export default function ShipperList() {
     const offset = (currentPage - 1) * itemsPerPage;
     console.log(offset);
 
-    const { data, isLoading } = useShippers(offset, itemsPerPage, search);
+    const { data, isLoading } = useShippers(offset, itemsPerPage, search, filterStatus);
 
     console.log(data);
 
@@ -26,6 +26,11 @@ export default function ShipperList() {
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleStatusChange = (e) => {
+        setFilterStatus(e.target.value);
         setCurrentPage(1);
     };
 
@@ -37,7 +42,7 @@ export default function ShipperList() {
             <div className="flex gap-4 mb-4">
                 <input
                     type="text"
-                    placeholder="Search by name or phone"
+                    placeholder="Tìm kiếm bằng tên và SĐT"
                     className="w-1/3 p-2 border rounded"
                     value={search}
                     onChange={handleSearchChange}
@@ -45,11 +50,12 @@ export default function ShipperList() {
                 <select
                     className="w-1/4 p-2 border rounded"
                     value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
+                    onChange={handleStatusChange}
                 >
-                    <option value="">All Status</option>
-                    <option value="Active">Active</option>
-                    <option value="Deactive">Deactive</option>
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="Đang hoạt động">Đang hoạt động</option>
+                    <option value="Dừng hoạt động">Dừng hoạt động</option>
+                    <option value="Đang duyệt">Đang duyệt</option>
                 </select>
                 <input
                     type="date"
@@ -68,7 +74,7 @@ export default function ShipperList() {
                         <th className="p-2 border">SĐT</th>
                         <th className="p-2 border">Email</th>
                         <th className="p-2 border">Trạng thái</th>
-                        <th className="p-2 border">Actions</th>
+                        <th className="p-2 border">Hoạt động</th>
                     </tr>
                 </thead>
                 {isLoading ? (
@@ -88,9 +94,11 @@ export default function ShipperList() {
                                 <td className="p-2 border">
                                     <span
                                         className={
-                                            shipper.status === "Active"
+                                            shipper.status === "Đang hoạt động"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : "text-red-700 bg-red-100 p-1 rounded"
+                                                : shipper.status === "Đang duyệt"
+                                                  ? "text-yellow-700 bg-yellow-100 p-1 rounded"
+                                                  : "text-red-700 bg-red-100 p-1 rounded"
                                         }
                                     >
                                         {shipper.status}
@@ -102,7 +110,7 @@ export default function ShipperList() {
                                         className="text-blue-500 underline"
                                         onClick={() => navigate(`/main/shipperslist/${shipper.id}`)}
                                     >
-                                        View Details
+                                        Xem chi tiết
                                     </button>
                                 </td>
                             </tr>
@@ -112,17 +120,17 @@ export default function ShipperList() {
             </table>
 
             {/* Phân trang */}
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-center mt-4 space-x-4">
                 <button
                     type="button"
                     className="px-4 py-2 text-white bg-gray-500 rounded disabled:opacity-50"
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                 >
-                    Previous
+                    Trước
                 </button>
                 <span className="self-center">
-                    Page {currentPage} of {totalPages}
+                    Trang {currentPage} / {totalPages}
                 </span>
                 <button
                     type="button"
@@ -130,7 +138,7 @@ export default function ShipperList() {
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                 >
-                    Next
+                    Tiếp
                 </button>
             </div>
         </div>

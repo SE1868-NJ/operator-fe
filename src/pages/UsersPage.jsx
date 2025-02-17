@@ -1,5 +1,4 @@
-const UsersPage = () => {
-    return <div>Tran Van Khuyen</div>;
-};
-
+function UsersPage() {
+    return <></>;
+}
 export default UsersPage;

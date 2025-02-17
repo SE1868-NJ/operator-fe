@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import ShipperServices from "../services/ShipperServices";
 
-export const useShippers = (offset, limit) => {
+export const useShippers = (offset, limit, search) => {
     console.log("Offset: ", offset);
     return useQuery({
-        queryKey: ["shippers", offset, limit],
-        queryFn: () => ShipperServices.getAllShippers(offset, limit),
+        queryKey: ["shippers", offset, limit, search],
+        queryFn: () => ShipperServices.getAllShippers(offset, limit, search),
     });
 };
 

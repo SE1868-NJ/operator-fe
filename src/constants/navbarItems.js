@@ -1,7 +1,6 @@
+import { IconReport } from "@tabler/icons-react";
 import {
-    IconAdjustments,
     IconCalendarStats,
-    IconFileAnalytics,
     IconGauge,
     IconLock,
     IconNotes,
@@ -17,8 +16,6 @@ export const NAVBAR_ITEMS = [
         links: [
             { label: "Danh sách tất cả cửa hàng", link: "/main/shops" },
             { label: "Cửa hàng đang duyệt", link: "/main/pendingshops/" },
-            // { label: "Outlook", link: "/c" },
-            // { label: "Real time", link: "/d" },
         ],
     },
     {
@@ -27,12 +24,10 @@ export const NAVBAR_ITEMS = [
         links: [
             { label: "Danh sách tất cả người giao hàng", link: "/main/shipperslist" },
             { label: "Người giao hàng đang duyệt", link: "/main/pendding-shippers" },
-            // { label: "Releases schedule", link: "/" },
         ],
     },
     { label: "Người dùng", icon: IconPresentationAnalytics, link: "/main/users" },
-    { label: "Contracts", icon: IconFileAnalytics },
-    { label: "Settings", icon: IconAdjustments },
+    { label: "Khiếu nại", icon: IconReport, link: "/main/reports" },
     {
         label: "Security",
         icon: IconLock,
@@ -42,5 +37,4 @@ export const NAVBAR_ITEMS = [
             { label: "Recovery codes", link: "/" },
         ],
     },
-    { label: "PendingShop", icon: IconNotes, link: "pendingshops" },
 ];

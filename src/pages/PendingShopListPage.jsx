@@ -2,7 +2,7 @@ import { ActionIcon, Modal } from "@mantine/core";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDebouncedState, useDisclosure } from "@mantine/hooks"; // keep useDebouncedState
 import { IconEye } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApprovedShops, usePendingShops } from "../hooks/useShop";
 

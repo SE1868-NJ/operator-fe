@@ -20,10 +20,13 @@ import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
-import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import UserDetailPage from "./pages/UserDetailPage.jsx";
+
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -76,6 +79,10 @@ const router = createBrowserRouter([
                 element: <UsersPage />,
             },
             {
+                path: "/main/user_detail/:id",
+                element: <UserDetailPage />,
+            },
+            {
                 path: "/main/pendingshops/",
                 element: <PendingShopListPage />,
             },
@@ -85,7 +92,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/main/pendding-shippers",
-                element: <ShipperManagementPage />,
+                element: <ShipperPendingPage />,
             },
             {
                 path: "/main/pendding-shippers/:id",

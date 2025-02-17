@@ -22,7 +22,6 @@ const Layout = () => {
         <AppShell
             header={{ height: 60 }}
             navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !isOpen } }}
-            padding="md"
             transitionDuration={500}
             transitionTimingFunction="ease"
         >
@@ -30,12 +29,12 @@ const Layout = () => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Header>
-                <div className="h-full flex items-center px-4">
+                <div className="flex items-center h-full px-4">
                     <p className="text-2xl font-bold text-primary">eCMarket</p>
                 </div>
             </AppShell.Header>
             {/* Main App */}
-            <AppShell.Main>
+            <AppShell.Main bg={"gray.0"}>
                 <Outlet />
             </AppShell.Main>
         </AppShell>

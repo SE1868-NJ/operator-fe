@@ -20,7 +20,7 @@ import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
-import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
+import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
@@ -92,7 +92,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/main/pendding-shippers",
-                element: <ShipperManagementPage />,
+                element: <ShipperPendingPage />,
             },
             {
                 path: "/main/pendding-shippers/:id",

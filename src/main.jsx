@@ -24,6 +24,9 @@ import ShipperManagementPage from "./pages/ShipperManagementPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import UserDetailPage from "./pages/UserDetailPage.jsx";
+
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -74,6 +77,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/users",
                 element: <UsersPage />,
+            },
+            {
+                path: "/main/user_detail/:id",
+                element: <UserDetailPage />,
             },
             {
                 path: "/main/pendingshops/",

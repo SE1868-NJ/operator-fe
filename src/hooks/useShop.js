@@ -39,3 +39,10 @@ export const useOnePendingShop = (id) => {
         queryFn: () => ShopService.getOnePendingShop(id),
     });
 };
+
+export const useApprovedShops = (limit = 10, page = 1, filterData = {}) => {
+    return useQuery({
+        queryKey: ["approvedShops", limit, page, filterData],
+        queryFn: () => ShopService.getApprovedShops(limit, page, filterData),
+    });
+};

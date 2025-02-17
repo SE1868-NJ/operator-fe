@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePendingShops } from "../hooks/useShop";
+import { useApprovedShops, usePendingShops } from "../hooks/useShop";
 
 const PendingShopListPage = () => {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ const PendingShopListPage = () => {
     const [searchEmail, setSearchEmail] = useDebouncedState("", timeOut);
     const [searchPhone, setSearchPhone] = useDebouncedState("", timeOut);
 
+    const [activeButton, setActiveButton] = useState("pending");
+
     const filterData = useMemo(
         () => ({
             shopName: searchShopName,
@@ -24,11 +27,38 @@ const PendingShopListPage = () => {
         [searchShopName, searchOwnerName, searchEmail, searchPhone],
     );
 
-    const { data: responseData, isLoading, error } = usePendingShops(limit, page, filterData);
+    const {
+        data: responseData,
+        isLoading: pendingShopsLoading,
+        error: pendingShopsError,
+    } = usePendingShops(limit, page, filterData);
 
+    const {
+        data: approvedShopsData,
+        isLoading: approvedShopsLoading,
+        error: approvedShopsError,
+    } = useApprovedShops(limit, page, filterData);
+
+    // pending
     const pendingShops = responseData?.pendingShops || [];
-    const total = responseData?.totalPendingShops || 0;
+    const totalPending = responseData?.totalPendingShops || 0;
+    // approved
+    const approvedShops = approvedShopsData?.approvedShops || [];
+    const totalApproved = approvedShopsData?.totalApprovedShops || 0;
 
+    const handleButtonClick = (buttonName) => {
+        setPage(1); // Reset page to 1 when switching tabs
+        setActiveButton(buttonName);
+    };
+
+    // Determine which list to display based on active button
+    const shopsToDisplay = useMemo(() => {
+        return activeButton === "pending" ? pendingShops : approvedShops;
+    }, [activeButton, pendingShops, approvedShops]);
+
+    const isLoading = activeButton === "pending" ? pendingShopsLoading : approvedShopsLoading;
+    const error = activeButton === "pending" ? pendingShopsError : approvedShopsError;
+    const total = activeButton === "pending" ? totalPending : totalApproved;
     const totalPages = Math.ceil(total / limit);
 
     return (
@@ -36,7 +66,9 @@ const PendingShopListPage = () => {
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
                 <div className="py-4 px-6 bg-gray-100 border-b border-gray-200">
                     <h1 className="text-2xl font-semibold text-gray-800 text-center">
-                        Các cửa hàng đang chờ duyệt
+                        {activeButton === "pending"
+                            ? "Các cửa hàng đang chờ duyệt"
+                            : "Các cửa hàng đã duyệt bởi tôi"}
                     </h1>
                 </div>
 
@@ -109,6 +141,33 @@ const PendingShopListPage = () => {
                         </div>
                     </div>
 
+                    {/* Toggle Switch */}
+                    <div>
+                        <button
+                            className={`hover:bg-gray-200 text-gray-600 border font-bold py-2 px-6 focus:outline-none focus:shadow-outline
+              ${
+                  activeButton === "pending"
+                      ? "bg-gray-100 border-gray-100 border-t-4 border-t-black" // Active: nền xám nhạt, border xám, border trên đen
+                      : "border-gray-300" // Không Active: border xám
+              }`}
+                            type="button"
+                            onClick={() => handleButtonClick("pending")}
+                        >
+                            Đang chờ duyệt
+                        </button>
+                        <button
+                            className={`hover:bg-gray-200 text-gray-600 border font-bold py-2 px-6 focus:outline-none focus:shadow-outline ${
+                                activeButton === "approved"
+                                    ? "bg-gray-100 border-gray-100 border-t-4 border-t-black"
+                                    : "border-gray-300"
+                            }`}
+                            type="button"
+                            onClick={() => handleButtonClick("approved")}
+                        >
+                            Đã duyệt bởi tôi
+                        </button>
+                    </div>
+
                     {/* Table */}
                     <div className="overflow-x-auto">
                         <table className="min-w-full leading-normal">
@@ -133,7 +192,13 @@ const PendingShopListPage = () => {
                                         Địa chỉ cửa hàng
                                     </th>
                                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Ngày gửi
+                                        {activeButton === "pending" ? "Ngày gửi" : "Ngày duyệt"}
+                                    </th>
+                                    <th
+                                        hidden={activeButton === "pending"}
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                    >
+                                        Kết quả duyệt
                                     </th>
                                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Chi tiết
@@ -166,8 +231,8 @@ const PendingShopListPage = () => {
                                         </td>
                                     </tr>
                                 )}
-                                {pendingShops &&
-                                pendingShops?.length === 0 &&
+                                {shopsToDisplay &&
+                                shopsToDisplay?.length === 0 &&
                                 !isLoading &&
                                 !error ? (
                                     <tr>
@@ -176,7 +241,7 @@ const PendingShopListPage = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    pendingShops?.map((shop, index) => (
+                                    shopsToDisplay?.map((shop, index) => (
                                         <tr key={shop.shopID}>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 {page * limit - limit + index + 1}
@@ -197,7 +262,30 @@ const PendingShopListPage = () => {
                                                 {shop.shopPickUpAddress}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                {shop.shopJoinedDate}
+                                                {activeButton === "pending"
+                                                    ? shop.shopJoinedDate
+                                                    : shop.reasonTemp.createAt}
+                                            </td>
+                                            <td
+                                                hidden={activeButton === "pending"}
+                                                className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                            >
+                                                {activeButton === "pending" ? (
+                                                    ""
+                                                ) : (
+                                                    <input
+                                                        type="button"
+                                                        disabled
+                                                        className={`rounded py-2 px-4 font-bold text-white
+              ${
+                  shop.reasonTemp.changedStatus === "accepted"
+                      ? "bg-green-500" // Xanh lá cây
+                      : "bg-red-500" // Đỏ
+              }
+              cursor-not-allowed`} // Vô hiệu hóa
+                                                        value={shop.reasonTemp.changedStatus}
+                                                    />
+                                                )}
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <button
@@ -254,7 +342,13 @@ const PendingShopListPage = () => {
                                     <button
                                         type="button"
                                         onClick={() => setPage(Math.min(page + 1, totalPages))}
-                                        disabled={page === totalPages}
+                                        disabled={
+                                            page === totalPages ||
+                                            (shopsToDisplay &&
+                                                shopsToDisplay?.length === 0 &&
+                                                !isLoading &&
+                                                !error)
+                                        }
                                         className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         Trang sau

@@ -1,13 +1,23 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
-    async getAllShops(offset, limit) {
+    async getAllShops(offset, limit, filterData = {}) {
+        const { shopName, ownerName, shopEmail, shopPhone, shopStatus } = filterData;
         const shops = await instance
             .get("/shops", {
-                params: { offset, limit }, // Sử dụng params để truyền query params
+                params: {
+                    offset,
+                    limit,
+                    shopName,
+                    ownerName,
+                    shopEmail,
+                    shopPhone,
+                    shopStatus,
+                }, // Sử dụng params để truyền query params
             })
             .then(({ data }) => {
-                return data?.shops;
+                console.log(data?.data);
+                return data?.data;
             });
         return shops;
     },

@@ -1,7 +1,10 @@
+import { notifications } from "@mantine/notifications";
+import { useForm } from "react-hook-form";
 // import React, {useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShop } from "../hooks/useShop";
 import ShopService from "../services/ShopService.js";
+
 const productsData = [
     {
         id: 1,
@@ -38,6 +41,9 @@ const productsData = [
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const { register, handleSubmit, watch } = useForm();
+
     const { data: shop, isLoading, error } = useShop(id);
 
     console.log(shop);
@@ -49,6 +55,41 @@ const ShopProfileDetail = () => {
     if (error || !shop) {
         return <div className="flex justify-center items-center h-screen">Shop not found</div>;
     }
+
+    const onSubmit = async (data) => {
+        try {
+            const shop = ShopService.updateShopStatus(data);
+            if (shop) {
+                notifications.show({
+                    color: "green",
+                    title: "Cập nhật thành công!",
+                    message: `Shop đã ${
+                        data.status === "active" ? "bị suspended tạm thời" : "được active trở lại"
+                    }.`,
+                });
+            } else {
+                notifications.show({
+                    color: "red",
+                    title: "Lỗi câp nhật!",
+                    message: "Vui lòng thử lại!",
+                });
+            }
+            navigate("/main/shops");
+        } catch (err) {
+            console.error(err);
+            notifications.show({
+                color: "red",
+                title: "Lỗi đã xảy ra khi cập nhật!",
+                message: "Vui lòng thử lại!",
+            });
+        }
+        navigate("/main/shops");
+    };
+
+    const handleDecision = (status) => {
+        const description = watch("description");
+        handleSubmit(() => onSubmit({ id: id, status, description }))();
+    };
 
     return (
         <div className="flex w-full bg-gray-100 min-h-screen">
@@ -64,9 +105,9 @@ const ShopProfileDetail = () => {
                             className="w-40 h-40 rounded-full shadow-md"
                         />
                         <div>
-                            <p className="text-xl font-semibold">Shop Description</p>
+                            <p className="text-xl font-semibold">Mô tả cửa hàng</p>
                             <p className="text-gray-800 mt-2">{shop.shopDescription}</p>
-                            <p className="text-xl font-semibold">Shop Rating</p>
+                            <p className="text-xl font-semibold">Đánh giá cửa hàng</p>
                             <p className="text-gray-800 mt-2">{shop.shopRating}</p>
                         </div>
                     </div>
@@ -85,18 +126,20 @@ const ShopProfileDetail = () => {
                     <tbody>
                         {/* Ownder in4 */}
                         <tr>
-                            <td className="px-4 py-2 font-semibold text-lg">Owner Information</td>
+                            <td className="px-4 py-2 font-semibold text-lg">
+                                Thông tin chủ cửa hàng
+                            </td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Fullname</td>
+                            <td className="border px-4 py-2 font-semibold">Họ và tên</td>
                             <td className="border px-4 py-2">{shop.Owner.fullName}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Date of birth</td>
+                            <td className="border px-4 py-2 font-semibold">Ngày sinh</td>
                             <td className="border px-4 py-2">{shop.Owner.dateOfBirth}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Gender</td>
+                            <td className="border px-4 py-2 font-semibold">Giới tính</td>
                             <td className="border px-4 py-2">{shop.Owner.gender}</td>
                         </tr>
                         <tr>
@@ -104,21 +147,19 @@ const ShopProfileDetail = () => {
                             <td className="border px-4 py-2">{shop.Owner.userEmail}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Phone</td>
+                            <td className="border px-4 py-2 font-semibold">SĐT</td>
                             <td className="border px-4 py-2">{shop.Owner.userPhone}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">CitizenID</td>
+                            <td className="border px-4 py-2 font-semibold">Số định danh cư dân</td>
                             <td className="border px-4 py-2">{shop.Owner.userCitizenID}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">
-                                Identification Number
-                            </td>
+                            <td className="border px-4 py-2 font-semibold">Số CCCD</td>
                             <td className="border px-4 py-2">{shop.Owner.identificationNumber}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">idCardFrontFile</td>
+                            <td className="border px-4 py-2 font-semibold">CCCD mặt trước</td>
                             <td className="border px-4 py-2">
                                 <img
                                     src={shop.Owner.idCardFrontFile}
@@ -128,7 +169,7 @@ const ShopProfileDetail = () => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">idCardBackFile</td>
+                            <td className="border px-4 py-2 font-semibold">CCCD mặt sau</td>
 
                             <td className="border px-4 py-2">
                                 <img
@@ -140,10 +181,10 @@ const ShopProfileDetail = () => {
                         </tr>
                         {/* Shop In4 */}
                         <tr>
-                            <td className="px-4 py-2 font-semibold text-lg">Shop Information</td>
+                            <td className="px-4 py-2 font-semibold text-lg">Thông tin cửa hàng</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Operation Hours</td>
+                            <td className="border px-4 py-2 font-semibold">Thời gian hoạt động</td>
                             <td className="border px-4 py-2">{shop.shopOperationHours}</td>
                         </tr>
                         <tr>
@@ -151,74 +192,92 @@ const ShopProfileDetail = () => {
                             <td className="border px-4 py-2">{shop.shopEmail}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Phone</td>
+                            <td className="border px-4 py-2 font-semibold">SĐT</td>
                             <td className="border px-4 py-2">{shop.shopPhone}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Pick Up Address</td>
+                            <td className="border px-4 py-2 font-semibold">Địa chỉ lấy hàng</td>
                             <td className="border px-4 py-2">{shop.shopPickUpAddress}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Business Type</td>
+                            <td className="border px-4 py-2 font-semibold">Mô hình kinh doanh</td>
                             <td className="border px-4 py-2">{shop.businessType}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Bank Account Number</td>
+                            <td className="border px-4 py-2 font-semibold">Tài khoản ngân hàng</td>
                             <td className="border px-4 py-2">{shop.shopBankAccountNumber}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Bank Name</td>
+                            <td className="border px-4 py-2 font-semibold">Tên ngân hàng</td>
                             <td className="border px-4 py-2">{shop.shopBankName}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Tax Code</td>
+                            <td className="border px-4 py-2 font-semibold">Mã số thuế</td>
                             <td className="border px-4 py-2">{shop.taxCode}</td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Joined Date</td>
+                            <td className="border px-4 py-2 font-semibold">Ngày tham gia</td>
                             <td className="border px-4 py-2">
                                 {new Date(shop.shopJoinedDate).toLocaleDateString()}
                             </td>
                         </tr>
                         <tr>
-                            <td className="border px-4 py-2 font-semibold">Status</td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-6 py-3 font-semibold bg-white-100 text-gray-700">
+                                Trạng thái
+                            </td>
+                            <td className="border px-6 py-3">
+                                {/* Nhãn trạng thái */}
                                 <span
-                                    className={
+                                    className={`text-sm font-semibold px-3 py-1 rounded-md ${
                                         shop.shopStatus === "active"
-                                            ? "text-green-700 bg-green-100 p-1 rounded"
-                                            : "text-red-700 bg-red-100 p-1 rounded"
-                                    }
+                                            ? "text-green-700 bg-green-100 border border-green-500"
+                                            : "text-red-700 bg-red-100 border border-red-500"
+                                    }`}
                                 >
-                                    {shop.shopStatus}
+                                    {shop.shopStatus === "active"
+                                        ? "Đang hoạt động"
+                                        : "Bị tạm dừng"}
                                 </span>
-                                {/* <div>
+
+                                {/* Form xử lý */}
+                                <div className="flex justify-center">
                                     <form
                                         onSubmit={handleSubmit(onSubmit)}
-                                        className="mt-8 border border-black p-6 w-5/6"
+                                        className="mt-6 border border-gray-300 p-6 w-4/5 shadow-lg rounded-lg bg-white"
                                     >
-                                        <p className="font-semibold mb-2">Đánh giá của Operator:</p>
+                                        <p className="font-semibold mb-2 text-gray-700">Lý do:</p>
                                         <textarea
                                             {...register("description", {
-                                                required: "Vui lòng nhập đánh giá của bạn",
+                                                required: "Vui lòng nhập lý do",
                                             })}
-                                            type="text"
                                             name="description"
                                             id="description"
-                                            placeholder="Hãy nhập đánh giá của bạn"
-                                            className="w-full p-2 rounded border border-gray-300 h-28"
+                                            placeholder="Nhập lý do..."
+                                            className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 h-28 text-gray-800"
                                         />
+
+                                        {/* Nút hành động */}
                                         <div className="mt-4 flex justify-end">
-                                            <button
-                                                type="button"
-                                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                                                onClick={() => handleDecision("accepted")}
-                                            >
-                                                Change Status
-                                            </button>
+                                            {shop.shopStatus === "active" ? (
+                                                <button
+                                                    type="button"
+                                                    className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                                                    onClick={() => handleDecision("active")}
+                                                >
+                                                    Tạm dừng hoạt động shop
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                                                    onClick={() => handleDecision("suspended")}
+                                                >
+                                                    Kích hoạt shop hoạt động
+                                                </button>
+                                            )}
                                         </div>
                                     </form>
-                                </div> */}
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -232,7 +291,9 @@ const ShopProfileDetail = () => {
                 </button>
                 {/* <div className="w-full mx-auto p-8 bg-white mt-8"></div> */}
                 <div className="w-full mx-auto p-8 bg-white mt-8">
-                    <h1 className="text-4xl font-bold mb-8 text-gray-800">List of Products</h1>
+                    <h1 className="text-4xl font-bold mb-8 text-gray-800">
+                        Danh sách sản phẩm của shop
+                    </h1>
                     <table className="table-auto w-full mb-8">
                         <thead>
                             <tr>

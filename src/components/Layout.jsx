@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useNavbarStore } from "../stores/NavbarStore";
+import Header from "./layout/Header";
 import { NavbarNested } from "./layout/NavbarNested/NavbarNested";
 
 const Layout = () => {
@@ -22,7 +23,6 @@ const Layout = () => {
         <AppShell
             header={{ height: 60 }}
             navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !isOpen } }}
-            padding="md"
             transitionDuration={500}
             transitionTimingFunction="ease"
         >
@@ -30,12 +30,10 @@ const Layout = () => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Header>
-                <div className="h-full flex items-center px-4">
-                    <p className="text-2xl font-bold text-primary">eCMarket</p>
-                </div>
+                <Header />
             </AppShell.Header>
             {/* Main App */}
-            <AppShell.Main>
+            <AppShell.Main bg={"gray.0"}>
                 <Outlet />
             </AppShell.Main>
         </AppShell>

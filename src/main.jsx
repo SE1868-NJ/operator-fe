@@ -24,9 +24,9 @@ import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
+import ReportsPage from "./pages/ReportsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -99,6 +99,10 @@ const router = createBrowserRouter([
                 element: <ShipperViewPage />,
             },
             {
+                path: "/main/reports",
+                element: <ReportsPage />,
+            },
+            {
                 path: "*",
                 element: <ErrorPage />,
             },
@@ -113,7 +117,7 @@ createRoot(document.getElementById("root")).render(
         {/* khong can quan tam */}
         <QueryClientProvider client={queryClient}>
             {/* provider cua thu vien ui */}
-            <MantineProvider theme={theme}>
+            <MantineProvider theme={theme} defaultColorScheme="light">
                 {/* toast thong bao */}
                 <Notifications />
                 {/* routes */}

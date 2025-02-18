@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUsers } from "../hooks/useUser";
 
 const UserList = () => {
@@ -8,8 +8,6 @@ const UserList = () => {
     // const search = searchParams.get("search") || "";
     // const phoneSearch = searchParams.get("phoneSearch") || "";
     // const statusFilter = searchParams.get("statusFilter") || "";
-
-    const navigate = useNavigate();
 
     const [whereCondition, setWhereCondition] = useState("name=&phone=&status=");
 

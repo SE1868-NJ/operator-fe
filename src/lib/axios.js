@@ -1,8 +1,5 @@
 import axios from "axios";
-
-const baseURL = "http://localhost:3050";
-const authURL = "https://auth-backend-core.onrender.com/api/v1";
-// const authURL = "https://auth-backend-core.onrender.com/api/v1";
+import { authURL, baseURL } from "../constants";
 
 export const instance = axios.create({
     baseURL: baseURL,

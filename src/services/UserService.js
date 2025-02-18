@@ -1,4 +1,4 @@
-import instance from "../lib/axios.js";
+import { instance } from "../lib/axios.js";
 
 const UserService = {
     async getAllUsers(page = 1, whereCondition = "", limit = 10) {

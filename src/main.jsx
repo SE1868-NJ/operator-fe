@@ -5,9 +5,12 @@ import "dayjs/locale/ru";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/nprogress/styles.css";
+
 import { MantineProvider, createTheme } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
+import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
@@ -26,6 +29,7 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
+import ReportDetailPage from "./pages/ReportDetailPage.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -103,6 +107,10 @@ const router = createBrowserRouter([
                 element: <ReportsPage />,
             },
             {
+                path: "/main/reports/:id",
+                element: <ReportDetailPage />,
+            },
+            {
                 path: "*",
                 element: <ErrorPage />,
             },
@@ -118,6 +126,7 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
             {/* provider cua thu vien ui */}
             <MantineProvider theme={theme} defaultColorScheme="light">
+                <NavigationProgress />
                 {/* toast thong bao */}
                 <Notifications />
                 {/* routes */}

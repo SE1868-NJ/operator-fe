@@ -18,6 +18,7 @@ const Header = () => {
         socket.on(NEW_NOTIF, () => {
             // reload number of notifications
             queryClient.invalidateQueries("notifications");
+            console.log("message");
         });
     }, [queryClient]);
 

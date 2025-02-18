@@ -1,6 +1,6 @@
-// import { io } from "socket.io-client";
-// import { baseURL } from "../constants";
+import { io } from "socket.io-client";
+import { baseURL } from "../constants";
 
-// const socket = io(baseURL);
+const socket = io(baseURL);
 
-// export default socket;
+export default socket;

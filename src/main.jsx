@@ -26,7 +26,7 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
-// import ReportsPage from "./pages/ReportsPage.jsx";
+import ReportsPage from "./pages/ReportsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -98,10 +98,10 @@ const router = createBrowserRouter([
                 path: "/main/pendding-shippers/:id",
                 element: <ShipperViewPage />,
             },
-            // {
-            //     path: "/main/reports",
-            //     element: <ReportsPage />,
-            // },
+            {
+                path: "/main/reports",
+                element: <ReportsPage />,
+            },
             {
                 path: "*",
                 element: <ErrorPage />,

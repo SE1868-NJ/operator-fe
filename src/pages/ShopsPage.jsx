@@ -1,35 +1,35 @@
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { useMemo, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useShops } from "../hooks/useShop.js";
 
-import React from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+// import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const data = [
-    { quarter: "2023-Q1", shop_count: 12 },
-    { quarter: "2023-Q2", shop_count: 18 },
-    { quarter: "2023-Q3", shop_count: 25 },
-    { quarter: "2023-Q4", shop_count: 20 },
-    { quarter: "2024-Q1", shop_count: 30 },
-];
+// const data = [
+//     { quarter: "2023-Q1", shop_count: 12 },
+//     { quarter: "2023-Q2", shop_count: 18 },
+//     { quarter: "2023-Q3", shop_count: 25 },
+//     { quarter: "2023-Q4", shop_count: 20 },
+//     { quarter: "2024-Q1", shop_count: 30 },
+// ];
 
-const ShopStatistics = () => {
-    return (
-        <div className="w-full h-96 p-4 bg-white rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Số lượng shop mới theo quý</h2>
-            <ResponsiveContainer width="100%" height="90%">
-                <BarChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="quarter" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="shop_count" fill="#4F46E5" barSize={50} />
-                </BarChart>
-            </ResponsiveContainer>
-        </div>
-    );
-};
+// const ShopStatistics = () => {
+//     return (
+//         <div className="w-full h-96 p-4 bg-white rounded-lg">
+//             <h2 className="text-xl font-bold mb-4">Số lượng shop mới theo quý</h2>
+//             <ResponsiveContainer width="100%" height="90%">
+//                 <BarChart data={data}>
+//                     <CartesianGrid strokeDasharray="3 3" />
+//                     <XAxis dataKey="quarter" />
+//                     <YAxis />
+//                     <Tooltip />
+//                     <Bar dataKey="shop_count" fill="#4F46E5" barSize={50} />
+//                 </BarChart>
+//             </ResponsiveContainer>
+//         </div>
+//     );
+// };
 
 export default function ShopsPage() {
     const navigate = useNavigate();
@@ -89,7 +89,7 @@ export default function ShopsPage() {
                     </div>
                 </div>
 
-                <ShopStatistics />
+                {/* <ShopStatistics /> */}
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Tìm kiếm</h1>
                 </div>

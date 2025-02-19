@@ -166,96 +166,70 @@ export default function ShopsPage() {
                 </div>
 
                 {/* Shop list */}
-                <table className="w-full border-collapse border border-gray-300">
+                <table className="w-full border-collapse border border-gray-300 shadow-lg rounded-lg overflow-hidden">
                     <thead>
-                        <tr className="bg-gray-200">
-                            <th className="border p-2">ID</th>
-                            <th className="border p-2">Tên Shop</th>
-                            <th className="border p-2">Chủ cửa hàng</th>
-                            <th className="border p-2">Email</th>
-                            <th className="border p-2">SĐT</th>
-                            {/* <th className="border p-2">Avatar</th> */}
-                            <th className="border p-2">Mô tả shop</th>
-                            <th className="border p-2">Địa chỉ</th>
-                            <th className="border p-2">Ngày tham gia</th>
-                            <th className="border p-2">Trạng thái</th>
-                            <th className="border p-2">Xem chi tiết</th>
+                        <tr className="bg-gray-200 text-gray-700 text-center uppercase font-semibold tracking-wide">
+                            <th className="border p-3">ID</th>
+                            <th className="border p-3">Tên Shop</th>
+                            <th className="border p-3">Chủ cửa hàng</th>
+                            <th className="border p-3">Email</th>
+                            <th className="border p-3">SĐT</th>
+                            <th className="border p-3">Mô tả shop</th>
+                            <th className="border p-3">Địa chỉ</th>
+                            <th className="border p-3">Ngày tham gia</th>
+                            <th className="border p-3">Trạng thái</th>
+                            <th className="border p-3">Xem chi tiết</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {error && (
-                            <tr>
-                                <td colSpan={8} className="px-5 py-5 text-center">
-                                    <div
-                                        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                        role="alert"
+                        {data?.shops?.map((shop) => (
+                            <tr
+                                key={shop.shopID}
+                                className="border text-center transition-all duration-200 hover:bg-gray-100"
+                            >
+                                <td className="border p-3 py-5">{shop.shopID}</td>
+                                <td className="border p-3 py-5 font-medium text-gray-800">
+                                    {shop.shopName}
+                                </td>
+                                <td className="border p-3 py-5">{shop.Owner.fullName}</td>
+                                <td className="border p-3 py-5 text-blue-500">{shop.shopEmail}</td>
+                                <td className="border p-3 py-5">{shop.shopPhone}</td>
+                                <td className="border p-3 py-5 truncate max-w-[200px]">
+                                    {shop.shopDescription}
+                                </td>
+                                <td className="border p-3 py-5">{shop.shopPickUpAddress}</td>
+                                <td className="border p-3 py-5">
+                                    {new Date(shop.shopJoinedDate).toLocaleDateString()}
+                                </td>
+                                <td className="border p-3">
+                                    <span
+                                        className={`text-sm font-semibold px-3 py-1 rounded-md ${
+                                            shop.shopStatus === "active"
+                                                ? "text-green-700 bg-green-100 border border-green-500"
+                                                : "text-red-700 bg-red-100 border border-red-500"
+                                        }`}
                                     >
-                                        <strong className="font-bold">Lỗi!</strong>
-                                        <span className="block sm:inline">
-                                            Đã có lỗi xảy ra khi lấy dữ liệu.
-                                        </span>
-                                    </div>
+                                        {shop.shopStatus === "active"
+                                            ? "Đang hoạt động"
+                                            : "Bị tạm dừng"}
+                                    </span>
+                                </td>
+                                <td className="border p-3">
+                                    <button
+                                        type="button"
+                                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                                        onClick={() => navigate(`/main/shop/${shop.shopID}`)}
+                                    >
+                                        Chi tiết
+                                    </button>
                                 </td>
                             </tr>
-                        )}
-                        {isLoading && (
-                            <tr>
-                                <td colSpan={8} className="px-5 py-5 text-center">
-                                    <div className="flex items-center justify-center">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500" />
-                                        <span className="ml-2">Đang tải dữ liệu...</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        )}
-                        {data?.shops && data?.shops?.length === 0 && !isLoading && !error ? (
-                            <tr>
-                                <td colSpan={8} className="px-5 py-5 text-center">
-                                    Không có cửa hàng nào!
-                                </td>
-                            </tr>
-                        ) : (
-                            data?.shops?.map((shop) => (
-                                <tr key={shop.shopID} className="border">
-                                    <td className="border p-2">{shop.shopID}</td>
-                                    <td className="border p-2">{shop.shopName}</td>
-                                    <td className="border p-2">{shop.Owner.fullName}</td>
-                                    <td className="border p-2">{shop.shopEmail}</td>
-                                    <td className="border p-2">{shop.shopPhone}</td>
-                                    <td className="border p-2">{shop.shopDescription}</td>
-                                    <td className="border p-2">{shop.shopPickUpAddress}</td>
-                                    <td className="border p-2">
-                                        {new Date(shop.shopJoinedDate).toLocaleDateString()}
-                                    </td>
-                                    <td className="border p-2">
-                                        <span
-                                            className={`text-sm font-semibold px-3 py-1 rounded-md ${
-                                                shop.shopStatus === "active"
-                                                    ? "text-green-700 bg-green-100 border border-green-500"
-                                                    : "text-red-700 bg-red-100 border border-red-500"
-                                            }`}
-                                        >
-                                            {shop.shopStatus === "active"
-                                                ? "Đang hoạt động"
-                                                : "Bị tạm dừng"}
-                                        </span>
-                                    </td>
-                                    <td className="border p-2">
-                                        <button
-                                            type="button"
-                                            className="text-blue-500 underline"
-                                            onClick={() => navigate(`/main/shop/${shop.shopID}`)}
-                                        >
-                                            Chi tiết
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
+                        ))}
                     </tbody>
                 </table>
+
                 {/* Phân trang */}
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-center mt-4 space-x-4">
                     <button
                         type="button"
                         className="px-4 py-2 text-white bg-gray-500 rounded disabled:opacity-50"

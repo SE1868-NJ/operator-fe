@@ -3,10 +3,14 @@ import { useDisclosure } from "@mantine/hooks";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { usePendingShipper } from "../hooks/useShippers";
 import ShipperServices from "../services/ShipperServices";
 
 const ShipperViewPage = () => {
     const { id } = useParams();
+    const { data: responeData, isLoading } = usePendingShipper(id);
+    const shipper = responeData?.data || {};
+    console.log("Lấy ra shipper: ", shipper);
     const navigate = useNavigate();
     const [opened, { open, close }] = useDisclosure(false);
     const {
@@ -15,25 +19,6 @@ const ShipperViewPage = () => {
         watch,
         formState: { errors },
     } = useForm();
-    const [shipper, setShipper] = useState({
-        id: "4",
-        fullName: "Phạm Thị Dung",
-        email: "phamthidung@gmail.com",
-        phoneNumber: "0901234567",
-        photoUrl: "/images/shipper4.jpg",
-        gender: "Nữ",
-        dateOfBirth: "04/04/2008",
-        hometown: "Hà Nội",
-        temporaryAddress: "Hà Nội",
-        cccd: "024789123456",
-        activityInformation: "Giao hàng chung cư The Link Ciputra",
-        shippingMethod: "Xe máy",
-        emergencyContact: {
-            name: "Phạm Thị Vân",
-            relationship: "Mẹ",
-            phoneNumber: "0969876543",
-        },
-    });
 
     const onSubmit = async (data) => {
         try {
@@ -75,19 +60,22 @@ const ShipperViewPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
                 {/* Profile Section */}
                 <div className="bg-white p-5 rounded-lg shadow-md">
-                    <div className="text-center mt-4">
+                    <div className="text-center mt-4 container">
                         <img
-                            src={shipper.photoUrl}
-                            alt={shipper.fullName}
-                            className="w-32 h-32 rounded-full mx-auto mb-3"
+                            src={
+                                shipper.avatar ||
+                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
+                            }
+                            alt={shipper.name}
+                            className="w-32 h-32 rounded-full mx-auto mb-3 border-4 hover:border-8 transition-transform duration-600 hover:scale-150  border-pink-200"
                         />
                         <h6 className="text-gray-500 text-sm mt-2">ID: {shipper.id}</h6>
-                        <h5 className="mt-3 font-bold">{shipper.fullName}</h5>
+                        <h5 className="mt-3 font-bold">{shipper.name}</h5>
                         <h6 className="text-gray-500 text-sm">{shipper.email}</h6>
                     </div>
                     <div className="mt-5 text-center">
                         <h5 className="text-blue-500 font-bold">Thông tin hoạt động</h5>
-                        <p className="text-sm">{shipper.activityInformation}</p>
+                        <p className="text-sm">{shipper.activityArea}</p>
                     </div>
                 </div>
 
@@ -102,16 +90,16 @@ const ShipperViewPage = () => {
                             <strong>Ngày sinh:</strong> {shipper.dateOfBirth}
                         </div>
                         <div>
-                            <strong>Quê quán:</strong> {shipper.hometown}
+                            <strong>Quê quán:</strong> {shipper.address}
                         </div>
                         <div>
-                            <strong>Địa chỉ:</strong> {shipper.temporaryAddress}
+                            <strong>Địa chỉ:</strong> {shipper.address}
                         </div>
                         <div>
                             <strong>CCCD:</strong> {shipper.cccd}
                         </div>
                         <div>
-                            <strong>Số điện thoại:</strong> {shipper.phoneNumber}
+                            <strong>Số điện thoại:</strong> {shipper.phone}
                         </div>
                     </div>
 
@@ -123,17 +111,19 @@ const ShipperViewPage = () => {
                     </div>
 
                     <h6 className="text-blue-500 font-bold mt-6 mb-4">Liên hệ khẩn cấp</h6>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <strong>Họ và tên:</strong> {shipper.emergencyContact.name}
-                        </div>
-                        <div>
-                            <strong>Mối quan hệ:</strong> {shipper.emergencyContact.relationship}
-                        </div>
-                        <div>
-                            <strong>Số điện thoại:</strong> {shipper.emergencyContact.phoneNumber}
-                        </div>
-                    </div>
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <strong>Họ và tên:</strong> {shipper.emergencyContact.name}
+            </div>
+            <div>
+              <strong>Mối quan hệ:</strong>{" "}
+              {shipper.emergencyContact.relationship}
+            </div>
+            <div>
+              <strong>Số điện thoại:</strong>{" "}
+              {shipper.emergencyContact.phoneNumber}
+            </div>
+          </div> */}
 
                     <div className="mt-5 text-center">
                         <button

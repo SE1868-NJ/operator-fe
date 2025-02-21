@@ -16,16 +16,16 @@ export const useShipper = (id) => {
     });
 };
 
-export const usePendingShippers = () => {
+export const usePendingShippers = (limit, page) => {
     return useQuery({
-        queryKey: ["shippers", "pending"],
-        queryFn: () => ShipperServices.getAllPendingShippers(),
+        queryKey: ["shippers", limit, page],
+        queryFn: () => ShipperServices.getAllPendingShippers(limit, page),
     });
 };
 
 export const usePendingShipper = (id) => {
     return useQuery({
-        queryKey: ["shippers", "pending", id],
+        queryKey: ["pendingShippers", id],
         queryFn: () => ShipperServices.getOnePendingShipper(id),
     });
 };

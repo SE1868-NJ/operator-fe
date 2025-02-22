@@ -1,10 +1,24 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
-    async getAllShops() {
-        const shops = await instance.get("/shops").then(({ data }) => {
-            return data?.shops;
-        });
+    async getAllShops(offset, limit, filterData = {}) {
+        const { shopName, ownerName, shopEmail, shopPhone, shopStatus } = filterData;
+        const shops = await instance
+            .get("/shops", {
+                params: {
+                    offset,
+                    limit,
+                    shopName,
+                    ownerName,
+                    shopEmail,
+                    shopPhone,
+                    shopStatus,
+                }, // Sử dụng params để truyền query params
+            })
+            .then(({ data }) => {
+                console.log(data?.data);
+                return data?.data;
+            });
         return shops;
     },
     async getPendingShops(limit = 10, page = 1, filterData = {}) {
@@ -57,6 +71,17 @@ const ShopService = {
     async updatePendingShop(data) {
         const shop = await instance
             .patch(`/shops/pendingshop/${data.id}`, data)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shop;
+    },
+    async updateShopStatus(data) {
+        const shop = await instance
+            .patch(`/shops/${data.id}`, data)
             .then(({ data }) => {
                 return data;
             })

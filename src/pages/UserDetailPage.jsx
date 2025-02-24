@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserById } from "../hooks/useUser";
+import BanService from "../services/BanService";
 import UserService from "../services/UserService";
 
 const statusStyles = {
@@ -20,20 +22,42 @@ const UserDetail = () => {
     const { data: user, isLoading, error } = useUserById(id);
     //   console.log(user)
 
-    // Update user status mutation
-    const mutation = useMutation((newStatus) => UserService.updateUserStatus(id, newStatus), {
-        onSuccess: () => {
-            queryClient.invalidateQueries(["user", id]);
-        },
-    });
+    const [banInfo, setBanInfo] = useState(null);
+    useEffect(() => {
+        const fetchBanInfo = async () => {
+            if (!user?.userID) return;
+
+            try {
+                const isUserBan = await BanService.getBanAccount(user.userID, "customer");
+                if (isUserBan) {
+                    setBanInfo(isUserBan);
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin ban:", error);
+            }
+        };
+
+        fetchBanInfo();
+    }, [user?.userID]);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading user data</p>;
 
-    const handleStatusChange = (e) => {
-        const newStatus = e.target.value;
-        if (window.confirm("Bạn có chắc chắn muốn thay đổi trạng thái này?")) {
-            mutation.mutate(newStatus);
+    const handleStatusChange = async () => {
+        if (user.status === "Hoạt động") {
+            const token = localStorage.getItem("token");
+            const operatorData = jwtDecode(token);
+            console.log(operatorData);
+            // Điều hướng đến trang đình chỉ, truyền userId & operatorId qua URL
+            Navigate(`/main/ban_account?userId=${user.userID}&operatorId=1&accountType=customer`); // sau này chỉnh lại thành operatorID
+        } else {
+            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
+
+            if (confirmUnban) {
+                // Nếu người dùng nhấn "OK", tiến hành gỡ ban
+                await BanService.unbanAccountManually(user.userID);
+                window.location.reload();
+            }
         }
     };
 
@@ -62,6 +86,19 @@ const UserDetail = () => {
                             >
                                 {user.status}
                             </div>
+
+                            {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}
+                            {user.status === "Đình chỉ" && banInfo && (
+                                <div className="mt-3 p-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
+                                    <p className="text-sm text-red-800 font-medium flex items-center gap-2">
+                                        <span className="text-red-600 font-bold">&#x21;</span>
+                                        <span>Tài khoản bị đình chỉ đến:</span>
+                                        <span className="font-semibold text-red-900">
+                                            {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                                        </span>
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="p-6 bg-white rounded-lg shadow-md md:col-span-2">
@@ -169,7 +206,7 @@ const UserDetail = () => {
                         <div className="flex items-center justify-center mt-6 space-x-4">
                             <button
                                 type="button"
-                                onClick={handleStatusChange}
+                                onClick={() => handleStatusChange()}
                                 className={`${
                                     user.status === "Hoạt động"
                                         ? "bg-yellow-500 hover:bg-yellow-700 text-white"

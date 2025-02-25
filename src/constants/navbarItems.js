@@ -27,14 +27,12 @@ export const NAVBAR_ITEMS = [
         ],
     },
     { label: "Người dùng", icon: IconPresentationAnalytics, link: "/main/users" },
-    { label: "Khiếu nại", icon: IconReport, link: "/main/reports" },
     {
-        label: "Security",
-        icon: IconLock,
+        label: "Khiếu nại",
+        icon: IconReport,
         links: [
-            { label: "Enable 2FA", link: "/" },
-            { label: "Change password", link: "/" },
-            { label: "Recovery codes", link: "/" },
+            { label: "Tất cả khiếu nại", link: "/main/reports" },
+            { label: "Danh mục khiếu nại", link: "/main/report-categories" },
         ],
     },
 ];

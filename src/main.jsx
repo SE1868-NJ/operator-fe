@@ -14,6 +14,7 @@ import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
+import BanPage from "./pages/BanPage.jsx";
 import ChangePassPage from "./pages/ChangePassPage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
                 path: "/main/report-categories",
                 element: <ReportCategoriesPage />,
             },
+                path: "/main/ban_account",
+                element: <BanPage />,
+            },
+
             {
                 path: "*",
                 element: <ErrorPage />,

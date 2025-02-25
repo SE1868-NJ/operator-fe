@@ -18,15 +18,18 @@ const ShipperServices = {
 
         return shippers;
     },
-    async getAllPendingShippers() {
-        const shippers = await instance.get("/shippers/pending").then(({ data }) => {
-            return data;
-        });
+    async getAllPendingShippers(limit = 10, page = 1) {
+        const offset = limit * (page - 1);
+        const shippers = await instance
+            .get("/shippers/pendingShippers", { params: { offset, limit } })
+            .then((data) => {
+                return data?.data?.data;
+            });
 
         return shippers;
     },
     async getOnePendingShipper(id) {
-        const shippers = await instance.get(`/shippers/pending/${id}`).then(({ data }) => {
+        const shippers = await instance.get(`/shippers/pendingShipper/${id}`).then(({ data }) => {
             return data;
         });
 

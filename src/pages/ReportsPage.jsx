@@ -8,7 +8,6 @@ import {
     Pagination,
     Paper,
     Select,
-    Skeleton,
     Table,
     Tabs,
     Text,
@@ -16,15 +15,21 @@ import {
     Title,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
+import { nprogress } from "@mantine/nprogress";
 import { IconAlertCircle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useReports } from "../hooks/useReport";
+import { useReportCategories } from "../hooks/useReportCategories";
 
 const ReportsPage = () => {
     const [search, setSearch] = useDebouncedState("", 300);
     const [reportType, setReportType] = useState("");
     const [status, setStatus] = useState("all");
+    const [priority, setPriority] = useState("all");
+    const [reportCategory, setReportCategory] = useState("all");
+
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
 
@@ -34,7 +39,19 @@ const ReportsPage = () => {
         search,
         report_type: reportType,
         status,
+        category_id: reportCategory,
+        priority,
     });
+
+    const { data: report_categories } = useReportCategories();
+
+    useEffect(() => {
+        if (isFetching) {
+            nprogress.start();
+        } else {
+            nprogress.complete();
+        }
+    }, [isFetching]);
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -54,6 +71,21 @@ const ReportsPage = () => {
                 return "green";
             case "rejected":
                 return "red";
+            default:
+                return "gray";
+        }
+    };
+
+    const getPriorityColor = (status) => {
+        switch (status.toLowerCase()) {
+            case "low":
+                return "blue"; // Changed from yellow to blue
+            case "medium":
+                return "orange"; // Changed from green to orange
+            case "high":
+                return "purple"; // Changed from red to purple
+            case "critical":
+                return "black"; // Changed from red to black
             default:
                 return "gray";
         }
@@ -101,7 +133,31 @@ const ReportsPage = () => {
                     />
 
                     <Select
-                        label="Phân loại"
+                        label="Danh mục Vấn đề"
+                        w="200px"
+                        placeholder="Chọn loại khiếu nại"
+                        data={report_categories?.data.map((c) => ({
+                            value: c.id,
+                            label: c.name,
+                        }))}
+                        defaultValue={{
+                            value: "all",
+                            label: "Tất cả",
+                        }}
+                        styles={{
+                            input: {
+                                "&:focus": {
+                                    borderColor: "var(--mantine-color-blue-filled)",
+                                },
+                            },
+                        }}
+                        onChange={(_value, option) => {
+                            setReportCategory(option.value);
+                            setCurrentPage(1); // Reset to first page on filter change
+                        }}
+                    />
+                    <Select
+                        label="Đối tượng"
                         w="200px"
                         placeholder="Chọn loại khiếu nại"
                         data={[
@@ -119,6 +175,30 @@ const ReportsPage = () => {
                         }}
                         onChange={(_value, option) => {
                             setReportType(option.value);
+                            setCurrentPage(1); // Reset to first page on filter change
+                        }}
+                    />
+
+                    <Select
+                        label="Độ ưu tiên"
+                        w="200px"
+                        placeholder="Chọn độ ưu tiên"
+                        data={[
+                            { value: "all", label: "Tất cả" },
+                            { value: "low", label: "Thấp" },
+                            { value: "medium", label: "Trung bình" },
+                            { value: "high", label: "Cao" },
+                            { value: "critical", label: "Nghiêm trọng" },
+                        ]}
+                        styles={{
+                            input: {
+                                "&:focus": {
+                                    borderColor: "var(--mantine-color-blue-filled)",
+                                },
+                            },
+                        }}
+                        onChange={(_value, option) => {
+                            setPriority(option.value);
                             setCurrentPage(1); // Reset to first page on filter change
                         }}
                     />
@@ -140,69 +220,77 @@ const ReportsPage = () => {
                     </Tabs.List>
                 </Tabs>
 
-                {isFetching ? (
-                    Array(5)
-                        .fill(0)
-                        .map((_, index) => <Skeleton key={index} height={50} mb="sm" />)
-                ) : (
-                    <Table striped highlightOnHover verticalSpacing="sm">
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>ID</Table.Th>
-                                <Table.Th>Phân loại</Table.Th>
-                                <Table.Th>Nội dung</Table.Th>
-                                <Table.Th>Trạng thái</Table.Th>
-                                <Table.Th>Thời gian</Table.Th>
+                <Table striped highlightOnHover verticalSpacing="sm">
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>ID</Table.Th>
+                            <Table.Th>Phân loại</Table.Th>
+                            <Table.Th>Nội dung</Table.Th>
+                            <Table.Th>Độ ưu tiên</Table.Th>
+                            <Table.Th>Trạng thái</Table.Th>
+                            <Table.Th>Thời gian</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {data?.reports.map((report) => (
+                            <Table.Tr key={report.id}>
+                                <Table.Td>
+                                    <Text size="sm" color="dimmed">
+                                        {report.id.slice(0, 8)}...
+                                    </Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Badge color="blue" variant="light">
+                                        {report.report_type === "shipper"
+                                            ? "Người giao hàng"
+                                            : report.report_type === "shop"
+                                              ? "Cửa hàng"
+                                              : "Người mua hàng"}
+                                    </Badge>
+                                </Table.Td>
+                                <Table.Td w={"30%"}>
+                                    <Text lineClamp={2}>{report.report_title}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Badge color={getPriorityColor(report.priority)}>
+                                        {report.priority === "low"
+                                            ? "Thấp"
+                                            : report.priority === "medium"
+                                              ? "Trung bình"
+                                              : report.priority === "high"
+                                                ? "Cao"
+                                                : report.priority === "critical"
+                                                  ? "Nguy cấp"
+                                                  : "Không xác định"}
+                                    </Badge>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Badge color={getStatusColor(report.status)}>
+                                        {report.status === "pending" ? "Đang chờ" : "Đã xử lý"}
+                                    </Badge>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text size="sm">{formatDate(report.createdAt)}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Group spacing="xs">
+                                        <Button
+                                            component={Link}
+                                            to={`/main/reports/${report.id}`}
+                                            variant="light"
+                                            size="xs"
+                                        >
+                                            View
+                                        </Button>
+                                        <Button variant="light" color="green" size="xs">
+                                            Resolve
+                                        </Button>
+                                    </Group>
+                                </Table.Td>
                             </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {data?.reports.map((report) => (
-                                <Table.Tr key={report.id}>
-                                    <Table.Td>
-                                        <Text size="sm" color="dimmed">
-                                            {report.id.slice(0, 8)}...
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge color="blue" variant="light">
-                                            {report.report_type === "shipper"
-                                                ? "Người giao hàng"
-                                                : report.report_type === "shop"
-                                                  ? "Cửa hàng"
-                                                  : "Người mua hàng"}
-                                        </Badge>
-                                    </Table.Td>
-                                    <Table.Td w={"30%"}>
-                                        <Text lineClamp={2}>{report.report_title}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge color={getStatusColor(report.status)}>
-                                            {report.status === "pending" ? "Đang chờ" : "Đã xử lý"}
-                                        </Badge>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm">{formatDate(report.createdAt)}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Group spacing="xs">
-                                            <Button
-                                                component={Link}
-                                                to={`/main/reports/${report.id}`}
-                                                variant="light"
-                                                size="xs"
-                                            >
-                                                View
-                                            </Button>
-                                            <Button variant="light" color="green" size="xs">
-                                                Resolve
-                                            </Button>
-                                        </Group>
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))}
-                        </Table.Tbody>
-                    </Table>
-                )}
+                        ))}
+                    </Table.Tbody>
+                </Table>
 
                 {!isFetching && data?.reports.length === 0 && (
                     <Text color="dimmed" align="center" py="xl">

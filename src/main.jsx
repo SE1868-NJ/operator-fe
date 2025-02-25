@@ -21,6 +21,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
+import ReportCategoriesPage from "./pages/ReportCategories.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
 import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
@@ -111,6 +112,10 @@ const router = createBrowserRouter([
                 element: <ReportDetailPage />,
             },
             {
+                path: "/main/report-categories",
+                element: <ReportCategoriesPage />,
+            },
+            {
                 path: "*",
                 element: <ErrorPage />,
             },
@@ -118,7 +123,13 @@ const router = createBrowserRouter([
     },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 30 * 1000,
+        },
+    },
+});
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>

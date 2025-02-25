@@ -1,8 +1,10 @@
 import { instance } from "../lib/axios";
 const ReportServices = {
-    async getReports({ page = 0, limit, search, report_type, status }) {
+    async getReports({ page = 0, limit, search, report_type, status, category_id, priority }) {
         status = status === "all" ? "" : status;
+        priority = priority === "all" ? "" : priority;
         report_type = report_type === "all" ? "" : report_type;
+        category_id = category_id === "all" ? "" : category_id;
 
         const reports = await instance
             .get("/reports", {
@@ -12,6 +14,8 @@ const ReportServices = {
                     search,
                     report_type,
                     status,
+                    category_id,
+                    priority,
                 },
             })
             .then(({ data }) => data);

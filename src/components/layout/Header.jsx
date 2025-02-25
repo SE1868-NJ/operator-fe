@@ -1,4 +1,13 @@
-import { ActionIcon, Box, Group, Popover, Stack, Text, UnstyledButton } from "@mantine/core";
+import {
+    ActionIcon,
+    Box,
+    Group,
+    Popover,
+    ScrollArea,
+    Stack,
+    Text,
+    UnstyledButton,
+} from "@mantine/core";
 import { IconMail } from "@tabler/icons-react";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { IconAlertCircle } from "@tabler/icons-react";
@@ -14,6 +23,8 @@ const Header = () => {
     const unReadMessage = data?.unReadMessage;
     const queryClient = useQueryClient();
 
+    console.log(data);
+
     useEffect(() => {
         socket.on(NEW_NOTIF, () => {
             // reload number of notifications
@@ -25,6 +36,8 @@ const Header = () => {
     return (
         <div className="flex justify-between items-center h-full px-4">
             <p className="text-2xl font-bold text-primary">eCMarket</p>
+
+            {/* Notification Popup */}
             <Popover width={300} position="bottom" withArrow shadow="md">
                 <Popover.Target>
                     <div className="relative inline-flex">
@@ -52,40 +65,37 @@ const Header = () => {
                                 Không có thông báo nào!
                             </Text>
                         ) : (
-                            notifications?.map((n) => (
-                                <UnstyledButton
-                                    key={n.id}
-                                    p="sm"
-                                    style={(theme) => ({
-                                        borderRadius: theme.radius.sm,
-                                        "&:hover": {
-                                            backgroundColor: "var(--mantine-color-default-hover)",
-                                        },
-                                    })}
-                                >
-                                    <Group wrap="nowrap" gap="sm">
-                                        {n.type === "success" ? (
-                                            <IconCircleCheck
-                                                size={20}
-                                                color="var(--mantine-color-green-6)"
-                                            />
-                                        ) : (
-                                            <IconAlertCircle
-                                                size={20}
-                                                color="var(--mantine-color-blue-6)"
-                                            />
-                                        )}
-                                        <Box style={{ flex: 1 }}>
-                                            <Text size="sm" fw={500} lineClamp={2}>
-                                                {n.message}
-                                            </Text>
-                                            <Text size="xs" c="dimmed" mt={4}>
-                                                {new Date(n.createdAt).toLocaleTimeString()}
-                                            </Text>
-                                        </Box>
-                                    </Group>
-                                </UnstyledButton>
-                            ))
+                            <ScrollArea h={500}>
+                                {notifications?.map((n) => (
+                                    <UnstyledButton
+                                        key={n.id}
+                                        p="sm"
+                                        className="hover:bg-slate-300 rounded-md]"
+                                    >
+                                        <Group wrap="nowrap" gap="sm">
+                                            {n.type === "success" ? (
+                                                <IconCircleCheck
+                                                    size={20}
+                                                    color="var(--mantine-color-green-6)"
+                                                />
+                                            ) : (
+                                                <IconAlertCircle
+                                                    size={20}
+                                                    color="var(--mantine-color-blue-6)"
+                                                />
+                                            )}
+                                            <Box style={{ flex: 1 }}>
+                                                <Text size="sm" fw={500} lineClamp={2}>
+                                                    {n.message}
+                                                </Text>
+                                                <Text size="xs" c="dimmed" mt={4}>
+                                                    {new Date(n.createdAt).toLocaleTimeString()}
+                                                </Text>
+                                            </Box>
+                                        </Group>
+                                    </UnstyledButton>
+                                ))}
+                            </ScrollArea>
                         )}
                     </Stack>
                 </Popover.Dropdown>

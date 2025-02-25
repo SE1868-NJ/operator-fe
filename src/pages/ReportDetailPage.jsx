@@ -11,6 +11,7 @@ import {
     Title,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
+import { nprogress } from "@mantine/nprogress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useReport } from "../hooks/useReport";
@@ -40,7 +41,23 @@ const ReportDetailPage = () => {
         return <div>Loading...</div>;
     }
 
+    const getPriorityColor = (status) => {
+        switch (status.toLowerCase()) {
+            case "low":
+                return "blue"; // Changed from yellow to blue
+            case "medium":
+                return "orange"; // Changed from green to orange
+            case "high":
+                return "purple"; // Changed from red to purple
+            case "critical":
+                return "black"; // Changed from red to black
+            default:
+                return "gray";
+        }
+    };
+
     const handleResponse = () => {
+        nprogress.start();
         instance
             .post(`/reports/response/${id}`, {
                 response,
@@ -53,6 +70,9 @@ const ReportDetailPage = () => {
             })
             .catch((err) => {
                 console.log(err);
+            })
+            .finally(() => {
+                nprogress.complete();
             });
     };
     return (
@@ -60,6 +80,14 @@ const ReportDetailPage = () => {
             <Stack spacing="md">
                 <Group position="apart">
                     <Title order={2}>{report.report_title}</Title>
+                    <Badge
+                        size="lg"
+                        variant="filled"
+                        color={getPriorityColor(report.priority)}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        {report.priority}
+                    </Badge>
                     <Badge
                         size="lg"
                         variant="filled"

@@ -7,6 +7,186 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useShop } from "../hooks/useShop";
 import ShopService from "../services/ShopService.js";
 
+import {
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    Title,
+    Tooltip,
+} from "chart.js";
+//Chart
+import React, { useState } from "react";
+import { Bar, Line, Pie } from "react-chartjs-2";
+
+// Đăng ký các thành phần cần thiết của Chart.js
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    ArcElement,
+    Title,
+    Tooltip,
+    Legend,
+);
+
+const DashboardChart = () => {
+    const [selectedChart, setSelectedChart] = useState("line");
+
+    // Dữ liệu chung
+    const labels = [
+        "Tháng 1",
+        "Tháng 2",
+        "Tháng 3",
+        "Tháng 4",
+        "Tháng 5",
+        "Tháng 6",
+        "Tháng 7",
+        "Tháng 8",
+        "Tháng 9",
+        "Tháng 10",
+        "Tháng 11",
+        "Tháng 12",
+    ];
+
+    // Dữ liệu cho từng biểu đồ
+    const lineData = {
+        labels,
+        datasets: [
+            {
+                label: "Doanh thu (Triệu VND)",
+                data: [50, 75, 100, 80, 120, 150, 150, 120, 80, 100, 75, 50],
+                borderColor: "rgb(75, 192, 192)",
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                tension: 0.3,
+            },
+        ],
+    };
+
+    const barData = {
+        labels: ["Gấu Teddy", "Thỏ Bông", "Mèo Bông", "Cá Mập Bông", "Khủng Long"],
+        datasets: [
+            {
+                label: "Số lượng bán (cái)",
+                data: [120, 90, 150, 110, 130],
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+            },
+        ],
+    };
+
+    const pieData = {
+        labels: ["Gấu Teddy", "Thỏ Bông", "Mèo Bông", "Cá Mập Bông", "Khủng Long"],
+        datasets: [
+            {
+                data: [30, 20, 25, 15, 10],
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+            },
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: { position: "top" },
+            title: { display: true, text: "Thống kê bán hàng" },
+        },
+    };
+
+    return (
+        <div className="bg-white shadow-md rounded-lg p-6 w-full">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Thống kê bán hàng</h2>
+
+            {/* Dropdown chọn biểu đồ */}
+            <div className="mb-4">
+                <select
+                    onChange={(e) => setSelectedChart(e.target.value)}
+                    value={selectedChart}
+                    className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                >
+                    <option value="line">📈 Doanh thu theo tháng</option>
+                    <option value="bar">📊 Sản phẩm bán chạy</option>
+                    <option value="pie">🥧 Doanh thu theo danh mục</option>
+                </select>
+            </div>
+
+            {/* Biểu đồ */}
+            <div className="w-full h-[400px] flex justify-center items-center">
+                {selectedChart === "line" && <Line data={lineData} options={options} />}
+                {selectedChart === "bar" && <Bar data={barData} options={options} />}
+                {selectedChart === "pie" && <Pie data={pieData} options={options} />}
+            </div>
+        </div>
+    );
+};
+
+//Feedback:
+const feedbacks = [
+    {
+        id: 1,
+        name: "Nguyễn Văn A",
+        avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+        rating: 5,
+        comment: "Sản phẩm rất đẹp, chất lượng tuyệt vời! Sẽ tiếp tục ủng hộ shop.",
+        date: "20/02/2025",
+    },
+    {
+        id: 2,
+        name: "Trần Thị B",
+        avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+        rating: 4,
+        comment: "Giao hàng nhanh, đóng gói cẩn thận. Tuy nhiên, màu sắc hơi khác.",
+        date: "18/02/2025",
+    },
+    // {
+    //     id: 3,
+    //     name: "Lê Văn C",
+    //     avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+    //     rating: 5,
+    //     comment: "Shop phục vụ rất nhiệt tình, sản phẩm đẹp hơn mong đợi!",
+    //     date: "15/02/2025",
+    // },
+];
+
+const renderStars = (rating) => {
+    return "⭐".repeat(rating) + "☆".repeat(5 - rating);
+};
+
+const CustomerFeedback = () => {
+    return (
+        <div className="bg-white p-6 shadow-md rounded-lg w-full">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Phản hồi từ khách hàng</h2>
+            <div className="space-y-4">
+                {feedbacks.map((feedback) => (
+                    <div
+                        key={feedback.id}
+                        className="flex items-center gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition"
+                    >
+                        <img
+                            src={feedback.avatar}
+                            alt={feedback.name}
+                            className="w-16 h-16 rounded-full border-2 border-gray-300 shadow"
+                        />
+                        <div className="flex-1">
+                            <p className="text-lg font-semibold text-gray-900">{feedback.name}</p>
+                            <p className="text-yellow-500 text-sm">
+                                🕒 {feedback.date} {renderStars(feedback.rating)}
+                            </p>
+                            <p className="text-gray-700 mt-1">{feedback.comment}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+//San pham gia
 const productsData = [
     {
         id: 1,
@@ -97,40 +277,35 @@ const ShopProfileDetail = () => {
         <div className="flex w-full bg-white-100 min-h-screen">
             <div className="w-full mx-auto p-8 bg-white mt-8">
                 <h1 className="text-4xl font-bold mb-8 text-gray-800">{shop.shopName}</h1>
-                <div className="flex gap-12 mb-8 items-start">
-                    {/* Shop Info */}
-                    <div className="flex gap-6 items-center bg-white p-6 rounded-lg">
-                        <img
-                            src="https://img.lovepik.com/free-png/20210918/lovepik-e-shop-png-image_400245565_wh1200.png"
-                            alt={shop.shopName}
-                            className="w-40 h-40 rounded-full shadow-lg border-4 border-gray-200 hover:border-blue-400 transition-all duration-300"
-                        />
-                        <div>
-                            <p className="text-2xl font-bold text-gray-800">Mô tả cửa hàng</p>
-                            <p className="text-gray-700 mt-2 text-lg">{shop.shopDescription}</p>
-                            <p className="text-2xl font-bold text-gray-800 mt-4">
-                                Đánh giá cửa hàng
-                            </p>
-                            <p className="text-yellow-500 mt-2 text-lg font-semibold">
-                                ⭐ {shop.shopRating}/5
-                            </p>
+
+                <div className="flex flex-col lg:flex-row gap-12 mb-8 items-start">
+                    {/* Thông tin cửa hàng */}
+                    <div className="gap-6 bg-white p-6 rounded-lg w-full lg:w-1/2">
+                        <div className="flex gap-6">
+                            <img
+                                src="https://img.lovepik.com/free-png/20210918/lovepik-e-shop-png-image_400245565_wh1200.png"
+                                alt={shop.shopName}
+                                className="w-40 h-40 rounded-full shadow-lg border-4 border-gray-200 hover:border-blue-400 transition-all duration-300"
+                            />
+                            <div>
+                                <p className="text-2xl font-bold text-gray-800">Mô tả cửa hàng</p>
+                                <p className="text-gray-700 mt-2 text-lg">{shop.shopDescription}</p>
+                                <p className="text-2xl font-bold text-gray-800 mt-4">
+                                    Đánh giá cửa hàng
+                                </p>
+                                <p className="text-yellow-500 mt-2 text-lg font-semibold">
+                                    ⭐ {shop.shopRating}/5
+                                </p>
+                            </div>
+                        </div>
+                        <div className="mt-6">
+                            <CustomerFeedback />
                         </div>
                     </div>
 
-                    {/* Shop Stats */}
-                    <div className="flex gap-6">
-                        <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-lg shadow-lg w-44 text-center transform hover:scale-105 transition-transform duration-300">
-                            <h2 className="text-xl font-bold text-yellow-700 flex items-center justify-center gap-2">
-                                📦 Total Orders
-                            </h2>
-                            <p className="text-3xl font-bold text-gray-900 mt-2">8,282</p>
-                        </div>
-                        <div className="bg-gradient-to-r from-orange-100 to-orange-200 p-6 rounded-lg shadow-lg w-44 text-center transform hover:scale-105 transition-transform duration-300">
-                            <h2 className="text-xl font-bold text-orange-700 flex items-center justify-center gap-2">
-                                💰 Total Revenue
-                            </h2>
-                            <p className="text-3xl font-bold text-gray-900 mt-2">$200,521</p>
-                        </div>
+                    {/* Biểu đồ */}
+                    <div className="w-full lg:w-1/2">
+                        <DashboardChart />
                     </div>
                 </div>
 

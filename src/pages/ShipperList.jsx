@@ -7,6 +7,15 @@ function formatDate(dateString) {
     return `${day}-${month}-${year}`;
 }
 
+function translateStatus(status) {
+    const statusMap = {
+        Active: "Đang hoạt động",
+        Pending: "Đang duyệt",
+        Deactive: "Dừng hoạt động",
+    };
+    return statusMap[status] || status;
+}
+
 export default function ShipperList() {
     const [search, setSearch] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
@@ -53,9 +62,9 @@ export default function ShipperList() {
                     onChange={handleStatusChange}
                 >
                     <option value="">Tất cả trạng thái</option>
-                    <option value="Đang hoạt động">Đang hoạt động</option>
-                    <option value="Dừng hoạt động">Dừng hoạt động</option>
-                    <option value="Đang duyệt">Đang duyệt</option>
+                    <option value="Pending">Đang hoạt động</option>
+                    <option value="Deactive">Dừng hoạt động</option>
+                    <option value="Active">Đang duyệt</option>
                 </select>
                 <input
                     type="date"
@@ -101,7 +110,7 @@ export default function ShipperList() {
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }
                                     >
-                                        {shipper.status}
+                                        {translateStatus(shipper.status)}
                                     </span>
                                 </td>
                                 <td className="p-2 text-center border">

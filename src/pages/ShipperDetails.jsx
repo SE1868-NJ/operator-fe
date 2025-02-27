@@ -1,8 +1,10 @@
 import { Button, Modal, Select, Textarea } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
+import BanService from "../services/BanService";
 
 function translateStatus(status) {
     const statusMap = {
@@ -34,32 +36,37 @@ export default function ShipperDetails() {
     const [selectedImage, setSelectedImage] = useState(null);
     const { data: shipper, error } = useShipper(id);
 
+    const queryClient = useQueryClient();
+
     if (!shipper) {
         return <div className="text-center text-red-500">Không tìm thấy shipper</div>;
     }
 
-    const handleChangeStatus = (status) => {
-        if (status === "Dừng hoạt động") {
-            setOpened(true);
+    const handleChangeStatus = async (status) => {
+        if (status === "Deactive") {
+            navigate(`/main/ban_account?userId=${shipper.id}&operatorId=1&accountType=shipper`);
         } else {
-            setIsLoading(true);
-            fetch(`http://localhost:3000/shippers/${id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status }),
-            })
-                .then(() => {
-                    setIsLoading(false);
-                    navigate("/main/shipperslist");
-                })
-                .catch(() => setIsLoading(false));
+            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
+
+            if (confirmUnban) {
+                queryClient.setQueryData(["shipper", id], (oldData) => ({
+                    ...oldData,
+                    status: "Active",
+                }));
+
+                // Nếu người dùng nhấn "OK", tiến hành gỡ ban
+                await BanService.unbanAccountManually(shipper.id).then(() => {
+                    queryClient.invalidateQueries(["shipper", id]);
+                    queryClient.invalidateQueries(["shipper"]);
+                });
+            }
         }
     };
 
     const handleConfirmDeactivation = () => {
         setIsLoading(true);
         const requestBody = {
-            status: "Dừng hoạt động",
+            status: "Deactive",
             deactivationReason,
             deactivationDuration:
                 deactivationDuration === "Tùy chỉnh" ? customDate : deactivationDuration,
@@ -94,9 +101,9 @@ export default function ShipperDetails() {
                         <div className="mt-6">
                             <div
                                 className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${
-                                    shipper.status === "Đang hoạt động"
+                                    shipper.status === "Active"
                                         ? "text-green-700 bg-green-100 border-green-500"
-                                        : shipper.status === "Đang duyệt"
+                                        : shipper.status === "Pending"
                                           ? "text-yellow-700 bg-yellow-100 border-yellow-500"
                                           : "text-red-700 bg-red-100 border-red-500"
                                 }`}
@@ -217,18 +224,16 @@ export default function ShipperDetails() {
                         <div className="flex items-center justify-center mt-6 space-x-4">
                             <div className="text-left">
                                 <Button
-                                    color={shipper?.status === "Đang hoạt động" ? "red" : "teal"}
+                                    color={shipper?.status === "Active" ? "red" : "teal"}
                                     onClick={() =>
                                         handleChangeStatus(
-                                            shipper?.status === "Đang hoạt động"
-                                                ? "Dừng hoạt động"
-                                                : "Đang hoạt động",
+                                            shipper?.status === "Active" ? "Deactive" : "Active",
                                         )
                                     }
                                 >
                                     {isLoading ? (
                                         <span>Đang xử lý...</span>
-                                    ) : shipper?.status === "Đang hoạt động" ? (
+                                    ) : shipper?.status === "Active" ? (
                                         "Dừng hoạt động"
                                     ) : (
                                         "Kích hoạt"
@@ -244,43 +249,6 @@ export default function ShipperDetails() {
                     </div>
                 </div>
             </div>
-            <Modal
-                opened={opened}
-                onClose={() => setOpened(false)}
-                title="Bạn xác nhận cho người này dừng hoạt động không?"
-            >
-                <Textarea
-                    label="Lý do dừng hoạt động"
-                    value={deactivationReason}
-                    onChange={(e) => setDeactivationReason(e.target.value)}
-                    placeholder="Nhập lý do..."
-                    rows={4}
-                />
-                <div className="flex justify-center text-center">
-                    <Select
-                        label="Thời gian tạm dừng"
-                        value={deactivationDuration}
-                        onChange={setDeactivationDuration}
-                        data={["1 tháng", "3 tháng", "6 tháng", "Vĩnh viễn", "Tùy chỉnh"]}
-                    />
-                    {deactivationDuration === "Tùy chỉnh" && (
-                        <DatePicker
-                            label="Chọn ngày kết thúc"
-                            value={customDate}
-                            onChange={setCustomDate}
-                            placeholder="Chọn ngày"
-                        />
-                    )}
-                </div>
-                <div className="flex justify-end mt-4 space-x-4">
-                    <Button color="red" onClick={handleConfirmDeactivation} loading={isLoading}>
-                        Xác nhận
-                    </Button>
-                    <Button variant="outline" onClick={() => setOpened(false)}>
-                        Hủy
-                    </Button>
-                </div>
-            </Modal>
         </div>
     );
 }

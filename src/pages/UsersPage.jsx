@@ -44,27 +44,27 @@ const UserList = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto mt-10 p-4 bg-white shadow-md rounded-lg">
+        <div className="max-w-4xl p-4 mx-auto mt-10 bg-white rounded-lg shadow-md">
             {/* 🔎 Search và Filter */}
-            <div className="flex justify-between mb-4 gap-2">
+            <div className="flex justify-between gap-2 mb-4">
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 />
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo SĐT..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 />
                 <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 >
                     <option value="">Tất cả trạng thái</option>
                     <option value="Hoạt động">Hoạt động</option>
@@ -74,7 +74,7 @@ const UserList = () => {
                 <button
                     type="button"
                     onClick={handleSearch}
-                    className="bg-blue-500 text-white px-4 py-2 rounded text-sm"
+                    className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
                 >
                     Tìm kiếm
                 </button>
@@ -82,13 +82,13 @@ const UserList = () => {
                 <button
                     type="button"
                     onClick={handleReset}
-                    className="bg-gray-500 text-white px-4 py-2 rounded text-sm"
+                    className="px-4 py-2 text-sm text-white bg-gray-500 rounded"
                 >
                     Làm mới
                 </button>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4">Danh sách người dùng</h2>
+            <h2 className="mb-4 text-2xl font-bold">Danh sách người dùng</h2>
             <table className="min-w-full border border-gray-300">
                 <thead>
                     <tr className="bg-gray-100">
@@ -107,7 +107,7 @@ const UserList = () => {
                                 <img
                                     src={user.avatar}
                                     alt={user.fullName}
-                                    className="w-10 h-10 rounded-full mx-auto"
+                                    className="w-10 h-10 mx-auto rounded-full"
                                 />
                             </td>
                             <td className="p-2 border">{user.fullName}</td>
@@ -129,7 +129,7 @@ const UserList = () => {
                             <td className="p-2 border">
                                 <Link
                                     to={`/main/user_detail/${user.userID}`}
-                                    className="bg-blue-500 text-white py-1 px-3 rounded"
+                                    className="px-3 py-1 text-white bg-blue-500 rounded"
                                 >
                                     Xem chi tiết
                                 </Link>

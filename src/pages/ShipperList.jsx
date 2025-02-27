@@ -1,5 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useShippers } from "../hooks/useShippers";
 
 function formatDate(dateString) {
@@ -32,6 +34,9 @@ export default function ShipperList() {
     console.log(data);
 
     const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);
+
+    const queryClient = useQueryClient();
+    queryClient.invalidateQueries(["shipper"]);
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
@@ -103,9 +108,9 @@ export default function ShipperList() {
                                 <td className="p-2 text-center border">
                                     <span
                                         className={
-                                            shipper.status === "Đang hoạt động"
+                                            shipper.status === "Active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.status === "Đang duyệt"
+                                                : shipper.status === "Pending"
                                                   ? "text-yellow-700 bg-yellow-100 p-1 rounded"
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }

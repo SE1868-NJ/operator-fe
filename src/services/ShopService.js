@@ -21,9 +21,21 @@ const ShopService = {
             });
         return shops;
     },
-    async getPendingShops() {
+    async getPendingShops(limit = 10, page = 1, filterData = {}) {
+        const offset = (page - 1) * limit;
+        const { shopName, ownerName, shopEmail, shopPhone } = filterData;
+
         const shops = await instance
-            .get("/shops/pendingshops")
+            .get("/shops/pendingshops", {
+                params: {
+                    offset,
+                    limit,
+                    shopName,
+                    ownerName,
+                    shopEmail,
+                    shopPhone,
+                },
+            })
             .then(({ data }) => {
                 return data.data;
             })
@@ -77,6 +89,24 @@ const ShopService = {
                 console.error(err);
             });
         return shop;
+    },
+    async getApprovedShops(limit = 10, page = 1, filterData = {}) {
+        const offset = (page - 1) * limit;
+        const { shopName, ownerName, shopEmail, shopPhone } = filterData;
+        const data = {
+            params: {
+                offset,
+                limit,
+                shopName,
+                ownerName,
+                shopEmail,
+                shopPhone,
+            },
+        };
+        const approvedShops = await instance.get("/shops/approvedshops", data).then(({ data }) => {
+            return data?.data;
+        });
+        return approvedShops;
     },
 };
 

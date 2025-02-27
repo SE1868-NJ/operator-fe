@@ -17,20 +17,10 @@ export const useShop = (id) => {
     });
 };
 
-// export const useUpdateShopStatus = () => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationFn: ({ id, status }) => ShopService.updateShopStatus(id, status),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries(["shop"]);
-//         },
-//     });
-// };
-
-export const usePendingShops = () => {
+export const usePendingShops = (limit = 10, page = 1, filterData = {}) => {
     return useQuery({
-        queryKey: ["pendingShops"],
-        queryFn: () => ShopService.getPendingShops(),
+        queryKey: ["pendingShops", limit, page, filterData],
+        queryFn: () => ShopService.getPendingShops(limit, page, filterData),
     });
 };
 
@@ -38,5 +28,12 @@ export const useOnePendingShop = (id) => {
     return useQuery({
         queryKey: ["onePendingShop", id],
         queryFn: () => ShopService.getOnePendingShop(id),
+    });
+};
+
+export const useApprovedShops = (limit = 10, page = 1, filterData = {}) => {
+    return useQuery({
+        queryKey: ["approvedShops", limit, page, filterData],
+        queryFn: () => ShopService.getApprovedShops(limit, page, filterData),
     });
 };

@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { usePendingShippers } from "../hooks/useShippers";
 
 const ShipperPendingPage = () => {
-    const [operators] = useState([
+    const [operators, setOperators] = useState([
         {
             id: 1,
             name: "Nguyễn Văn An",
@@ -37,14 +37,13 @@ const ShipperPendingPage = () => {
 
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const itemsPerPage = 2;
-    const totalPages = Math.ceil(operators.length / itemsPerPage);
+    const itemsPerPage = 10;
 
-    const paginatedOperators = operators.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    const { data, isLoading, error } = usePendingShippers(itemsPerPage, page);
+    const pendingShippers = data?.shippers || [];
+    const totalPages = Math.ceil(data?.total / itemsPerPage) || 1;
 
-    // Navigate to the shipper detail page
     const handleViewDetails = (shipper) => {
-        console.log(shipper);
         navigate(`/main/pendding-shippers/${shipper.id}`, { state: { shipper } });
     };
 
@@ -65,17 +64,19 @@ const ShipperPendingPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {paginatedOperators.map((operator) => (
-                        <tr key={operator.id}>
-                            <td className="border px-4 py-2 text-center">{operator.id}</td>
-                            <td className="border px-4 py-2">{operator.name}</td>
-                            <td className="border px-4 py-2">{operator.email}</td>
-                            <td className="border px-4 py-2 text-center">{operator.role}</td>
-                            <td className="border px-4 py-2 text-center">{operator.status}</td>
+                    {pendingShippers?.map((shipper, index) => (
+                        <tr key={shipper.id}>
+                            <td className="border px-4 py-2 text-center">
+                                {(page - 1) * itemsPerPage + index + 1}
+                            </td>
+                            <td className="border px-4 py-2">{shipper.name}</td>
+                            <td className="border px-4 py-2">{shipper.email}</td>
+                            <td className="border px-4 py-2 text-center">{shipper.role}</td>
+                            <td className="border px-4 py-2 text-center">{shipper.status}</td>
                             <td className="border px-4 py-2 flex justify-center space-x-4">
                                 <button
                                     type="button"
-                                    onClick={() => handleViewDetails(operator)}
+                                    onClick={() => handleViewDetails(shipper)}
                                     className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
                                 >
                                     Xem chi tiết

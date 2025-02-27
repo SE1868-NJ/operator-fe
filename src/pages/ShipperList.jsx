@@ -12,7 +12,7 @@ export default function ShipperList() {
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const navigate = useNavigate();
 
     const offset = (currentPage - 1) * itemsPerPage;
@@ -87,11 +87,11 @@ export default function ShipperList() {
                     <tbody>
                         {data?.shippers?.map((shipper) => (
                             <tr key={shipper.id} className="border">
-                                <td className="p-2 border">{shipper.id}</td>
-                                <td className="p-2 border">{shipper.name}</td>
-                                <td className="p-2 border">{shipper.phone}</td>
-                                <td className="p-2 border">{shipper.email}</td>
-                                <td className="p-2 border">
+                                <td className="p-2 text-center border">{shipper.id}</td>
+                                <td className="p-2 text-center border">{shipper.name}</td>
+                                <td className="p-2 text-center border">{shipper.phone}</td>
+                                <td className="p-2 text-center border">{shipper.email}</td>
+                                <td className="p-2 text-center border">
                                     <span
                                         className={
                                             shipper.status === "Đang hoạt động"
@@ -104,13 +104,13 @@ export default function ShipperList() {
                                         {shipper.status}
                                     </span>
                                 </td>
-                                <td className="p-2 border">
+                                <td className="p-2 text-center border">
                                     <button
                                         type="button"
                                         className="text-blue-500 underline"
                                         onClick={() => navigate(`/main/shipperslist/${shipper.id}`)}
                                     >
-                                        Xem chi tiết
+                                        Chi tiết
                                     </button>
                                 </td>
                             </tr>

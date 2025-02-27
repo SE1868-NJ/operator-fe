@@ -44,7 +44,7 @@ const UserDetail = () => {
     if (error) return <p>Error loading user data</p>;
 
     const handleStatusChange = async () => {
-        if (user.status === "Hoạt động") {
+        if (user.status === "active") {
             const token = localStorage.getItem("token");
             const operatorData = jwtDecode(token);
             console.log(operatorData);
@@ -77,9 +77,9 @@ const UserDetail = () => {
                             {/* <h5 className="text-lg font-semibold">Trạng thái</h5> */}
                             <div
                                 className={`inline-block mt-2 px-4 py-1 text-sm font-semibold rounded-full ${
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "bg-green-100 text-green-700 border-green-500"
-                                        : user.status === "Không hoạt động"
+                                        : user.status === "inactive"
                                           ? "bg-red-100 text-red-700 border-red-500"
                                           : "bg-yellow-100 text-yellow-700 border-yellow-500"
                                 }`}
@@ -208,17 +208,17 @@ const UserDetail = () => {
                                 type="button"
                                 onClick={() => handleStatusChange()}
                                 className={`${
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "bg-yellow-500 hover:bg-yellow-700 text-white"
-                                        : user.status === "Đình chỉ"
+                                        : user.status === "suspended"
                                           ? "bg-green-500 hover:bg-green-700 text-white"
                                           : "bg-blue-500 hover:bg-blue-700 text-white" // Nếu là "Không hoạt động"
                                 } px-4 py-2 rounded`}
                             >
                                 {
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "Đình chỉ người dùng"
-                                        : user.status === "Đình chỉ"
+                                        : user.status === "suspended"
                                           ? "Gỡ đình chỉ người dùng"
                                           : "Kích hoạt người dùng" // Nếu là "Không hoạt động"
                                 }

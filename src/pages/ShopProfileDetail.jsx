@@ -414,15 +414,19 @@ const ShopProfileDetail = () => {
                                 </td>
                                 <td className="border px-6 py-3">
                                     <span
-                                        className={`text-sm font-semibold px-3 py-1 rounded-md ${
+                                        className={`px-4 py-1 rounded-full text-white text-sm ${
                                             shop.shopStatus === "active"
-                                                ? "text-green-700 bg-green-100 border border-green-500"
-                                                : "text-red-700 bg-red-100 border border-red-500"
+                                                ? "bg-green-500"
+                                                : shop.shopStatus === "inactive"
+                                                  ? "bg-red-500"
+                                                  : "bg-yellow-500"
                                         }`}
                                     >
                                         {shop.shopStatus === "active"
-                                            ? "Đang hoạt động"
-                                            : "Bị tạm dừng"}
+                                            ? "Hoạt động"
+                                            : shop.shopStatus === "inactive"
+                                              ? "Không hoạt động"
+                                              : "Đình chỉ"}
                                     </span>
                                 </td>
                             </tr>

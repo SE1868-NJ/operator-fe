@@ -1,11 +1,9 @@
-import { Button, Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import { useForm } from "react-hook-form";
-// import React, {useState, useEffect } from "react";
+// import ShopService from "../services/ShopService.js";
+import { jwtDecode } from "jwt-decode";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShop } from "../hooks/useShop";
-import ShopService from "../services/ShopService.js";
+import BanService from "../services/BanService";
 
 import {
     ArcElement,
@@ -20,7 +18,7 @@ import {
     Tooltip,
 } from "chart.js";
 //Chart
-import React, { useState } from "react";
+
 import { Bar, Line, Pie } from "react-chartjs-2";
 
 // Đăng ký các thành phần cần thiết của Chart.js
@@ -223,12 +221,27 @@ const productsData = [
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { register, handleSubmit, watch } = useForm();
     const { data: shop, isLoading, error } = useShop(id);
+    const [selectedImage, setSelectedImage] = useState(null);
+    // const [banInfo, setBanInfo] = useState(null);
 
-    console.log(shop);
+    // Ensure hooks are always called in the same order
+    // useEffect(() => {
+    //     if (!shop?.shopID) return;
 
-    const [opened, { open, close }] = useDisclosure(false);
+    //     const fetchBanInfo = async () => {
+    //         try {
+    //             const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
+    //             if (isUserBan) {
+    //                 setBanInfo(isUserBan);
+    //             }
+    //         } catch (error) {
+    //             console.error("Lỗi khi lấy thông tin ban:", error);
+    //         }
+    //     };
+
+    //     fetchBanInfo();
+    // }, [shop?.shopID]);
 
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -238,39 +251,19 @@ const ShopProfileDetail = () => {
         return <div className="flex justify-center items-center h-screen">Shop not found</div>;
     }
 
-    const onSubmit = async (data) => {
-        try {
-            const shop = ShopService.updateShopStatus(data);
-            if (shop) {
-                notifications.show({
-                    color: "green",
-                    title: "Cập nhật thành công!",
-                    message: `Shop đã ${
-                        data.status === "active" ? "bị suspended tạm thời" : "được active trở lại"
-                    }.`,
-                });
-            } else {
-                notifications.show({
-                    color: "red",
-                    title: "Lỗi câp nhật!",
-                    message: "Vui lòng thử lại!",
-                });
+    const handleStatusChange = async () => {
+        if (shop.shopStatus === "active") {
+            const token = localStorage.getItem("token");
+            const operatorData = jwtDecode(token);
+            console.log(operatorData);
+            navigate(`/main/ban_account?userId=${shop.shopID}&operatorId=1&accountType=shop`);
+        } else {
+            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
+            if (confirmUnban) {
+                await BanService.unbanAccountManually(shop.shopID);
+                window.location.reload();
             }
-            navigate("/main/shops");
-        } catch (err) {
-            console.error(err);
-            notifications.show({
-                color: "red",
-                title: "Lỗi đã xảy ra khi cập nhật!",
-                message: "Vui lòng thử lại!",
-            });
         }
-        navigate("/main/shops");
-    };
-
-    const handleDecision = (status) => {
-        const description = watch("description");
-        handleSubmit(() => onSubmit({ id: id, status, description }))();
     };
 
     return (
@@ -301,6 +294,17 @@ const ShopProfileDetail = () => {
                         <div className="mt-6">
                             <CustomerFeedback />
                         </div>
+                        {/* {shop.shopStatus === "suspended" && banInfo && (
+                            <div className="mt-3 p-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
+                                <p className="text-sm text-red-800 font-medium flex items-center gap-2">
+                                    <span className="text-red-600 font-bold">&#x21;</span>
+                                    <span>Tài khoản bị đình chỉ đến:</span>
+                                    <span className="font-semibold text-red-900">
+                                        {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                                    </span>
+                                </p>
+                            </div>
+                        )} */}
                     </div>
 
                     {/* Biểu đồ */}
@@ -347,11 +351,24 @@ const ShopProfileDetail = () => {
                                     CCCD mặt trước
                                 </td>
                                 <td className="border px-6 py-3">
-                                    <img
-                                        src={shop.Owner.idCardFrontFile}
-                                        alt="CCCD mặt trước"
-                                        className="w-60 h-40 object-cover shadow-md rounded-md transition-transform duration-300 hover:scale-110"
-                                    />
+                                    <div className="relative">
+                                        <img
+                                            src={shop.Owner.idCardFrontFile}
+                                            alt="Mặt trước CCCD"
+                                            className="w-32 h-20 border cursor-pointer"
+                                            onClick={() =>
+                                                setSelectedImage(shop.Owner.idCardFrontFile)
+                                            }
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ")
+                                                    setSelectedImage(shop.Owner.idCardFrontFile);
+                                            }}
+                                            aria-label="CCCD Mặt trước" // Add an accessible label
+                                        />
+                                        <span className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-1 rounded">
+                                            Mặt trước
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -360,15 +377,44 @@ const ShopProfileDetail = () => {
                                     CCCD mặt sau
                                 </td>
                                 <td className="border px-6 py-3">
-                                    <img
-                                        src={shop.Owner.idCardBackFile}
-                                        alt="CCCD mặt sau"
-                                        className="w-60 h-40 object-cover shadow-md rounded-md transition-transform duration-300 hover:scale-110"
-                                    />
+                                    <div className="relative">
+                                        <img
+                                            src={shop.Owner.idCardBackFile}
+                                            alt="Mặt sau CCCD"
+                                            className="w-32 h-20 border cursor-pointer"
+                                            onClick={() =>
+                                                setSelectedImage(shop.Owner.idCardBackFile)
+                                            }
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ")
+                                                    setSelectedImage(shop.Owner.idCardBackFile);
+                                            }}
+                                            aria-label="CCCD Mặt sau" // Add an accessible label
+                                        />
+                                        <span className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-1 rounded">
+                                            Mặt sau
+                                        </span>{" "}
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    {selectedImage && (
+                        <div
+                            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+                            onClick={() => setSelectedImage(null)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") setSelectedImage(null);
+                            }}
+                            aria-label="Xem ảnh CCCD" // Add an accessible label
+                        >
+                            <img
+                                src={selectedImage}
+                                alt="Ảnh CCCD"
+                                className="max-w-full max-h-full p-4 bg-white shadow-lg rounded-lg"
+                            />
+                        </div>
+                    )}
 
                     {/* Bảng thông tin cửa hàng */}
                     <table className="table-auto w-1/2 mb-8 shadow-lg rounded-lg overflow-hidden border border-gray-300">
@@ -414,73 +460,42 @@ const ShopProfileDetail = () => {
                                 </td>
                                 <td className="border px-6 py-3">
                                     <span
-                                        className={`px-4 py-1 rounded-full text-white text-sm ${
+                                        className={`text-sm font-semibold px-3 py-1 rounded-md ${
                                             shop.shopStatus === "active"
-                                                ? "bg-green-500"
-                                                : shop.shopStatus === "inactive"
-                                                  ? "bg-red-500"
-                                                  : "bg-yellow-500"
+                                                ? "text-green-700 bg-green-100 border border-green-500"
+                                                : "text-red-700 bg-red-100 border border-red-500"
                                         }`}
                                     >
                                         {shop.shopStatus === "active"
-                                            ? "Hoạt động"
-                                            : shop.shopStatus === "inactive"
-                                              ? "Không hoạt động"
-                                              : "Đình chỉ"}
+                                            ? "Đang hoạt động"
+                                            : "Bị tạm dừng"}
                                     </span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                {/* Form xử lý trạng thái */}
-                <div className="flex justify-center mt-6">
-                    <Modal
-                        opened={opened}
-                        onClose={close}
-                        title="Xác nhận"
-                        centered
-                        className="rounded-lg shadow-xl"
-                    >
-                        <form
-                            onSubmit={handleSubmit(onSubmit)}
-                            className="w-full max-w-md mx-auto p-6 border border-gray-200 shadow-lg rounded-lg bg-white"
-                        >
-                            {/* Title */}
-                            <p className="font-semibold text-lg text-gray-800 mb-3">Lý do:</p>
-
-                            {/* Textarea */}
-                            <textarea
-                                {...register("description", { required: "Vui lòng nhập lý do" })}
-                                id="description"
-                                placeholder="Nhập lý do..."
-                                className="w-full p-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 
-                       focus:border-blue-500 h-28 text-gray-800 placeholder-gray-400 shadow-sm"
-                            />
-
-                            <div className="mt-4 flex justify-end">
-                                {shop.shopStatus === "active" ? (
-                                    <button
-                                        type="button"
-                                        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                                        onClick={() => handleDecision("active")}
-                                    >
-                                        Tạm dừng hoạt động shop
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                                        onClick={() => handleDecision("suspended")}
-                                    >
-                                        Kích hoạt shop hoạt động
-                                    </button>
-                                )}
-                            </div>
-                        </form>
-                    </Modal>
-                </div>
                 <div className="flex justify-end mt-6 w-full gap-4">
+                    <button
+                        type="button"
+                        onClick={() => handleStatusChange()}
+                        className={`${
+                            shop.shopStatus === "active"
+                                ? "bg-red-500 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                                : shop.shopStatus === "suspended"
+                                  ? "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                                  : "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md" // Nếu là "Không hoạt động"
+                        } px-4 py-2 rounded`}
+                    >
+                        {
+                            shop.shopStatus === "active"
+                                ? "Đình chỉ cửa hàng"
+                                : shop.shopStatus === "suspended"
+                                  ? "Gỡ đình cửa hàng"
+                                  : "Kích hoạt cửa hàng" // Nếu là "Không hoạt động"
+                        }
+                    </button>
+
                     <button
                         type="button"
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
@@ -488,23 +503,6 @@ const ShopProfileDetail = () => {
                     >
                         Back to List
                     </button>
-                    {shop.shopStatus === "active" ? (
-                        <button
-                            type="button"
-                            onClick={open}
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                        >
-                            Tạm dừng hoạt động shop
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            onClick={open}
-                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                        >
-                            Kích hoạt shop hoạt động
-                        </button>
-                    )}
                 </div>
 
                 {/* <div className="w-full mx-auto p-8 bg-white mt-8"></div> */}

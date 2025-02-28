@@ -88,7 +88,7 @@ const UserDetail = () => {
                             </div>
 
                             {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}
-                            {user.status === "Đình chỉ" && banInfo && (
+                            {user.status === "suspended" && banInfo && (
                                 <div className="mt-3 p-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
                                     <p className="text-sm text-red-800 font-medium flex items-center gap-2">
                                         <span className="text-red-600 font-bold">&#x21;</span>

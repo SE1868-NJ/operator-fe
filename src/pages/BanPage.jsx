@@ -90,9 +90,13 @@ const BanAccountForm = () => {
         try {
             // Gọi service để thực hiện hành động ban tài khoản
             const response = await BanService.banUser(payload);
-            if (response?.success) {
+            if (response?.success && userType === "customer") {
                 alert("Đình chỉ thành công!");
                 Navigate(`/main/user_detail/${userId}`);
+            } else if (response?.success && userType === "shop") {
+                alert("Đình chỉ thành công!");
+                Navigate(`/main/shop/${userId}`);
+                window.location.reload();
             } else {
                 alert("Có lỗi xảy ra, vui lòng thử lại!");
             }

@@ -17,16 +17,6 @@ export const useShop = (id) => {
     });
 };
 
-// export const useUpdateShopStatus = () => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationFn: ({ id, status }) => ShopService.updateShopStatus(id, status),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries(["shop"]);
-//         },
-//     });
-// };
-
 export const usePendingShops = (limit = 10, page = 1, filterData = {}) => {
     return useQuery({
         queryKey: ["pendingShops", limit, page, filterData],

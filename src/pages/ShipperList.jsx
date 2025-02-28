@@ -31,7 +31,7 @@ export default function ShipperList() {
 
     const { data, isLoading } = useShippers(offset, itemsPerPage, search, filterStatus);
 
-    console.log(data);
+    console.log("data-----", data);
 
     const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);
 
@@ -99,7 +99,7 @@ export default function ShipperList() {
                     </tr>
                 ) : (
                     <tbody>
-                        {data?.shippers?.map((shipper) => (
+                        {data?.map((shipper) => (
                             <tr key={shipper.id} className="border">
                                 <td className="p-2 text-center border">{shipper.id}</td>
                                 <td className="p-2 text-center border">{shipper.name}</td>

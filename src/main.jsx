@@ -116,6 +116,7 @@ const router = createBrowserRouter([
                 path: "/main/report-categories",
                 element: <ReportCategoriesPage />,
             },
+            {
                 path: "/main/ban_account",
                 element: <BanPage />,
             },

@@ -11,7 +11,7 @@ export const useShippers = (offset, limit, search, status) => {
 
 export const useShipper = (id) => {
     return useQuery({
-        queryKey: ["shippers", id],
+        queryKey: ["shipper", id],
         queryFn: () => ShipperServices.getOneShipper(id),
     });
 };

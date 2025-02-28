@@ -57,32 +57,32 @@ const ShipperViewPage = () => {
 
     return (
         <div className="flex items-center justify-center pt-10">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
+            <div className="grid w-full max-w-6xl grid-cols-1 gap-4 md:grid-cols-4">
                 {/* Profile Section */}
-                <div className="bg-white p-5 rounded-lg shadow-md">
-                    <div className="text-center mt-4 container">
+                <div className="p-5 bg-white rounded-lg shadow-md">
+                    <div className="container mt-4 text-center">
                         <img
                             src={
                                 shipper.avatar ||
                                 "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
                             }
                             alt={shipper.name}
-                            className="w-32 h-32 rounded-full mx-auto mb-3 border-4 hover:border-8 transition-transform duration-600 hover:scale-150  border-pink-200"
+                            className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"
                         />
-                        <h6 className="text-gray-500 text-sm mt-2">ID: {shipper.id}</h6>
+                        <h6 className="mt-2 text-sm text-gray-500">ID: {shipper.id}</h6>
                         <h5 className="mt-3 font-bold">{shipper.name}</h5>
-                        <h6 className="text-gray-500 text-sm">{shipper.email}</h6>
+                        <h6 className="text-sm text-gray-500">{shipper.email}</h6>
                     </div>
                     <div className="mt-5 text-center">
-                        <h5 className="text-blue-500 font-bold">Thông tin hoạt động</h5>
+                        <h5 className="font-bold text-blue-500">Thông tin hoạt động</h5>
                         <p className="text-sm">{shipper.activityArea}</p>
                     </div>
                 </div>
 
                 {/* Details Section */}
-                <div className="md:col-span-3 bg-white p-5 rounded-lg shadow-md">
-                    <h6 className="text-blue-500 font-bold mb-4">Thông tin cá nhân</h6>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-5 bg-white rounded-lg shadow-md md:col-span-3">
+                    <h6 className="mb-4 font-bold text-blue-500">Thông tin cá nhân</h6>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <strong>Giới tính:</strong> {shipper.gender}
                         </div>
@@ -103,15 +103,15 @@ const ShipperViewPage = () => {
                         </div>
                     </div>
 
-                    <h6 className="text-blue-500 font-bold mt-6 mb-4">Thông tin giao hàng</h6>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h6 className="mt-6 mb-4 font-bold text-blue-500">Thông tin giao hàng</h6>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <strong>Phương thức vận chuyển:</strong> {shipper.shippingMethod}
                         </div>
                     </div>
 
-                    <h6 className="text-blue-500 font-bold mt-6 mb-4">Liên hệ khẩn cấp</h6>
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h6 className="mt-6 mb-4 font-bold text-blue-500">Liên hệ khẩn cấp</h6>
+                    {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <strong>Họ và tên:</strong> {shipper.emergencyContact.name}
             </div>
@@ -128,7 +128,7 @@ const ShipperViewPage = () => {
                     <div className="mt-5 text-center">
                         <button
                             type="button"
-                            className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+                            className="px-4 py-2 mr-2 text-white bg-green-500 rounded"
                             onClick={handleDecision("accepted")}
                         >
                             Chấp nhận
@@ -136,8 +136,8 @@ const ShipperViewPage = () => {
                         <Modal opened={opened} onClose={close} withCloseButton={false} centered>
                             <form>
                                 <label className="block mb-4">
-                                    <p className="flex text-xl font-semibold mb-2">
-                                        Nhập lý do từ chối <p className="text-red-500 ml-2">*</p>
+                                    <p className="flex mb-2 text-xl font-semibold">
+                                        Nhập lý do từ chối <p className="ml-2 text-red-500">*</p>
                                     </p>
                                     <textarea
                                         {...register("description", {
@@ -148,7 +148,7 @@ const ShipperViewPage = () => {
                                         placeholder="Nhập lý do..."
                                     />
                                     {errors.description && (
-                                        <p className="text-red-500 text-sm mt-1">
+                                        <p className="mt-1 text-sm text-red-500">
                                             {errors.description.message}
                                         </p>
                                     )}
@@ -176,14 +176,14 @@ const ShipperViewPage = () => {
                         <button
                             type="button"
                             variant="default"
-                            className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+                            className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
                             onClick={open}
                         >
                             Từ chối
                         </button>
                         <button
                             type="button"
-                            className="px-4 py-2 bg-blue-500 text-white rounded"
+                            className="px-4 py-2 text-white bg-blue-500 rounded"
                             onClick={() => navigate(-1)}
                         >
                             Quay lại

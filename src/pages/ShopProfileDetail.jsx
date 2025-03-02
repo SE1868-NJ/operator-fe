@@ -357,8 +357,8 @@ const FeedbackList = ({ feedbacks }) => {
                             onClick={() => setVisibleCount(visibleCount + 2)}
                             radius="xl"
                             size="md"
-                            variant="outline"
-                            color="blue"
+                            variant="filled"
+                            className="bg-blue-500 text-white hover:bg-blue-600 transition-all"
                         >
                             Xem thêm feedback
                         </Button>
@@ -687,8 +687,7 @@ const ShopProfileDetail = () => {
                 </div>
 
                 {/* Biểu đồ */}
-                <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
-                    {/* Biểu đồ */}
+                <div className="w-full flex flex-col lg:flex-row gap-6 px-4 border border-gray-200 mt-8 pt-8 rounded-lg">
                     <div className="w-full lg:w-1/2">
                         <DashboardChart />
                     </div>

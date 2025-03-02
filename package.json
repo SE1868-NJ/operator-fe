@@ -33,6 +33,7 @@
         "chart.js": "^4.4.8",
         "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
+        "framer-motion": "^12.4.7",
         "iconsax-react": "^0.0.8",
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.475.0",

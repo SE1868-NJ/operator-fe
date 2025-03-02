@@ -47,7 +47,7 @@ const ShopService = {
     },
     async getOneShop(id) {
         const shop = await instance.get(`/shops/${id}`).then(({ data }) => {
-            return data?.shop;
+            return data;
         });
         return shop;
     },

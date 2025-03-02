@@ -311,6 +311,12 @@ const FeedbackList = ({ feedbacks }) => {
                                                         💰 Giá:{" "}
                                                         {fb.OrderItem?.price.toLocaleString()} VND
                                                     </p>
+                                                    <p className="text-sm font-bold">
+                                                        Trạng thái giao hàng:{" "}
+                                                        <span className="text-red-500 uppercase">
+                                                            {fb.OrderItem?.Order?.status}
+                                                        </span>
+                                                    </p>
                                                 </div>
                                                 <Image
                                                     src="https://shopmebi.com/wp-content/uploads/2023/07/ao-so-mi-nam-dai-tay-uniqlo-goods_57_453156_edited.jpeg"
@@ -360,7 +366,7 @@ const FeedbackList = ({ feedbacks }) => {
                             variant="filled"
                             className="bg-blue-500 text-white hover:bg-blue-600 transition-all"
                         >
-                            Xem thêm feedback
+                            Xem thêm
                         </Button>
                     </motion.div>
                 ) : (
@@ -377,7 +383,7 @@ const FeedbackList = ({ feedbacks }) => {
                                 variant="outline"
                                 color="red"
                             >
-                                Thu gọn feedback
+                                Thu gọn
                             </Button>
                         </motion.div>
                     )
@@ -390,10 +396,19 @@ const FeedbackList = ({ feedbacks }) => {
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { data, isLoading, error } = useShop(id);
+
+    // const currentPage = data?.currentPage;
+
+    const [page, setPage] = useState(1);
+    const limit = 5; // ✅ Số lượng sản phẩm mỗi trang
+    const offset = (page - 1) * limit;
+
+    const { data, isLoading, error } = useShop(id, offset, limit);
     const [selectedImage, setSelectedImage] = useState(null);
     const shop = data?.shop;
     const products = data?.products;
+    const totalPages = data?.totalPages || 1;
+
     // const [banInfo, setBanInfo] = useState(null);
 
     // Ensure hooks are always called in the same order
@@ -687,39 +702,26 @@ const ShopProfileDetail = () => {
                 </div>
 
                 {/* Biểu đồ */}
-                <div className="w-full flex flex-col lg:flex-row gap-6 px-4 border border-gray-200 mt-8 pt-8 rounded-lg">
-                    <div className="w-full lg:w-1/2">
-                        <DashboardChart />
+                <div className="border border-gray-200 mt-8 pt-1 rounded-lg">
+                    <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
+                        <div className="w-full lg:w-1/2">
+                            <DashboardChart />
+                        </div>
+                        <div className="w-full lg:w-1/2">
+                            <DashboardChart />
+                        </div>
                     </div>
-
-                    {/* Đánh giá từ AI */}
-                    <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                            <IconRobot size={28} className="text-blue-500" />
-                            Đánh giá tổng quan từ AI
-                        </h2>
-
-                        <div className="mt-3 bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative">
-                            <span className="absolute top-0 left-0 w-full h-full bg-white opacity-10 blur-lg rounded-xl" />
-                            {data.feedbacks.aiReview === undefined ? (
-                                <p>Tạm thời cửa hàng chưa có đánh giá nào!!!</p>
-                            ) : (
-                                <p>“{data.feedbacks.aiReview}”</p>
-                            )}
-                        </div>
-
-                        {/* Nút Xem feedback */}
-                        <div className="mt-4 flex justify-center">
-                            <Button
-                                onClick={scrollToFeedback}
-                                radius="lg"
-                                size="md"
-                                color="blue"
-                                variant="outline"
-                            >
-                                Xem feedback
-                            </Button>
-                        </div>
+                    {/* Nút Xem feedback */}
+                    <div className="flex justify-center mb-6">
+                        <Button
+                            onClick={scrollToFeedback}
+                            radius="lg"
+                            size="md"
+                            color="blue"
+                            variant="outline"
+                        >
+                            Xem feedback
+                        </Button>
                     </div>
                 </div>
 
@@ -824,8 +826,64 @@ const ShopProfileDetail = () => {
                                 })}
                             </tbody>
                         </table>
+                        {/* Nút phân trang */}
+                        <div className="flex justify-center mt-6 gap-4">
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                disabled={page === 1}
+                                onClick={() => setPage(page - 1)}
+                            >
+                                Trang trước
+                            </button>
+
+                            <span className="text-lg font-semibold">
+                                Trang {page} / {totalPages}
+                            </span>
+
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                disabled={page === totalPages}
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Trang sau
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <div className="w-full flex items-center justify-center border-t border-gray-300 relative">
+                    {/* Icon AI bên trái */}
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/4712/4712037.png"
+                        alt="AI Icon Left"
+                        className="w-16 h-16 absolute left-5 lg:left-20"
+                    />
+
+                    <div className="w-full lg:w-1/2 flex flex-col justify-center text-center">
+                        <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2 tracking-wider justify-center uppercase mt-6">
+                            <IconRobot size={35} className="text-blue-500" />
+                            Đánh giá tổng quan từ AI
+                        </h2>
+
+                        <div className="mt-3 bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative mb-6">
+                            <span className="absolute top-0 left-0 w-full h-full bg-white opacity-10 blur-lg rounded-xl" />
+                            {data.feedbacks.aiReview === undefined ? (
+                                <p>Tạm thời cửa hàng chưa có đánh giá nào!!!</p>
+                            ) : (
+                                <p>“{data.feedbacks.aiReview}”</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Icon AI bên phải */}
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/4712/4712005.png"
+                        alt="AI Icon Right"
+                        className="w-16 h-16 absolute right-5 lg:right-20"
+                    />
+                </div>
+
                 <div id="feedback-section" className="mt-6 border-t border-gray-200 pt-6">
                     {data.feedbacks.feedbacks && data.feedbacks.feedbacks.length > 0 ? (
                         <FeedbackList feedbacks={data.feedbacks.feedbacks} />

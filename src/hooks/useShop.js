@@ -10,10 +10,11 @@ export const useShops = (page, limit, filterData) => {
     });
 };
 
-export const useShop = (id) => {
+export const useShop = (id, offset, limit) => {
     return useQuery({
-        queryKey: ["shop", id],
-        queryFn: () => ShopService.getOneShop(id),
+        queryKey: ["shop", id, offset, limit], // ✅ Cập nhật key để cache dữ liệu từng trang
+        queryFn: () => ShopService.getOneShop(id, offset, limit),
+        keepPreviousData: true, // ✅ Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };
 

@@ -45,12 +45,16 @@ const ShopService = {
 
         return shops;
     },
-    async getOneShop(id) {
-        const shop = await instance.get(`/shops/${id}`).then(({ data }) => {
-            return data;
-        });
+    async getOneShop(id, offset = 0, limit = 10) {
+        const shop = await instance
+            .get(`/shops/${id}`, {
+                params: { offset, limit }, // ✅ Gửi offset & limit vào query params
+            })
+            .then(({ data }) => data);
+
         return shop;
     },
+
     // async updateShopStatus(id, status) {
     //     const updatedShop = await instance.put(`/shops/${id}/status`, { status }).then(({ data }) => {
     //         return data?.shop;

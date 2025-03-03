@@ -31,6 +31,7 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
+import AccountProfile from "./pages/AccountProfile.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import ReportDetailPage from "./pages/ReportDetailPage.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     {
         path: "/forgotpass",
         element: <ForgotPassPage />,
+    },
+    {
+        path: "/profile",
+        element: <AccountProfile />,
     },
     {
         path: "/main/",

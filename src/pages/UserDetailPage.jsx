@@ -44,7 +44,7 @@ const UserDetail = () => {
     if (error) return <p>Error loading user data</p>;
 
     const handleStatusChange = async () => {
-        if (user.status === "Hoạt động") {
+        if (user.status === "active") {
             const token = localStorage.getItem("token");
             const operatorData = jwtDecode(token);
             console.log(operatorData);
@@ -68,7 +68,10 @@ const UserDetail = () => {
                     <div className="p-6 text-center bg-white rounded-lg shadow-md">
                         <img
                             className="w-40 h-40 mx-auto rounded-full"
-                            src={user.avatar}
+                            src={
+                                user.avatar ||
+                                "https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg"
+                            }
                             alt={`${user.fullName}'s avatar`}
                         />
                         <h5 className="mt-4 text-lg font-semibold">{user.fullName}</h5>
@@ -77,18 +80,18 @@ const UserDetail = () => {
                             {/* <h5 className="text-lg font-semibold">Trạng thái</h5> */}
                             <div
                                 className={`inline-block mt-2 px-4 py-1 text-sm font-semibold rounded-full ${
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "bg-green-100 text-green-700 border-green-500"
-                                        : user.status === "Không hoạt động"
-                                          ? "bg-red-100 text-red-700 border-red-500"
-                                          : "bg-yellow-100 text-yellow-700 border-yellow-500"
+                                        : user.status === "suspended"
+                                          ? "bg-yellow-100 text-yellow-700 border-yellow-500"
+                                          : "bg-red-100 text-red-700 border-red-500"
                                 }`}
                             >
-                                {user.status}
+                                {user.status === "active" ? "Hoạt động" : "Đình chỉ"}
                             </div>
 
                             {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}
-                            {user.status === "Đình chỉ" && banInfo && (
+                            {user.status === "suspended" && banInfo && (
                                 <div className="mt-3 p-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
                                     <p className="text-sm text-red-800 font-medium flex items-center gap-2">
                                         <span className="text-red-600 font-bold">&#x21;</span>
@@ -208,17 +211,17 @@ const UserDetail = () => {
                                 type="button"
                                 onClick={() => handleStatusChange()}
                                 className={`${
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "bg-yellow-500 hover:bg-yellow-700 text-white"
-                                        : user.status === "Đình chỉ"
+                                        : user.status === "suspended"
                                           ? "bg-green-500 hover:bg-green-700 text-white"
                                           : "bg-blue-500 hover:bg-blue-700 text-white" // Nếu là "Không hoạt động"
                                 } px-4 py-2 rounded`}
                             >
                                 {
-                                    user.status === "Hoạt động"
+                                    user.status === "active"
                                         ? "Đình chỉ người dùng"
-                                        : user.status === "Đình chỉ"
+                                        : user.status === "suspended"
                                           ? "Gỡ đình chỉ người dùng"
                                           : "Kích hoạt người dùng" // Nếu là "Không hoạt động"
                                 }

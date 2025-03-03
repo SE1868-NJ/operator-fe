@@ -8,6 +8,8 @@ const UserService = {
 
         const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
 
+        console.log(users);
+
         return users;
     },
     async getUserById(id) {

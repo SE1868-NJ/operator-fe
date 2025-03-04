@@ -121,7 +121,6 @@ const router = createBrowserRouter([
                 path: "/main/ban_account",
                 element: <BanPage />,
             },
-
             {
                 path: "*",
                 element: <ErrorPage />,

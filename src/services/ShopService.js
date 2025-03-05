@@ -1,6 +1,27 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
+    async getProductsByShopId(id, offset, limit, filterData) {
+        const products = await instance
+            .get(`/shops/${id}/products`, {
+                params: {
+                    offset,
+                    limit,
+                    productName: filterData.productName || undefined, // Tìm theo tên sản phẩm
+                    minPrice: filterData.minPrice || undefined, // Lọc giá thấp nhất
+                    maxPrice: filterData.maxPrice || undefined, // Lọc giá cao nhất
+                },
+            })
+            .then(({ data }) => data);
+        return products;
+    },
+
+    //Lay thong tin shop va feedback
+    async getOneShop(id) {
+        const shop = await instance.get(`/shops/${id}`).then(({ data }) => data);
+        return shop;
+    },
+
     async getAllShops(offset, limit, filterData = {}) {
         const { shopName, ownerName, shopEmail, shopPhone, shopStatus } = filterData;
         const shops = await instance
@@ -45,22 +66,16 @@ const ShopService = {
 
         return shops;
     },
-    async getOneShop(id, offset = 0, limit = 10) {
-        const shop = await instance
-            .get(`/shops/${id}`, {
-                params: { offset, limit }, // ✅ Gửi offset & limit vào query params
+
+    async getOrderByShopId(id, offset = 0, limit = 5) {
+        const data = await instance
+            .get(`/shops/${id}/orders`, {
+                params: { offset, limit },
             })
             .then(({ data }) => data);
-
-        return shop;
+        return data;
     },
 
-    // async updateShopStatus(id, status) {
-    //     const updatedShop = await instance.put(`/shops/${id}/status`, { status }).then(({ data }) => {
-    //         return data?.shop;
-    //     });
-    //     return updatedShop;
-    // },
     async getOnePendingShop(id) {
         const shop = await instance
             .get(`/shops/pendingshop/${id}`)
@@ -100,6 +115,19 @@ const ShopService = {
             return data?.data;
         });
         return approvedShops;
+    },
+    async getOrdersStatistic(id, timeRange, interval) {
+        try {
+            const data = await instance
+                .get(`/shops/${id}/chart`, {
+                    params: { timeRange, interval },
+                })
+                .then(({ data }) => data);
+            return data;
+        } catch (error) {
+            console.error("Error fetching order statistics:", error);
+            return null; // Hoặc throw error nếu muốn xử lý bên ngoài
+        }
     },
 };
 

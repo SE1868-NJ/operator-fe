@@ -1,433 +1,70 @@
-import {
-    Accordion,
-    Avatar,
-    Badge,
-    Button,
-    Card,
-    Grid,
-    Image,
-    Progress,
-    Rating,
-    Select,
-    Table,
-} from "@mantine/core";
-import { IconAlertCircle, IconRobot, IconStar } from "@tabler/icons-react";
-import {
-    ArcElement,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    Title,
-    Tooltip,
-} from "chart.js";
-import { formatDistanceToNow } from "date-fns";
-import { vi } from "date-fns/locale";
-import { AnimatePresence, motion } from "framer-motion"; // 🎯 Import framer-motion
-// import ShopService from "../services/ShopService.js";
+import { Avatar, Badge, Button, Card, Grid, Image, Table } from "@mantine/core";
+import { Group, NumberInput, TextInput } from "@mantine/core";
+import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
+import { IconRobot } from "@tabler/icons-react";
+import { IconCurrencyDollar, IconSearch } from "@tabler/icons-react";
 import { jwtDecode } from "jwt-decode";
-import React, { useState } from "react";
-import { Bar, Line, Pie } from "react-chartjs-2";
+import React, { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useShop } from "../hooks/useShop";
+import FeedbackList from "../components/ShopFeedback";
+import OrderChart from "../components/ShopOrderChart";
+import { useShop, useShopOrders, useShopProducts } from "../hooks/useShop";
 import BanService from "../services/BanService";
-
-// Đăng ký các thành phần cần thiết của Chart.js
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
-);
-
-const DashboardChart = () => {
-    const [selectedChart, setSelectedChart] = useState("line");
-
-    // Dữ liệu chung
-    const labels = [
-        "Tháng 1",
-        "Tháng 2",
-        "Tháng 3",
-        "Tháng 4",
-        "Tháng 5",
-        "Tháng 6",
-        "Tháng 7",
-        "Tháng 8",
-        "Tháng 9",
-        "Tháng 10",
-        "Tháng 11",
-        "Tháng 12",
-    ];
-
-    // Dữ liệu cho từng biểu đồ
-    const lineData = {
-        labels,
-        datasets: [
-            {
-                label: "Doanh thu (Triệu VND)",
-                data: [50, 75, 100, 80, 120, 150, 150, 120, 80, 100, 75, 50],
-                borderColor: "rgba(75, 192, 192, 1)",
-                backgroundColor: "rgba(75, 192, 192, 0.2)",
-                tension: 0.4,
-                borderWidth: 3,
-                pointRadius: 5,
-                pointBackgroundColor: "rgba(75, 192, 192, 1)",
-            },
-        ],
-    };
-
-    const barData = {
-        labels: ["Gấu Teddy", "Thỏ Bông", "Mèo Bông", "Cá Mập Bông", "Khủng Long"],
-        datasets: [
-            {
-                label: "Số lượng bán (cái)",
-                data: [120, 90, 150, 110, 130],
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-                hoverBackgroundColor: ["#FF4A6E", "#2B94D1", "#E0B43B", "#38A89D", "#8357D1"],
-                borderRadius: 10,
-            },
-        ],
-    };
-
-    const pieData = {
-        labels: ["Gấu Teddy", "Thỏ Bông", "Mèo Bông", "Cá Mập Bông", "Khủng Long"],
-        datasets: [
-            {
-                data: [30, 20, 25, 15, 10],
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-                hoverBackgroundColor: ["#FF4A6E", "#2B94D1", "#E0B43B", "#38A89D", "#8357D1"],
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: true,
-                labels: {
-                    font: { size: 14, weight: "bold" },
-                    color: "#333",
-                },
-            },
-            title: {
-                display: true,
-                text: "Thống kê bán hàng",
-                font: { size: 18, weight: "bold" },
-                color: "#1E293B",
-            },
-        },
-    };
-
-    return (
-        <div className="rounded-2xl p-6 w-full">
-            <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-6">
-                📊 Thống kê bán hàng
-            </h2>
-
-            {/* Dropdown chọn biểu đồ */}
-            <div className="mb-6 flex justify-center">
-                <Select
-                    data={[
-                        { value: "line", label: "📈 Doanh thu theo tháng" },
-                        { value: "bar", label: "📊 Sản phẩm bán chạy" },
-                        { value: "pie", label: "🥧 Doanh thu theo danh mục" },
-                    ]}
-                    value={selectedChart}
-                    onChange={setSelectedChart}
-                    radius="lg"
-                    size="md"
-                    className="w-64"
-                />
-            </div>
-
-            {/* Biểu đồ */}
-            <div className="w-full h-[400px] flex justify-center items-center bg-white p-4 rounded-xl transition-all duration-300 hover:scale-105">
-                {selectedChart === "line" && <Line data={lineData} options={options} />}
-                {selectedChart === "bar" && <Bar data={barData} options={options} />}
-                {selectedChart === "pie" && <Pie data={pieData} options={options} />}
-            </div>
-        </div>
-    );
-};
-
-//Feedback:
-const FeedbackList = ({ feedbacks }) => {
-    const [selectedStar, setSelectedStar] = useState("all");
-    const [visibleCount, setVisibleCount] = useState(3);
-
-    // Tính tổng số feedback
-    const totalFeedback = feedbacks.length;
-
-    // Lọc feedback theo số sao
-    const filteredFeedbacks =
-        selectedStar === "all"
-            ? feedbacks
-            : feedbacks.filter((fb) => fb.star === Number.parseInt(selectedStar));
-
-    // Chỉ hiển thị số lượng feedback theo visibleCount
-    const displayedFeedbacks = filteredFeedbacks.slice(0, visibleCount);
-
-    const averageRating = () => {
-        if (feedbacks.length === 0) return 0;
-        const totalStars = feedbacks.reduce((sum, fb) => sum + fb.star, 0);
-        return (totalStars / feedbacks.length).toFixed(1);
-    };
-
-    const starCounts = [5, 4, 3, 2, 1].map((star) => {
-        const count = feedbacks.filter((fb) => fb.star === star).length;
-        const percentage = totalFeedback > 0 ? (count / totalFeedback) * 100 : 0;
-        return { star, count, percentage: percentage.toFixed(1) }; // Giữ 1 chữ số thập phân
-    });
-
-    return (
-        <div className="mt-6">
-            {/* Hiển thị số sao trung bình */}
-            <div className="mb-4 flex items-center gap-4">
-                <h2 className="text-2xl font-bold">📢 Tất cả Feedback ({totalFeedback})</h2>
-                <div className="flex items-center gap-2 text-lg font-medium">
-                    <span className="text-gray-600 font-medium">⭐ Đánh giá trung bình:</span>
-                    <span className="text-lg font-bold text-blue-600">{averageRating()} / 5</span>
-                </div>
-            </div>
-
-            {/* Biểu đồ đánh giá tổng quan */}
-            <div className="mb-6 p-4 bg-white rounded-lg shadow-md">
-                <h3 className="font-semibold text-gray-800 mb-2">📊 Tổng quan đánh giá</h3>
-                {starCounts.map(({ star, count, percentage }) => (
-                    <div key={star} className="flex items-center gap-2 mb-2">
-                        <span className="w-10 text-gray-700">⭐{star}</span>
-                        <Progress
-                            value={percentage}
-                            color={star >= 4 ? "green" : "orange"}
-                            className="flex-1"
-                        />
-                        <span className="text-gray-600">{count} đánh giá</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Bộ lọc feedback theo sao */}
-            <div className="mb-4 flex items-center gap-4">
-                <span className="text-gray-600 font-medium">Lọc theo sao:</span>
-                <Select
-                    value={selectedStar}
-                    onChange={setSelectedStar}
-                    data={[
-                        { value: "all", label: "🌟 Tất cả" },
-                        ...starCounts.map(({ star, count }) => ({
-                            value: String(star),
-                            label: `⭐${star} (${count})`,
-                        })),
-                    ]}
-                    radius="lg"
-                    size="md"
-                />
-            </div>
-
-            {/* Danh sách feedback với animation */}
-            <div className="space-y-6">
-                <AnimatePresence>
-                    {displayedFeedbacks.map((fb) => (
-                        <motion.div
-                            key={fb.ID}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <Card
-                                shadow="md"
-                                p="lg"
-                                className="border rounded-xl hover:shadow-lg transition-all"
-                            >
-                                {/* Header Feedback */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-4">
-                                        <Avatar src={fb.Customer.avatar} size="lg" radius="xl" />
-                                        <div>
-                                            <h3 className="font-bold text-lg">
-                                                {fb.Customer.fullName}
-                                            </h3>
-                                            <p className="text-sm text-gray-500">
-                                                {fb.Customer.userEmail}
-                                            </p>
-                                            <Rating value={fb.star} readOnly size="sm" />
-                                        </div>
-                                    </div>
-                                    <p className="text-sm text-gray-500">
-                                        🕒{" "}
-                                        {formatDistanceToNow(new Date(fb.createdAt), {
-                                            addSuffix: true,
-                                            locale: vi,
-                                        })}
-                                    </p>
-                                </div>
-
-                                {/* Nội dung feedback */}
-                                <p className="mt-3 text-gray-700">{fb.content}</p>
-
-                                {/* Hình ảnh feedback (nếu có) */}
-                                {fb.Media?.MediaItems?.length > 0 && (
-                                    <div className="mt-2 flex space-x-2">
-                                        {fb.Media.MediaItems.map((img) => (
-                                            <Image
-                                                key={img.ID}
-                                                src={img.mediaItemURL}
-                                                alt="Feedback image"
-                                                className="w-20 h-20 rounded-lg object-cover border"
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Chi tiết sản phẩm đã mua */}
-                                <Accordion variant="separated" className="mt-4">
-                                    <Accordion.Item value="product">
-                                        <Accordion.Control>
-                                            📦 Chi tiết sản phẩm đã mua
-                                        </Accordion.Control>
-                                        <Accordion.Panel>
-                                            <div className="flex items-center space-x-4">
-                                                <div className="flex-1">
-                                                    <p className="text-sm font-bold">
-                                                        {fb.OrderItem?.ProductIT?.product_name}
-                                                    </p>
-                                                    <p className="text-sm text-gray-500">
-                                                        {fb.OrderItem?.ProductIT?.description}
-                                                    </p>
-                                                    <p className="text-sm text-gray-600">
-                                                        Số lượng: {fb.OrderItem?.quantity}
-                                                    </p>
-                                                    <p className="text-sm font-bold text-blue-600">
-                                                        💰 Giá:{" "}
-                                                        {fb.OrderItem?.price.toLocaleString()} VND
-                                                    </p>
-                                                    <p className="text-sm font-bold">
-                                                        Trạng thái giao hàng:{" "}
-                                                        <span className="text-red-500 uppercase">
-                                                            {fb.OrderItem?.Order?.status}
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                                <Image
-                                                    src="https://shopmebi.com/wp-content/uploads/2023/07/ao-so-mi-nam-dai-tay-uniqlo-goods_57_453156_edited.jpeg"
-                                                    alt="Ảnh sản phẩm"
-                                                    className="w-20 h-20 rounded-md object-cover border"
-                                                />
-                                            </div>
-                                        </Accordion.Panel>
-                                    </Accordion.Item>
-                                </Accordion>
-
-                                {/* Phản hồi từ shop */}
-                                {fb.Reply && (
-                                    <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                                        <h4 className="text-sm font-bold">💬 Phản hồi từ shop</h4>
-                                        <p className="text-gray-700">{fb.Reply.content}</p>
-                                        <div className="flex items-center mt-2">
-                                            <Avatar
-                                                src={fb.Reply.ReplyUser.avatar}
-                                                size="sm"
-                                                radius="xl"
-                                            />
-                                            <span className="ml-2 text-sm text-gray-500">
-                                                {fb.Reply.ReplyUser.fullName}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </Card>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
-            </div>
-
-            {/* Nút Xem thêm / Thu gọn với animation */}
-            <div className="mt-6 text-center">
-                {visibleCount < filteredFeedbacks.length ? (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <Button
-                            onClick={() => setVisibleCount(visibleCount + 2)}
-                            radius="xl"
-                            size="md"
-                            variant="filled"
-                            className="bg-blue-500 text-white hover:bg-blue-600 transition-all"
-                        >
-                            Xem thêm
-                        </Button>
-                    </motion.div>
-                ) : (
-                    visibleCount > 5 && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <Button
-                                onClick={() => setVisibleCount(3)}
-                                radius="xl"
-                                size="md"
-                                variant="outline"
-                                color="red"
-                            >
-                                Thu gọn
-                            </Button>
-                        </motion.div>
-                    )
-                )}
-            </div>
-        </div>
-    );
-};
 
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // const currentPage = data?.currentPage;
+    //AI nhan xet
+    const [showReview, setShowReview] = useState(false);
 
+    // Pagination for product
     const [page, setPage] = useState(1);
-    const limit = 5; // ✅ Số lượng sản phẩm mỗi trang
+    const limit = 5; // Số lượng sản phẩm mỗi trang
     const offset = (page - 1) * limit;
 
-    const { data, isLoading, error } = useShop(id, offset, limit);
-    const [selectedImage, setSelectedImage] = useState(null);
+    //pagination for orders
+    const [page2, setPage2] = useState(1);
+    const limit2 = 5;
+    const offset2 = (page2 - 1) * limit2;
+
+    //filter for products
+    const timeOut = 500;
+
+    //Filter cho product
+    const [searchProductName, setSearchProductName] = useDebouncedState("", timeOut);
+    const [searchMinPrice, setSearchMinPrice] = useDebouncedState("", timeOut);
+    const [searchMaxPrice, setSearchMaxPrice] = useDebouncedState("", timeOut);
+
+    const filterData = useMemo(
+        () => ({
+            productName: searchProductName,
+            minPrice: searchMinPrice,
+            maxPrice: searchMaxPrice,
+        }),
+        [searchProductName, searchMinPrice, searchMaxPrice],
+    );
+
+    //Lay thong tin shop, feedback
+    const { data, isLoading, error } = useShop(id);
     const shop = data?.shop;
-    const products = data?.products;
-    const totalPages = data?.totalPages || 1;
+    const feedbacks = data?.feedbacks || [];
 
-    // const [banInfo, setBanInfo] = useState(null);
+    //Lay thong tin order
+    const { data: dataOrders, isLoading2, error2 } = useShopOrders(id, offset2, limit2);
+    const orders = dataOrders?.orders || [];
+    const totalPages2 = dataOrders?.totalPages || 1;
 
-    // Ensure hooks are always called in the same order
-    // useEffect(() => {
-    //     if (!shop?.shopID) return;
+    //lay thong tin product
+    const {
+        data: dataProducts,
+        isLoading3,
+        error3,
+    } = useShopProducts(id, offset, limit, filterData);
+    const products = dataProducts?.products || [];
+    const totalPages = dataProducts?.totalPages || 1;
 
-    //     const fetchBanInfo = async () => {
-    //         try {
-    //             const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
-    //             if (isUserBan) {
-    //                 setBanInfo(isUserBan);
-    //             }
-    //         } catch (error) {
-    //             console.error("Lỗi khi lấy thông tin ban:", error);
-    //         }
-    //     };
-
-    //     fetchBanInfo();
-    // }, [shop?.shopID]);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -457,6 +94,26 @@ const ShopProfileDetail = () => {
     const scrollToFeedback = () => {
         document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
     };
+
+    // const [banInfo, setBanInfo] = useState(null);
+
+    // Ensure hooks are always called in the same order
+    // useEffect(() => {
+    //     if (!shop?.shopID) return;
+
+    //     const fetchBanInfo = async () => {
+    //         try {
+    //             const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
+    //             if (isUserBan) {
+    //                 setBanInfo(isUserBan);
+    //             }
+    //         } catch (error) {
+    //             console.error("Lỗi khi lấy thông tin ban:", error);
+    //         }
+    //     };
+
+    //     fetchBanInfo();
+    // }, [shop?.shopID]);
 
     return (
         <div className="flex w-full bg-white-100 min-h-screen">
@@ -539,7 +196,11 @@ const ShopProfileDetail = () => {
                             </Grid.Col>
 
                             <Grid.Col span={12} md={8}>
-                                <Table striped highlightOnHover withBorder>
+                                <Table
+                                    striped
+                                    highlightOnHover
+                                    className="border border-gray-200 rounded-lg shadow-sm"
+                                >
                                     <tbody>
                                         {[
                                             {
@@ -602,7 +263,11 @@ const ShopProfileDetail = () => {
                             🏪 Thông tin cửa hàng
                         </h2>
 
-                        <Table striped highlightOnHover withBorder>
+                        <Table
+                            striped
+                            highlightOnHover
+                            className="border border-gray-200 rounded-lg shadow-sm"
+                        >
                             <tbody>
                                 {[
                                     {
@@ -705,10 +370,109 @@ const ShopProfileDetail = () => {
                 <div className="border border-gray-200 mt-8 pt-1 rounded-lg">
                     <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
                         <div className="w-full lg:w-1/2">
-                            <DashboardChart />
+                            <div className="rounded-2xl p-6 w-full">
+                                <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-4 mb-11 ">
+                                    📊 Thống kê số đơn hàng
+                                </h2>
+                                <div>
+                                    <OrderChart id={id} />
+                                </div>
+                            </div>
                         </div>
                         <div className="w-full lg:w-1/2">
-                            <DashboardChart />
+                            <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-10">
+                                📦 Danh sách đơn hàng gần nhất
+                            </h2>
+                            <table className="w-full border-collapse border border-gray-200">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="p-3 border">🆔 Mã đơn</th>
+                                        <th className="p-3 border">👤 Khách hàng</th>
+                                        <th className="p-3 border">📞 SĐT</th>
+                                        <th className="p-3 border">💰 Tổng tiền (VND)</th>
+                                        <th className="p-3 border">📦 Trạng thái</th>
+                                        <th className="p-3 border">📝 Ghi chú</th>
+                                        <th className="p-3 border text-center">🔍 Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {orders?.map((order) => (
+                                        <tr key={order.id} className="border hover:bg-gray-50">
+                                            <td className="p-3 border text-center">{order.id}</td>
+                                            <td className="p-3 border font-semibold">
+                                                {order.Customer.fullName}
+                                            </td>
+                                            <td className="p-3 border text-gray-600">
+                                                {order.Customer.userPhone}
+                                            </td>
+                                            <td className="p-3 border text-center font-semibold">
+                                                {Number(order.total).toLocaleString()} VND
+                                            </td>
+                                            <td className="p-3 border text-center font-semibold">
+                                                {order.status === "completed" && (
+                                                    <Badge color="green" variant="light">
+                                                        ✅ Hoàn thành
+                                                    </Badge>
+                                                )}
+                                                {order.status === "cancelled" && (
+                                                    <Badge color="red" variant="light">
+                                                        ❌ Đã hủy
+                                                    </Badge>
+                                                )}
+                                                {order.status === "processing" && (
+                                                    <Badge color="blue" variant="light">
+                                                        🔄 Đang xử lý
+                                                    </Badge>
+                                                )}
+                                                {order.status === "pending" && (
+                                                    <Badge color="yellow" variant="light">
+                                                        ⏳ Chờ xử lý
+                                                    </Badge>
+                                                )}
+                                            </td>{" "}
+                                            <td className="p-3 border text-gray-500">
+                                                {order.note || "Không có ghi chú"}
+                                            </td>
+                                            <td className="p-3 border text-center">
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                                                    onClick={() =>
+                                                        alert(`Xem chi tiết đơn hàng: ${order.id}`)
+                                                    }
+                                                >
+                                                    Xem
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            {/* Phân trang */}
+                            <div className="flex justify-center mt-6 gap-4">
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                    disabled={page2 === 1}
+                                    onClick={() => setPage2((prev) => Math.max(prev - 1, 1))}
+                                >
+                                    ⬅ Trang trước
+                                </button>
+                                <span className="text-lg font-semibold">
+                                    Trang {page2} / {totalPages2}
+                                </span>
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                    disabled={page2 >= totalPages2}
+                                    onClick={() =>
+                                        setPage2((prev) => Math.min(prev + 1, totalPages2))
+                                    }
+                                >
+                                    Trang sau ➡
+                                </button>
+                            </div>
                         </div>
                     </div>
                     {/* Nút Xem feedback */}
@@ -724,40 +488,64 @@ const ShopProfileDetail = () => {
                         </Button>
                     </div>
                 </div>
-
                 {/* <div className="w-full mx-auto p-8 bg-white mt-8"></div> */}
                 <div className="container mx-auto p-6">
                     <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-6">
                         🛍 Danh sách sản phẩm
                     </h2>
 
+                    <Group align="center" justify="center" spacing="md" mb="md">
+                        <TextInput
+                            label="🔍 Tên sản phẩm"
+                            placeholder="Nhập tên sản phẩm..."
+                            value={searchProductName}
+                            onChange={(e) => setSearchProductName(e.target.value)}
+                            icon={<IconSearch size={18} />}
+                            radius="md"
+                            size="md"
+                        />
+                        <NumberInput
+                            label="💰 Giá thấp nhất"
+                            placeholder="Nhập giá thấp nhất..."
+                            value={searchMinPrice}
+                            onChange={setSearchMinPrice}
+                            icon={<IconCurrencyDollar size={18} />}
+                            radius="md"
+                            size="md"
+                        />
+                        <NumberInput
+                            label="💰 Giá cao nhất"
+                            placeholder="Nhập giá cao nhất..."
+                            value={searchMaxPrice}
+                            onChange={setSearchMaxPrice}
+                            icon={<IconCurrencyDollar size={18} />}
+                            radius="md"
+                            size="md"
+                        />
+                    </Group>
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
                             <thead className="bg-gray-100">
                                 <tr className="text-left">
-                                    <th className="p-3 border-b">Hình ảnh</th>
-                                    <th className="p-3 border-b">Tên sản phẩm</th>
-                                    <th className="p-3 border-b">Mô tả</th>
-                                    <th className="p-3 border-b text-center">Giá (VND)</th>
-                                    <th className="p-3 border-b text-center">Đã bán</th>
-                                    <th className="p-3 border-b text-center">Đánh giá</th>
-                                    <th className="p-3 border-b text-center">Hành động</th>
+                                    <th className="p-3 border-b">📸 Hình ảnh</th>
+                                    <th className="p-3 border-b">🛒 Tên sản phẩm</th>
+                                    <th className="p-3 border-b">📜 Mô tả</th>
+                                    <th className="p-3 border-b text-center">💰 Giá (VND)</th>
+                                    <th className="p-3 border-b text-center">📦 Đã bán</th>
+                                    <th className="p-3 border-b text-center">⭐ Đánh giá</th>
+                                    <th className="p-3 border-b text-center">🔍 Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {products?.map((product) => {
-                                    // Tính tổng số lượng đã bán
+                                {products.map((product, index) => {
                                     const totalSold =
                                         product.OrderItems?.reduce(
-                                            (sum, item) => sum + item.quantity,
+                                            (sum, item) => item.quantity,
                                             0,
                                         ) || 0;
-
-                                    // Tính trung bình số sao từ feedbacks
                                     const feedbacks = product.OrderItems?.map(
                                         (item) => item.Feedbacks?.star,
                                     ).filter((star) => star !== undefined && star !== null);
-
                                     const averageStars = feedbacks.length
                                         ? (
                                               feedbacks.reduce((sum, star) => sum + star, 0) /
@@ -770,47 +558,31 @@ const ShopProfileDetail = () => {
                                             key={product.product_id}
                                             className="border-b hover:bg-gray-50"
                                         >
-                                            {/* Hình ảnh sản phẩm */}
                                             <td className="p-3">
                                                 <img
-                                                    src={
-                                                        product.main_image ||
-                                                        "https://cdn.shopify.com/s/files/1/0681/2821/1221/files/hipster-ban-phoi-thanh-thi-phong-khoang-1024x1024_480x480.jpg?v=1699854796"
-                                                    }
+                                                    src={product.main_image}
                                                     alt={product.product_name}
                                                     className="w-20 h-20 object-cover rounded-lg border"
                                                 />
                                             </td>
-
-                                            {/* Tên sản phẩm */}
                                             <td className="p-3 font-semibold">
                                                 {product.product_name}
                                             </td>
-
-                                            {/* Mô tả */}
                                             <td className="p-3 text-gray-600">
                                                 {product.description}
                                             </td>
-
-                                            {/* Giá */}
                                             <td className="p-3 text-center font-semibold">
                                                 {Number(product.price).toLocaleString()}
                                             </td>
-
-                                            {/* Tổng số lượng bán */}
                                             <td className="p-3 text-center text-blue-600">
                                                 {totalSold}
                                             </td>
-
-                                            {/* Đánh giá trung bình */}
                                             <td className="p-3 text-center text-yellow-500">
                                                 {averageStars} ⭐
                                             </td>
-
-                                            {/* Nút Xem chi tiết */}
                                             <td className="p-3 text-center">
                                                 <button
-                                                    type="button" // 🔹 Thêm type="button" để tránh lỗi
+                                                    type="button"
                                                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
                                                     onClick={() =>
                                                         alert(
@@ -818,7 +590,7 @@ const ShopProfileDetail = () => {
                                                         )
                                                     }
                                                 >
-                                                    View
+                                                    Xem
                                                 </button>
                                             </td>
                                         </tr>
@@ -826,7 +598,7 @@ const ShopProfileDetail = () => {
                                 })}
                             </tbody>
                         </table>
-                        {/* Nút phân trang */}
+                        {/* Phân trang */}
                         <div className="flex justify-center mt-6 gap-4">
                             <button
                                 type="button"
@@ -834,24 +606,23 @@ const ShopProfileDetail = () => {
                                 disabled={page === 1}
                                 onClick={() => setPage(page - 1)}
                             >
-                                Trang trước
+                                ⬅ Trang trước
                             </button>
-
                             <span className="text-lg font-semibold">
                                 Trang {page} / {totalPages}
                             </span>
-
                             <button
                                 type="button"
                                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
                                 disabled={page === totalPages}
                                 onClick={() => setPage(page + 1)}
                             >
-                                Trang sau
+                                Trang sau ➡
                             </button>
                         </div>
                     </div>
                 </div>
+
                 <div className="w-full flex items-center justify-center border-t border-gray-300 relative">
                     {/* Icon AI bên trái */}
                     <img
@@ -861,21 +632,33 @@ const ShopProfileDetail = () => {
                     />
 
                     <div className="w-full lg:w-1/2 flex flex-col justify-center text-center">
-                        <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2 tracking-wider justify-center uppercase mt-6">
+                        <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2 tracking-wider justify-center uppercase my-8">
                             <IconRobot size={35} className="text-blue-500" />
                             Đánh giá tổng quan từ AI
                         </h2>
+                        {/* Nút hiển thị đánh giá */}
+                        {!showReview && (
+                            <button
+                                type="button"
+                                onClick={() => setShowReview(true)}
+                                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition duration-300"
+                            >
+                                Bạn có muốn xem nhận xét về shop từ AI?
+                            </button>
+                        )}
 
-                        <div className="mt-3 bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative mb-6">
-                            <span className="absolute top-0 left-0 w-full h-full bg-white opacity-10 blur-lg rounded-xl" />
-                            {data.feedbacks.aiReview === undefined ? (
-                                <p>Tạm thời cửa hàng chưa có đánh giá nào!!!</p>
-                            ) : (
-                                <p>“{data.feedbacks.aiReview}”</p>
-                            )}
-                        </div>
+                        {/* Đánh giá từ AI - chỉ hiển thị khi showReview = true */}
+                        {showReview && (
+                            <div className="mt-1 bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative mb-6">
+                                <span className="absolute top-0 left-0 w-full h-full bg-white opacity-10 blur-lg rounded-xl" />
+                                {feedbacks.aiReview === undefined ? (
+                                    <p>Tạm thời cửa hàng chưa có đánh giá nào!!!</p>
+                                ) : (
+                                    <p>“{feedbacks.aiReview}”</p>
+                                )}
+                            </div>
+                        )}
                     </div>
-
                     {/* Icon AI bên phải */}
                     <img
                         src="https://cdn-icons-png.flaticon.com/512/4712/4712005.png"

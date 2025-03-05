@@ -10,11 +10,27 @@ export const useShops = (page, limit, filterData) => {
     });
 };
 
-export const useShop = (id, offset, limit) => {
+export const useShop = (id) => {
     return useQuery({
-        queryKey: ["shop", id, offset, limit], // ✅ Cập nhật key để cache dữ liệu từng trang
-        queryFn: () => ShopService.getOneShop(id, offset, limit),
-        keepPreviousData: true, // ✅ Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+        queryKey: ["shop", id], // Thay đổi queryKey
+        queryFn: () => ShopService.getOneShop(id), // Thay đổi queryFn
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useShopOrders = (id, offset, limit) => {
+    return useQuery({
+        queryKey: ["shopOrders", id, offset, limit],
+        queryFn: () => ShopService.getOrderByShopId(id, offset, limit),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useShopProducts = (id, offset, limit, filterData) => {
+    return useQuery({
+        queryKey: ["shopProducts", id, offset, limit, filterData],
+        queryFn: () => ShopService.getProductsByShopId(id, offset, limit, filterData),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };
 

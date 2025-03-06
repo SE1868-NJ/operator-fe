@@ -122,14 +122,14 @@ const ShipperViewPage = () => {
 
     return (
         <div className="flex items-center justify-center pt-10">
-            <div className="grid w-full max-w-6xl grid-cols-1 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
                 {/* Profile Section */}
-                <div className="p-5 bg-white rounded-lg shadow-md">
-                    <div className="container mt-4 text-center">
+                <div className="bg-white p-5 rounded-lg shadow-md">
+                    <div className="text-center mt-4 container">
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-dep-8.jpg"
+                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"
@@ -190,59 +190,70 @@ const ShipperViewPage = () => {
             </div>
           </div> */}
 
-                    {/* Action Buttons */}
-                    <div className="mt-8 flex justify-between gap-4">
-                        <Button
-                            color="blue"
-                            onClick={() => navigate("/main/pendding-shippers")}
-                            className="flex-grow md:flex-none"
+                    <div className="mt-5 text-center">
+                        <button
+                            type="button"
+                            className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+                            onClick={handleDecision("accepted")}
                         >
-                            Back to List
-                        </Button>
-                        <div className="flex gap-4">
-                            <Button color="green" onClick={handleAccept}>
-                                Accept
-                            </Button>
-                            <Button color="red" onClick={handleReject}>
-                                Reject
-                            </Button>
-                        </div>
-                    </div>
-
-                    {/* Rejection Modal */}
-                    <Modal opened={opened} onClose={close} withCloseButton={false} centered>
-                        <form onSubmit={handleSubmit(onSubmitReject)}>
-                            <div className="mb-4">
-                                <p className="flex items-center text-lg font-semibold mb-2 text-gray-700">
-                                    <IconAlertCircle className="mr-2 text-red-500" size={20} />
-                                    Nhập lý do từ chối <span className="text-red-500 ml-1">*</span>
-                                </p>
-                                <Textarea
-                                    {...register("description", {
-                                        required: "Hãy nhập lý do từ chối.",
-                                    })}
-                                    placeholder="Nhập lý do từ chối..."
-                                    className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    autosize
-                                    minRows={3}
-                                />
-                                {errors.description && (
-                                    <p className="text-red-500 text-sm mt-1">
-                                        {errors.description.message}
+                            Chấp nhận
+                        </button>
+                        <Modal opened={opened} onClose={close} withCloseButton={false} centered>
+                            <form>
+                                <label className="block mb-4">
+                                    <p className="flex text-xl font-semibold mb-2">
+                                        Nhập lý do từ chối <p className="text-red-500 ml-2">*</p>
                                     </p>
-                                )}
-                            </div>
+                                    <textarea
+                                        {...register("description", {
+                                            required: "Hãy nhập lý do của bạn",
+                                        })}
+                                        name="description"
+                                        className="w-full p-2 border border-4 rounded-md focus:outline-none focus:border-pink-300"
+                                        placeholder="Nhập lý do..."
+                                    />
+                                    {errors.description && (
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {errors.description.message}
+                                        </p>
+                                    )}
+                                </label>
 
-                            <div className="flex justify-end gap-3">
-                                <Button variant="outline" color="gray" onClick={close}>
-                                    Trở lại
-                                </Button>
-                                <Button type="submit" color="red">
-                                    Xác nhận
-                                </Button>
-                            </div>
-                        </form>
-                    </Modal>
+                                <div className="flex justify-end gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        color="gray"
+                                        onClick={close}
+                                    >
+                                        Trở lại
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        color="red"
+                                        onClick={handleDecision("rejected")}
+                                    >
+                                        Xác nhận
+                                    </Button>
+                                </div>
+                            </form>
+                        </Modal>
+                        <button
+                            type="button"
+                            variant="default"
+                            className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+                            onClick={open}
+                        >
+                            Từ chối
+                        </button>
+                        <button
+                            type="button"
+                            className="px-4 py-2 bg-blue-500 text-white rounded"
+                            onClick={() => navigate(-1)}
+                        >
+                            Quay lại
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

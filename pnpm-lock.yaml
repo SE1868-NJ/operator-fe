@@ -44,12 +44,18 @@ importers:
       chart.js:
         specifier: ^4.4.8
         version: 4.4.8
+      chart.js:
+        specifier: ^4.4.8
+        version: 4.4.8
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      file-saver:
+        specifier: ^2.0.5
+        version: 2.0.5
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -65,12 +71,18 @@ importers:
       moment-timezone:
         specifier: ^0.5.47
         version: 0.5.47
+      moment-timezone:
+        specifier: ^0.5.47
+        version: 0.5.47
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.0(chart.js@4.4.8)(react@18.3.1)
       react-chartjs-2:
         specifier: ^5.3.0
         version: 5.3.0(chart.js@4.4.8)(react@18.3.1)
@@ -83,15 +95,27 @@ importers:
       react-icons:
         specifier: ^5.5.0
         version: 5.5.0(react@18.3.1)
+      react-icons:
+        specifier: ^5.5.0
+        version: 5.5.0(react@18.3.1)
       react-router-dom:
         specifier: ^7.1.1
         version: 7.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      recharts:
+        specifier: ^2.15.1
+        version: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
+      xlsx:
+        specifier: ^0.18.5
+        version: 0.18.5
+      xlsx-js-style:
+        specifier: ^1.2.0
+        version: 1.2.0
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5

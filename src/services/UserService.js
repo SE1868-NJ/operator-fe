@@ -34,6 +34,13 @@ const UserService = {
         const users = await instance.get(`user/${query}`).then(({ data }) => data.data);
         return users;
     },
+    async getOrderList(id) {
+        const orders = await instance
+            .get(`users/orders/${id}`)
+            .then(({ data }) => data.data)
+            .catch((err) => console.log(err));
+        return orders;
+    },
 };
 
 export default UserService;

@@ -2,7 +2,8 @@ import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { useMemo, useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useShops } from "../hooks/useShop.js";
+import { useExportShops, useShops } from "../hooks/useShop.js";
+import ExportExcelButton from "./ExportExcelButton.jsx";
 
 export default function ShopsPage() {
     const navigate = useNavigate();
@@ -28,7 +29,38 @@ export default function ShopsPage() {
 
     const { data, isLoading, error } = useShops(page, limit, filterData);
 
-    console.log(data?.shops);
+    const { data: exportData } = useExportShops(page, 99999, filterData);
+    // console.log(data?.shops);
+    const excelData = (exportData?.shops || []).map((shop) => ({
+        shopID: shop.shopID,
+        shopName: shop.shopName,
+        ownerID: shop.ownerID,
+        taxCode: shop.taxCode,
+        shopEmail: shop.shopEmail,
+        shopPhone: shop.shopPhone,
+        shopDescription: shop.shopDescription,
+        shopPickUpAddress: shop.shopPickUpAddress,
+        shopStatus: shop.shopStatus,
+        shopAvatar: shop.shopAvatar,
+        shopOperationHours: shop.shopOperationHours,
+        shopJoinedDate: shop.shopJoinedDate,
+        businessType: shop.businessType,
+        shopRating: shop.shopRating,
+        shopBankAccountNumber: shop.shopBankAccountNumber,
+        shopBankName: shop.shopBankName,
+        // Thông tin của Owner
+        ownerFullName: shop.Owner?.fullName || "",
+        ownerDateOfBirth: shop.Owner?.dateOfBirth || "",
+        ownerGender: shop.Owner?.gender || "",
+        ownerEmail: shop.Owner?.userEmail || "",
+        ownerPhone: shop.Owner?.userPhone || "",
+        ownerCitizenID: shop.Owner?.userCitizenID || "",
+        ownerAddress: shop.Owner?.userAddress || "",
+        ownerIdentificationNumber: shop.Owner?.identificationNumber || "",
+        ownerIdCardFrontFile: shop.Owner?.idCardFrontFile || "",
+        ownerIdCardBackFile: shop.Owner?.idCardBackFile || "",
+        ownerAvatar: shop.Owner?.avatar || "",
+    }));
 
     const totalPages = Number.parseInt(data?.totalShops / limit) + 1;
 
@@ -44,14 +76,16 @@ export default function ShopsPage() {
         <div className="flex h-screen">
             {/* <Sidebar className="fixed top-0 left-0 h-full" /> */}
             <div className="flex-1 mx-auto bg-white p-6">
-                <h1 className="text-2xl font-bold mb-4">Danh sách các shop</h1>
-
-                {/* Statistics */}
+                <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-2xl font-bold">Danh sách shop</h2>
+                    <ExportExcelButton data={excelData} fileName="ShopList" />
+                </div>
 
                 {/* <ShopStatistics /> */}
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Tìm kiếm</h1>
                 </div>
+
                 {/* Tìm kiếm và lọc */}
                 <div className="p-6">
                     {" "}

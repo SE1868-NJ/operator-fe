@@ -9,8 +9,15 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackList from "../components/ShopFeedback";
 import OrderChart from "../components/ShopOrderChart";
-import { useShop, useShopOrders, useShopProducts } from "../hooks/useShop";
+import {
+    useExportShopOrders,
+    useExportShopProducts,
+    useShop,
+    useShopOrders,
+    useShopProducts,
+} from "../hooks/useShop";
 import BanService from "../services/BanService";
+import ExportExcelButton from "./ExportExcelButton";
 
 const ShopProfileDetail = () => {
     const { id } = useParams();
@@ -56,12 +63,45 @@ const ShopProfileDetail = () => {
     const orders = dataOrders?.orders || [];
     const totalPages2 = dataOrders?.totalPages || 1;
 
+    //Lay thong tin order export
+    const { data: dataExportOrders } = useExportShopOrders(id, offset2, 99999);
+    const excelData = (dataExportOrders?.orders || []).map((order) => ({
+        id: order.id,
+        shop_id: order.shop_id,
+        customer_id: order.customer_id,
+        shipper_id: order.shipper_id,
+        address_id: order.address_id,
+        productFee: order.productFee,
+        shippingFee: order.shippingFee,
+        status: order.status,
+        total: order.total,
+        note: order.note,
+        payment_status: order.payment_status,
+        shipping_status: order.shipping_status,
+        payment_method: order.payment_method,
+        created_at: order.created_at,
+        // Thông tin của Customer
+        customerFullName: order.Customer?.fullName || "",
+        customerDateOfBirth: order.Customer?.dateOfBirth || "",
+        customerGender: order.Customer?.gender || "",
+        customerEmail: order.Customer?.userEmail || "",
+        customerPhone: order.Customer?.userPhone || "",
+        customerCitizenID: order.Customer?.userCitizenID || "",
+        customerAddress: order.Customer?.userAddress || "",
+        customerIdentificationNumber: order.Customer?.identificationNumber || "",
+        customerIdCardFrontFile: order.Customer?.idCardFrontFile || "",
+        customerIdCardBackFile: order.Customer?.idCardBackFile || "",
+        customerAvatar: order.Customer?.avatar || "",
+    }));
+
     //lay thong tin product
     const {
         data: dataProducts,
         isLoading3,
         error3,
     } = useShopProducts(id, offset, limit, filterData);
+    const { data: dataExportProducts } = useExportShopProducts(id, offset, 99999, filterData);
+    const excelDataProduct = dataExportProducts?.products || [];
     const products = dataProducts?.products || [];
     const totalPages = dataProducts?.totalPages || 1;
 
@@ -475,6 +515,9 @@ const ShopProfileDetail = () => {
                                     Trang sau ➡
                                 </button>
                             </div>
+                            <div className="flex justify-end mt-6 gap-4">
+                                <ExportExcelButton data={excelData} fileName="OrderList" />
+                            </div>
                         </div>
                     </div>
                     {/* Nút Xem feedback */}
@@ -621,6 +664,9 @@ const ShopProfileDetail = () => {
                             >
                                 Trang sau ➡
                             </button>
+                        </div>
+                        <div className="flex justify-end mt-6 gap-4">
+                            <ExportExcelButton data={excelDataProduct} fileName="ProductList" />
                         </div>
                     </div>
                 </div>

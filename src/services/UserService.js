@@ -1,14 +1,11 @@
 import { instance } from "../lib/axios.js";
-
 const UserService = {
     async getAllUsers(page = 1, whereCondition = "", limit = 10) {
-        console.log(whereCondition);
-
         const query = `page=${page}&limit=${limit}&${whereCondition}`;
 
-        const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
+        console.log(query);
 
-        console.log(users);
+        const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
 
         return users;
     },

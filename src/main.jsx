@@ -29,7 +29,7 @@ import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
-import UserDetailPage from "./pages/UserDetailPage.jsx";
+import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 
 import AccountProfile from "./pages/AccountProfile.jsx";
 import MainPage from "./pages/MainPage.jsx";
@@ -58,10 +58,7 @@ const router = createBrowserRouter([
         path: "/forgotpass",
         element: <ForgotPassPage />,
     },
-    {
-        path: "/profile",
-        element: <AccountProfile />,
-    },
+
     {
         path: "/main/",
         element: <Layout />,
@@ -125,6 +122,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/ban_account",
                 element: <BanPage />,
+            },
+            {
+                path: "/main/profile",
+                element: <AccountProfile />,
             },
 
             {

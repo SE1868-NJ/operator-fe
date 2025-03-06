@@ -1,17 +1,26 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAccountProfile } from "../hooks/useAccountProfile.js";
 import BanService from "../services/BanService";
 
 const BanAccountForm = () => {
+    const { data, isLoading, error } = useAccountProfile();
+    const queryClient = useQueryClient();
+
     const [searchParams] = useSearchParams();
 
     const Navigate = useNavigate();
+
+    // Lấy thông tin từ data (account profile)
+    const operatorName = `${data?.lastName} ${data?.firstName}`;
 
     // Lấy thông tin từ URL
     const userId = searchParams.get("userId") || "";
     const operatorId = searchParams.get("operatorId") || "";
     const userType = searchParams.get("accountType") || "";
+    const userName = searchParams.get("userName") || "";
 
     // Các lựa chọn lý do theo loại tài khoản
     const reasonOptions = {
@@ -85,13 +94,14 @@ const BanAccountForm = () => {
             banEnd: finalBanEnd,
         };
 
-        console.log(payload);
-
         try {
             // Gọi service để thực hiện hành động ban tài khoản
             const response = await BanService.banUser(payload);
             if (response?.success) {
                 alert("Đình chỉ thành công!");
+
+                // xóa cache và refetch dữ liệu user
+                queryClient.invalidateQueries(["user", userId]);
                 Navigate(`/main/user_detail/${userId}`);
             } else {
                 alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -103,18 +113,25 @@ const BanAccountForm = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+        <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-5">
             <h2 className="text-2xl font-semibold mb-4 text-red-600">Đình Chỉ Người Dùng</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Các trường thông tin như trước */}
                 <div>
                     <label htmlFor="userId" className="block text-sm font-medium">
-                        ID Người dùng
+                        Tên người bị đình chỉ
                     </label>
                     <input
                         id="userId"
-                        type="text"
+                        type="hidden"
                         value={formData.userId}
+                        disabled
+                        className="w-full p-2 border rounded bg-gray-200"
+                    />
+                    <input
+                        id="userName"
+                        type="text"
+                        value={userName}
                         disabled
                         className="w-full p-2 border rounded bg-gray-200"
                     />
@@ -133,12 +150,19 @@ const BanAccountForm = () => {
                 </div>
                 <div>
                     <label htmlFor="operatorId" className="block text-sm font-medium">
-                        ID Operator
+                        Tên người đình chỉ
                     </label>
                     <input
                         id="operatorId"
-                        type="text"
+                        type="hidden"
                         value={formData.operatorId}
+                        disabled
+                        className="w-full p-2 border rounded bg-gray-200"
+                    />
+                    <input
+                        id="operatorName"
+                        type="text"
+                        value={operatorName}
                         disabled
                         className="w-full p-2 border rounded bg-gray-200"
                     />

@@ -1,14 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useUsers } from "../hooks/useUser";
+import { useExportUsers, useUsers } from "../hooks/useUser";
+import ExportExcelButton from "./ExportExcelButton.jsx";
 
 const UserList = () => {
-    // Lấy giá trị từ URL
-    //const page = Number(searchParams.get("page")) || 1;
-    // const search = searchParams.get("search") || "";
-    // const phoneSearch = searchParams.get("phoneSearch") || "";
-    // const statusFilter = searchParams.get("statusFilter") || "";
-
     const [whereCondition, setWhereCondition] = useState("name=&phone=&status=");
 
     const [page, setPage] = useState(1);
@@ -21,11 +16,19 @@ const UserList = () => {
 
     // Fetch dữ liệu dựa trên page + filter
     const { data, isLoading, error } = useUsers(page, whereCondition);
+    const {
+        data: dataExport,
+        isLoading: isLoadingExport,
+        error: errorExport,
+    } = useExportUsers(page, whereCondition);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading users</p>;
 
+    console.log(dataExport);
+
     const users = data?.users || [];
+    const exportUsers = dataExport?.users || [];
     const totalPages = data?.totalPages || 1;
 
     // Xử lý khi nhấn "Tìm kiếm"
@@ -87,7 +90,11 @@ const UserList = () => {
                 </button>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4">Danh sách người dùng</h2>
+            <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold">Danh sách người dùng</h2>
+                <ExportExcelButton data={exportUsers} fileName="UserList" />
+            </div>
+
             <table className="min-w-full border border-gray-300">
                 <thead>
                     <tr className="bg-gray-100">

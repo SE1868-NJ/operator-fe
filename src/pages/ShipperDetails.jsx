@@ -4,6 +4,24 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
 
+function translateStatus(status) {
+    const statusMap = {
+        Active: "Đang hoạt động",
+        Pending: "Đang duyệt",
+        Deactive: "Dừng hoạt động",
+    };
+    return statusMap[status] || status;
+}
+
+function translateGender(gender) {
+    const genderMap = {
+        Male: "Nam",
+        Female: "Nữ",
+        Other: "Khác",
+    };
+    return genderMap[gender] || gender;
+}
+
 export default function ShipperDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -83,7 +101,7 @@ export default function ShipperDetails() {
                                           : "text-red-700 bg-red-100 border-red-500"
                                 }`}
                             >
-                                {shipper.status}
+                                {translateStatus(shipper.status)}
                             </div>
                         </div>
                     </div>
@@ -91,7 +109,8 @@ export default function ShipperDetails() {
                         <h5 className="mb-4 font-semibold text-blue-500">Thông tin cá nhân</h5>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
-                                <span className="font-bold">Giới tính:</span> {shipper.gender}
+                                <span className="font-bold">Giới tính:</span>{" "}
+                                {translateGender(shipper.gender)}
                             </div>
                             <div>
                                 <span className="font-bold">Ngày sinh:</span>{" "}

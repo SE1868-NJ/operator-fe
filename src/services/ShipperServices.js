@@ -35,6 +35,22 @@ const ShipperServices = {
 
         return shippers;
     },
+
+    async getSumShippingFeeAllShippers(offset, limit) {
+        const sumShippingFee = await instance
+            .get("/shippers/sumShippingFee", { params: { offset, limit } })
+            .then(({ data }) => {
+                return data?.data;
+            });
+        return sumShippingFee;
+    },
+
+    async getOrdersOfShipper(id) {
+        const orders = await instance.get(`/shippers/ordersOfShipper/${id}`).then(({ data }) => {
+            return data?.data;
+        });
+        return orders;
+    },
 };
 
 export default ShipperServices;

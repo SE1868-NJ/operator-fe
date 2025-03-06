@@ -5,21 +5,23 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
 import BanService from "../services/BanService";
+import ShipperDashboardChart from "./ShipperDashboardChart";
+import ShipperOrdersList from "./ShipperOrdersList";
 
 function translateStatus(status) {
     const statusMap = {
-        Active: "Đang hoạt động",
-        Pending: "Đang duyệt",
-        Deactive: "Dừng hoạt động",
+        active: "Đang hoạt động",
+        pending: "Đang duyệt",
+        deactive: "Dừng hoạt động",
     };
     return statusMap[status] || status;
 }
 
 function translateGender(gender) {
     const genderMap = {
-        Male: "Nam",
-        Female: "Nữ",
-        Other: "Khác",
+        male: "Nam",
+        female: "Nữ",
+        other: "Khác",
     };
     return genderMap[gender] || gender;
 }
@@ -43,7 +45,7 @@ export default function ShipperDetails() {
     }
 
     const handleChangeStatus = async (status) => {
-        if (status === "Deactive") {
+        if (status === "deactive") {
             navigate(`/main/ban_account?userId=${shipper.id}&operatorId=1&accountType=shipper`);
         } else {
             const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
@@ -72,7 +74,7 @@ export default function ShipperDetails() {
                 deactivationDuration === "Tùy chỉnh" ? customDate : deactivationDuration,
         };
 
-        fetch(`http://localhost:3000/shippers/${id}`, {
+        fetch(`http://localhost:3000/shipperslist/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(requestBody),
@@ -101,9 +103,9 @@ export default function ShipperDetails() {
                         <div className="mt-6">
                             <div
                                 className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${
-                                    shipper.status === "Active"
+                                    shipper.status === "active"
                                         ? "text-green-700 bg-green-100 border-green-500"
-                                        : shipper.status === "Pending"
+                                        : shipper.status === "pending"
                                           ? "text-yellow-700 bg-yellow-100 border-yellow-500"
                                           : "text-red-700 bg-red-100 border-red-500"
                                 }`}
@@ -116,32 +118,36 @@ export default function ShipperDetails() {
                         <h5 className="mb-4 font-semibold text-blue-500">Thông tin cá nhân</h5>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
-                                <span className="font-bold">Giới tính:</span>{" "}
+                                <span className="font-bold text-amber-700">Giới tính:</span>{" "}
                                 {translateGender(shipper.gender)}
                             </div>
                             <div>
-                                <span className="font-bold">Ngày sinh:</span>{" "}
+                                <span className="font-bold text-amber-700">Ngày sinh:</span>{" "}
                                 {shipper.dateOfBirth.split("T")[0]}
                             </div>
                             <div>
-                                <span className="font-bold">Quê quán:</span> {shipper.hometown}
+                                <span className="font-bold text-amber-700">Quê quán:</span>{" "}
+                                {shipper.hometown}
                             </div>
                             <div>
-                                <span className="font-bold">Địa chỉ:</span> {shipper.address}
+                                <span className="font-bold text-amber-700">Địa chỉ:</span>{" "}
+                                {shipper.address}
                             </div>
                             <div>
-                                <span className="font-bold">SĐT:</span> {shipper.phone}
+                                <span className="font-bold text-amber-700">SĐT:</span>{" "}
+                                {shipper.phone}
                             </div>
                             <div>
-                                <span className="font-bold">Vị trí hoạt động:</span>{" "}
+                                <span className="font-bold text-amber-700">Vị trí hoạt động:</span>{" "}
                                 {shipper.activityArea}
                             </div>
                             <div>
-                                <span className="font-bold">Phương tiện:</span>{" "}
+                                <span className="font-bold text-amber-700">Phương tiện:</span>{" "}
                                 {shipper.shippingMethod}
                             </div>
                             <div>
-                                <span className="font-bold">CCCD:</span> {shipper.cccd}
+                                <span className="font-bold text-amber-700">CCCD:</span>{" "}
+                                {shipper.cccd}
                             </div>
                         </div>
 
@@ -224,16 +230,16 @@ export default function ShipperDetails() {
                         <div className="flex items-center justify-center mt-6 space-x-4">
                             <div className="text-left">
                                 <Button
-                                    color={shipper?.status === "Active" ? "red" : "teal"}
+                                    color={shipper?.status === "active" ? "red" : "teal"}
                                     onClick={() =>
                                         handleChangeStatus(
-                                            shipper?.status === "Active" ? "Deactive" : "Active",
+                                            shipper?.status === "active" ? "deactive" : "active",
                                         )
                                     }
                                 >
                                     {isLoading ? (
                                         <span>Đang xử lý...</span>
-                                    ) : shipper?.status === "Active" ? (
+                                    ) : shipper?.status === "active" ? (
                                         "Dừng hoạt động"
                                     ) : (
                                         "Kích hoạt"
@@ -246,6 +252,14 @@ export default function ShipperDetails() {
                                 </Button>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4 mt-6 md:flex-row">
+                    <div className="w-full md:w-1/2">
+                        <ShipperDashboardChart />
+                    </div>
+                    <div className="w-full md:w-1/2">
+                        <ShipperOrdersList shipperId={shipper.id} />
                     </div>
                 </div>
             </div>

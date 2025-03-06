@@ -68,7 +68,10 @@ const UserDetail = () => {
                     <div className="p-6 text-center bg-white rounded-lg shadow-md">
                         <img
                             className="w-40 h-40 mx-auto rounded-full"
-                            src={user.avatar}
+                            src={
+                                user.avatar ||
+                                "https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg"
+                            }
                             alt={`${user.fullName}'s avatar`}
                         />
                         <h5 className="mt-4 text-lg font-semibold">{user.fullName}</h5>
@@ -79,12 +82,13 @@ const UserDetail = () => {
                                 className={`inline-block mt-2 px-4 py-1 text-sm font-semibold rounded-full ${
                                     user.status === "active"
                                         ? "bg-green-100 text-green-700 border-green-500"
-                                        : user.status === "inactive"
-                                          ? "bg-red-100 text-red-700 border-red-500"
-                                          : "bg-yellow-100 text-yellow-700 border-yellow-500"
+
+                                        : user.status === "suspended"
+                                          ? "bg-yellow-100 text-yellow-700 border-yellow-500"
+                                          : "bg-red-100 text-red-700 border-red-500"
                                 }`}
                             >
-                                {user.status}
+                                {user.status === "active" ? "Hoạt động" : "Đình chỉ"}
                             </div>
 
                             {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}

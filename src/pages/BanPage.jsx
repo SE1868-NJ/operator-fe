@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -49,6 +50,8 @@ const BanAccountForm = () => {
     const [customBanDate, setCustomBanDate] = useState("");
     const [customBanTime, setCustomBanTime] = useState("00:00");
 
+    const queryClient = useQueryClient();
+
     // Tính toán ngày hết hạn ban
     const calculateBanEndDate = () => {
         let banEndDate;
@@ -92,11 +95,14 @@ const BanAccountForm = () => {
             const response = await BanService.banUser(payload);
             if (response?.success && userType === "customer") {
                 alert("Đình chỉ thành công!");
-                Navigate(`/main/user_detail/${userId}`);
-            } else if (response?.success && userType === "shop") {
-                alert("Đình chỉ thành công!");
-                Navigate(`/main/shop/${userId}`);
-                window.location.reload();
+                if (userType === "shipper") {
+                    queryClient.invalidateQueries(["shipper", userId]);
+                    Navigate(`/main/shipperslist/${userId}`);
+                } else if (userType === "shop") {
+                    Navigate(`/main/shop/${userId}`);
+                } else if (userType === "customer") {
+                    Navigate(`/main/user_detail/${userId}`);
+                }
             } else {
                 alert("Có lỗi xảy ra, vui lòng thử lại!");
             }
@@ -107,8 +113,8 @@ const BanAccountForm = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-red-600">Đình Chỉ Người Dùng</h2>
+        <div className="max-w-lg p-6 mx-auto bg-white rounded-lg shadow-md">
+            <h2 className="mb-4 text-2xl font-semibold text-red-600">Đình Chỉ Người Dùng</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Các trường thông tin như trước */}
                 <div>
@@ -120,7 +126,7 @@ const BanAccountForm = () => {
                         type="text"
                         value={formData.userId}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
                 <div>
@@ -132,7 +138,7 @@ const BanAccountForm = () => {
                         type="text"
                         value={formData.userType}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
                 <div>
@@ -144,7 +150,7 @@ const BanAccountForm = () => {
                         type="text"
                         value={formData.operatorId}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
 
@@ -181,7 +187,7 @@ const BanAccountForm = () => {
                                 handleChangeReason(e);
                             }}
                             placeholder="Nhập lý do khác"
-                            className="w-full p-2 border rounded mt-2"
+                            className="w-full p-2 mt-2 border rounded"
                         />
                     )}
                 </div>
@@ -264,7 +270,7 @@ const BanAccountForm = () => {
                 {/* Nút submit */}
                 <button
                     type="submit"
-                    className="w-full bg-red-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
+                    className="w-full py-3 text-lg font-semibold text-white transition bg-red-600 rounded-lg hover:bg-red-700"
                 >
                     Đình chỉ
                 </button>

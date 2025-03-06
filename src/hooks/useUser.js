@@ -14,3 +14,10 @@ export const useUserById = (id) => {
         queryFn: () => UserService.getUserById(id),
     });
 };
+
+export const useExportUsers = (page, whereCondition) => {
+    return useQuery({
+        queryKey: ["exportUsers", page, whereCondition],
+        queryFn: () => UserService.getAllUsers(page, whereCondition, 9999),
+    });
+};

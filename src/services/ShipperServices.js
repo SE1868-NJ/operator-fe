@@ -38,7 +38,7 @@ const ShipperServices = {
     },
 
     async updatePendingShipper(data) {
-        const shop = await instance
+        const shipper = await instance
             .patch(`/shippers/pendingShipper/${data.id}`, data)
             .then(({ data }) => {
                 return data;
@@ -46,7 +46,7 @@ const ShipperServices = {
             .catch((err) => {
                 console.error(err);
             });
-        return shop;
+        return shipper;
     },
 };
 

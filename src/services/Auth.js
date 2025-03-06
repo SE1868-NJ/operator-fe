@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { authInstance } from "../lib/axios";
 
 const AuthService = {
@@ -9,7 +10,6 @@ const AuthService = {
             })
             .then(({ data }) => {
                 localStorage.setItem("token", data.token);
-                console.log(data);
                 return data;
             });
         return token;
@@ -20,6 +20,26 @@ const AuthService = {
         });
         return payload;
     },
+    async logout() {
+        localStorage.removeItem("token");
+    },
+    async changePassword(oldPassword, newPassword) {},
+    async getAccountInfo() {
+        const token = localStorage.getItem("token");
+        console.log(token);
+        const operatorData = jwtDecode(token);
+        const { email } = operatorData.email;
+
+        console.log(email);
+
+        const accontInfo = authInstance.get("/users/getUserByEmail", { email }).then(({ data }) => {
+            return data;
+        });
+
+        console.log(accontInfo);
+    },
 };
 
 export default AuthService;
+
+//AuthService.getAccountInfo()

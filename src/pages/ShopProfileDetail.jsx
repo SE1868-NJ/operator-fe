@@ -3,8 +3,9 @@ import { Group, NumberInput, TextInput } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { IconRobot } from "@tabler/icons-react";
 import { IconCurrencyDollar, IconSearch } from "@tabler/icons-react";
+import { IconAlertCircle } from "@tabler/icons-react";
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackList from "../components/ShopFeedback";
 import OrderChart from "../components/ShopOrderChart";
@@ -66,13 +67,10 @@ const ShopProfileDetail = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
 
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
-    }
-
-    if (error || !shop) {
-        return <div className="flex justify-center items-center h-screen">Shop not found</div>;
-    }
+    // Hàm xử lý scroll xuống phần feedback
+    const scrollToFeedback = () => {
+        document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
+    };
 
     //Hàm xử lý ban
     const handleStatusChange = async () => {
@@ -89,31 +87,35 @@ const ShopProfileDetail = () => {
             }
         }
     };
-
-    // Hàm xử lý scroll xuống phần feedback
-    const scrollToFeedback = () => {
-        document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    // const [banInfo, setBanInfo] = useState(null);
+    const [banInfo, setBanInfo] = useState(null);
 
     // Ensure hooks are always called in the same order
-    // useEffect(() => {
-    //     if (!shop?.shopID) return;
+    useEffect(() => {
+        if (!shop?.shopID) return;
 
-    //     const fetchBanInfo = async () => {
-    //         try {
-    //             const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
-    //             if (isUserBan) {
-    //                 setBanInfo(isUserBan);
-    //             }
-    //         } catch (error) {
-    //             console.error("Lỗi khi lấy thông tin ban:", error);
-    //         }
-    //     };
+        const fetchBanInfo = async () => {
+            try {
+                const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
+                console.log("Ban info:", isUserBan);
+                if (isUserBan) {
+                    setBanInfo(isUserBan);
+                }
+                console.log("Ban info:", isUserBan);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin ban:", error);
+            }
+        };
 
-    //     fetchBanInfo();
-    // }, [shop?.shopID]);
+        fetchBanInfo();
+    }, [shop?.shopID]);
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
+
+    if (error || !shop) {
+        return <div className="flex justify-center items-center h-screen">Shop not found</div>;
+    }
 
     return (
         <div className="flex w-full bg-white-100 min-h-screen">
@@ -148,17 +150,17 @@ const ShopProfileDetail = () => {
                         </div>
 
                         {/* Nếu shop bị đình chỉ */}
-                        {/* {shop.shopStatus === "suspended" && (
+                        {shop.shopStatus === "suspended" && (
                             <div className="mt-4 p-4 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md flex items-center gap-3">
                                 <IconAlertCircle size={24} className="text-red-600" />
                                 <p className="text-sm text-red-800 font-medium">
                                     Tài khoản bị đình chỉ đến:{" "}
                                     <span className="font-semibold text-red-900">
-                                        {new Date(data.banInfo.banEnd).toLocaleString("vi-VN")}
+                                        {new Date(banInfo?.banEnd).toLocaleString("vi-VN")}
                                     </span>
                                 </p>
                             </div>
-                        )} */}
+                        )}
                     </Card>
                 </div>
 

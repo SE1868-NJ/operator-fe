@@ -21,6 +21,9 @@ const ChangePassPage = () => {
         const { password, newpassword, passwordconfirmation } = data;
 
         try {
+            console.log("Mật khẩu cũ: ", password);
+            console.log("Mật khẩu mới", newpassword);
+            console.log("Mật khẩu mới nhập lại: ", passwordconfirmation);
             //   await AuthService.changePassword(
             //     password,
             //     newpassword,

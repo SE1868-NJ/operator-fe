@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserById } from "../../hooks/useUser";
 import BanService from "../../services/BanService";
-//import CustomerDashboardChart from "./CustomerDashboardChart.jsx";
-//import CustomerOrderList from "./CustomerOrderList.jsx";
+import CustomerDashboardChart from "./CustomerDashboardChart.jsx";
+import CustomerOrderList from "./CustomerOrderList.jsx";
 
 const UserDetail = () => {
     const Navigate = useNavigate();
@@ -245,12 +245,10 @@ const UserDetail = () => {
                 </div>
                 <div className="flex flex-col gap-4 mt-6 md:flex-row">
                     <div className="w-full md:w-1/2">
-                        {/* <CustomerDashboardChart /> */}
-                        CustomerDashboardChart
+                        <CustomerDashboardChart id={user?.userID} />
                     </div>
                     <div className="w-full md:w-1/2">
-                        {/* <CustomerOrderList shipperId={shipper.id} /> */}
-                        CustomerOrderList
+                        <CustomerOrderList id={user?.userID} />
                     </div>
                 </div>
             </div>

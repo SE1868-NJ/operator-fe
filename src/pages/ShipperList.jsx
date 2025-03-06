@@ -1,9 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useShippers, useTotalShippingFeeAllShippers } from "../hooks/useShippers";
-import ShipperDashboardChart from "./ShipperDashboardChart";
+import { useShippers, useTotalShippingFeeAllShippers } from "../hooks/useShippers.js";
+import TopShippersTable from "./TopShippersTable.jsx";
 
 function formatDate(dateString) {
     const [year, month, day] = dateString.split("-");
@@ -54,7 +53,8 @@ export default function ShipperList() {
 
     return (
         <div className="p-6 mx-auto bg-white">
-            <ShipperDashboardChart />
+            <TopShippersTable />
+
             <h1 className="pt-4 mb-4 text-2xl font-bold">Danh sách tất cả người giao hàng</h1>
 
             {/* Tìm kiếm và lọc */}

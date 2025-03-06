@@ -46,3 +46,10 @@ export const useOrdersOfShipper = (id) => {
         queryFn: () => ShipperServices.getOrdersOfShipper(id),
     });
 };
+
+export const useGetTopShippers = () => {
+    return useQuery({
+        queryKey: ["topShippers"],
+        queryFn: () => ShipperServices.getTopShippers(),
+    });
+};

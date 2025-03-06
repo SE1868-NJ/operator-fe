@@ -51,6 +51,13 @@ const ShipperServices = {
         });
         return orders;
     },
+
+    async getTopShippers() {
+        const topShippers = await instance
+            .get("/shippers/topShippers")
+            .then(({ data }) => data?.data);
+        return topShippers;
+    },
 };
 
 export default ShipperServices;

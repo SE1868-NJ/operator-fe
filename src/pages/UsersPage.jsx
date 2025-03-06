@@ -116,10 +116,19 @@ const UserList = () => {
                             <td className="p-2 border">
                                 <span
                                     className={`px-4 py-1 rounded-full text-white text-sm ${
-                                        user.status === "active" ? "bg-green-500" : "bg-yellow-500"
+                                        user.status === "active"
+                                            ? "bg-green-500"
+                                            : user.status === "inactive"
+                                              ? "bg-red-500"
+                                              : "bg-yellow-500"
                                     }`}
                                 >
-                                    {user.status || "Hello"}
+                                    {user.status === "active"
+                                        ? "Đang hoạt động"
+                                        : user.status === "inactive"
+                                          ? "Không hoạt động"
+                                          : "Đình chỉ"}
+
                                 </span>
                             </td>
                             <td className="p-2 border">

@@ -4,33 +4,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useShops } from "../hooks/useShop.js";
 
-// import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-
-// const data = [
-//     { quarter: "2023-Q1", shop_count: 12 },
-//     { quarter: "2023-Q2", shop_count: 18 },
-//     { quarter: "2023-Q3", shop_count: 25 },
-//     { quarter: "2023-Q4", shop_count: 20 },
-//     { quarter: "2024-Q1", shop_count: 30 },
-// ];
-
-// const ShopStatistics = () => {
-//     return (
-//         <div className="w-full h-96 p-4 bg-white rounded-lg">
-//             <h2 className="text-xl font-bold mb-4">Số lượng shop mới theo quý</h2>
-//             <ResponsiveContainer width="100%" height="90%">
-//                 <BarChart data={data}>
-//                     <CartesianGrid strokeDasharray="3 3" />
-//                     <XAxis dataKey="quarter" />
-//                     <YAxis />
-//                     <Tooltip />
-//                     <Bar dataKey="shop_count" fill="#4F46E5" barSize={50} />
-//                 </BarChart>
-//             </ResponsiveContainer>
-//         </div>
-//     );
-// };
-
 export default function ShopsPage() {
     const navigate = useNavigate();
     const limit = 10;
@@ -74,20 +47,6 @@ export default function ShopsPage() {
                 <h1 className="text-2xl font-bold mb-4">Danh sách các shop</h1>
 
                 {/* Statistics */}
-                <div className="flex gap-4 mb-4">
-                    <div className="bg-blue-100 p-4 rounded-lg shadow-md w-1/3 text-center">
-                        <h2 className="text-xl font-semibold text-blue-800">New Shops</h2>
-                        <p className="text-2xl font-bold">8,282</p>
-                    </div>
-                    <div className="bg-green-100 p-4 rounded-lg shadow-md w-1/3 text-center">
-                        <h2 className="text-xl font-semibold text-green-800">Total Orders Today</h2>
-                        <p className="text-2xl font-bold">200,521</p>
-                    </div>
-                    <div className="bg-yellow-100 p-4 rounded-lg shadow-md w-1/3 text-center">
-                        <h2 className="text-xl font-semibold text-yellow-800">Total Products</h2>
-                        <p className="text-2xl font-bold">215,542</p>
-                    </div>
-                </div>
 
                 {/* <ShopStatistics /> */}
                 <div>
@@ -201,17 +160,21 @@ export default function ShopsPage() {
                                 <td className="border p-3 py-5">
                                     {new Date(shop.shopJoinedDate).toLocaleDateString()}
                                 </td>
-                                <td className="border p-3">
+                                <td className="border p-3 py-5">
                                     <span
-                                        className={`text-sm font-semibold px-3 py-1 rounded-md ${
+                                        className={`px-4 py-1 rounded-full text-white text-sm ${
                                             shop.shopStatus === "active"
-                                                ? "text-green-700 bg-green-100 border border-green-500"
-                                                : "text-red-700 bg-red-100 border border-red-500"
+                                                ? "bg-green-500"
+                                                : shop.shopStatus === "inactive"
+                                                  ? "bg-red-500"
+                                                  : "bg-yellow-500"
                                         }`}
                                     >
                                         {shop.shopStatus === "active"
-                                            ? "Đang hoạt động"
-                                            : "Bị tạm dừng"}
+                                            ? "Hoạt động"
+                                            : shop.shopStatus === "inactive"
+                                              ? "Không hoạt động"
+                                              : "Đình chỉ"}
                                     </span>
                                 </td>
                                 <td className="border p-3">

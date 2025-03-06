@@ -82,6 +82,7 @@ const UserDetail = () => {
                                 className={`inline-block mt-2 px-4 py-1 text-sm font-semibold rounded-full ${
                                     user.status === "active"
                                         ? "bg-green-100 text-green-700 border-green-500"
+
                                         : user.status === "suspended"
                                           ? "bg-yellow-100 text-yellow-700 border-yellow-500"
                                           : "bg-red-100 text-red-700 border-red-500"

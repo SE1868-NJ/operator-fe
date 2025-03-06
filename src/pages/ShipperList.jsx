@@ -108,9 +108,10 @@ export default function ShipperList() {
                                 <td className="p-2 text-center border">
                                     <span
                                         className={
-                                            shipper.status === "Active"
+                                            shipper.status === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.status === "Pending"
+                                                : shipper.status === "pending"
+
                                                   ? "text-yellow-700 bg-yellow-100 p-1 rounded"
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }

@@ -127,7 +127,6 @@ const router = createBrowserRouter([
                 path: "/main/profile",
                 element: <AccountProfile />,
             },
-
             {
                 path: "*",
                 element: <ErrorPage />,

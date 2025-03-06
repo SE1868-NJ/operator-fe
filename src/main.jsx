@@ -26,6 +26,8 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
+import OrderDetail from "./pages/OrderDetail.jsx";
+import OrderManagement from "./pages/OrderManagement.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
@@ -97,6 +99,14 @@ const router = createBrowserRouter([
             {
                 path: "/main/pendding-shippers/:id",
                 element: <ShipperViewPage />,
+            },
+            {
+                path: "/main/ordermanagement",
+                element: <OrderManagement />,
+            },
+            {
+                path: "/main/orderdetail/:id",
+                element: <OrderDetail />,
             },
             {
                 path: "/main/reports",

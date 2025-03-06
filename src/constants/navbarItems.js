@@ -26,6 +26,11 @@ export const NAVBAR_ITEMS = [
             { label: "Người giao hàng đang duyệt", link: "/main/pendding-shippers" },
         ],
     },
+    {
+        label: "Quản lý đơn hàng",
+        icon: IconNotes,
+        links: [{ label: "Danh sách tất cả các đơn hàng", link: "/main/ordermanagement" }],
+    },
     { label: "Người dùng", icon: IconPresentationAnalytics, link: "/main/users" },
     { label: "Khiếu nại", icon: IconReport, link: "/main/reports" },
     {

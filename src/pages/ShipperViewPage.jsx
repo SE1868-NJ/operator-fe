@@ -64,7 +64,7 @@ const ShipperViewPage = () => {
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
+                                "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-dep-8.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 rounded-full mx-auto mb-3 border-4 hover:border-8 transition-transform duration-600 hover:scale-150  border-pink-200"

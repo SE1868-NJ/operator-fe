@@ -17,23 +17,40 @@ import {
 import { useDebouncedState } from "@mantine/hooks";
 import { nprogress } from "@mantine/nprogress";
 import { IconAlertCircle, IconSearch } from "@tabler/icons-react";
+import { IconLink } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import ReportChart from "../components/ReportChart";
 import { useReports } from "../hooks/useReport";
 import { useReportCategories } from "../hooks/useReportCategories";
 
 const ReportsPage = () => {
     const [search, setSearch] = useDebouncedState("", 300);
-    const [reportType, setReportType] = useState("");
+    const [reportType, setReportType] = useState("all");
     const [status, setStatus] = useState("all");
     const [priority, setPriority] = useState("all");
     const [reportCategory, setReportCategory] = useState("all");
+    const [orderBy, setOrderBy] = useState("ASC");
+
+    const handleResetFilters = () => {
+        setSearch("");
+        setReportType("all");
+        setStatus("all");
+        setPriority("all");
+        setReportCategory("all");
+        setOrderBy("ASC");
+    };
 
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
 
-    const { data, isFetching, error } = useReports({
+    const {
+        data,
+        isLoading: isFetching,
+        error,
+    } = useReports({
         page: currentPage,
         limit: ITEMS_PER_PAGE,
         search,
@@ -41,9 +58,26 @@ const ReportsPage = () => {
         status,
         category_id: reportCategory,
         priority,
+        orderBy,
     });
 
     const { data: report_categories } = useReportCategories();
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        queryClient.invalidateQueries([
+            "reports",
+            {
+                page: currentPage,
+                limit: ITEMS_PER_PAGE,
+                search,
+                report_type: reportType,
+                status,
+                category_id: reportCategory,
+                priority,
+            },
+        ]);
+    }, [currentPage, search, reportType, status, reportCategory, priority, queryClient]);
 
     useEffect(() => {
         if (isFetching) {
@@ -107,11 +141,13 @@ const ReportsPage = () => {
     }
 
     return (
-        <Container size="xl" py="xl">
+        <Container fluid py="xl">
             <Paper shadow="sm" p="md" withBorder>
                 <Group position="apart" mb="md">
                     <Title order={2}>Danh sách khiếu nại</Title>
                 </Group>
+
+                <ReportChart />
 
                 <Group align="end" spacing="md" my={20}>
                     <TextInput
@@ -136,14 +172,18 @@ const ReportsPage = () => {
                         label="Danh mục Vấn đề"
                         w="200px"
                         placeholder="Chọn loại khiếu nại"
-                        data={report_categories?.data.map((c) => ({
-                            value: c.id,
-                            label: c.name,
-                        }))}
+                        data={[
+                            { value: "all", label: "Tất cả" },
+                            ...(report_categories?.data?.map((c) => ({
+                                value: c.id,
+                                label: c.name,
+                            })) || []),
+                        ]}
                         defaultValue={{
                             value: "all",
                             label: "Tất cả",
                         }}
+                        value={reportCategory}
                         styles={{
                             input: {
                                 "&:focus": {
@@ -166,6 +206,7 @@ const ReportsPage = () => {
                             { value: "shop", label: "Cửa hàng" },
                             { value: "customer", label: "Người mua hàng" },
                         ]}
+                        value={reportType}
                         styles={{
                             input: {
                                 "&:focus": {
@@ -190,6 +231,7 @@ const ReportsPage = () => {
                             { value: "high", label: "Cao" },
                             { value: "critical", label: "Nghiêm trọng" },
                         ]}
+                        value={priority}
                         styles={{
                             input: {
                                 "&:focus": {
@@ -202,6 +244,29 @@ const ReportsPage = () => {
                             setCurrentPage(1); // Reset to first page on filter change
                         }}
                     />
+                    <Select
+                        label="Sắp xếp"
+                        w="200px"
+                        placeholder="Cũ nhất -> Mới nhất"
+                        data={[
+                            { value: "ASC", label: "Cũ nhất -> Mới nhất" },
+                            { value: "DESC", label: "Mới nhất -> Cũ nhất" },
+                        ]}
+                        value={orderBy}
+                        styles={{
+                            input: {
+                                "&:focus": {
+                                    borderColor: "var(--mantine-color-blue-filled)",
+                                },
+                            },
+                        }}
+                        onChange={(_value, option) => {
+                            setOrderBy(option.value);
+                            setCurrentPage(1); // Reset to first page on filter change
+                        }}
+                    />
+
+                    <Button onClick={handleResetFilters}>Làm mới bộ lọc</Button>
                 </Group>
 
                 <Tabs
@@ -279,11 +344,9 @@ const ReportsPage = () => {
                                             to={`/main/reports/${report.id}`}
                                             variant="light"
                                             size="xs"
+                                            rightSection={<IconLink size={16} />}
                                         >
-                                            View
-                                        </Button>
-                                        <Button variant="light" color="green" size="xs">
-                                            Resolve
+                                            Xem chi tiết
                                         </Button>
                                     </Group>
                                 </Table.Td>

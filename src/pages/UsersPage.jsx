@@ -18,11 +18,7 @@ const UserList = () => {
 
     // Fetch dữ liệu dựa trên page + filter
     const { data, isLoading, error } = useUsers(page, whereCondition);
-    const {
-        data: dataExport,
-        isLoading: isLoadingExport,
-        error: errorExport,
-    } = useExportUsers(page, whereCondition);
+    const { data: dataExport } = useExportUsers(page, whereCondition);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading users</p>;
@@ -62,24 +58,25 @@ const UserList = () => {
 
             {/* Search và Filter */}
             <div className="flex justify-between mb-4 gap-2">
+
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 />
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo SĐT..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 />
                 <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="border p-2 rounded w-1/4"
+                    className="w-1/4 p-2 border rounded"
                 >
                     <option value="">Tất cả trạng thái</option>
                     <option value="active">Hoạt động</option>
@@ -88,7 +85,7 @@ const UserList = () => {
                 <button
                     type="button"
                     onClick={handleSearch}
-                    className="bg-blue-500 text-white px-4 py-2 rounded text-sm"
+                    className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
                 >
                     Tìm kiếm
                 </button>
@@ -96,7 +93,7 @@ const UserList = () => {
                 <button
                     type="button"
                     onClick={handleReset}
-                    className="bg-gray-500 text-white px-4 py-2 rounded text-sm"
+                    className="px-4 py-2 text-sm text-white bg-gray-500 rounded"
                 >
                     Làm mới
                 </button>
@@ -125,7 +122,7 @@ const UserList = () => {
                                 <img
                                     src="https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg"
                                     alt={user.fullName}
-                                    className="w-10 h-10 rounded-full mx-auto"
+                                    className="w-10 h-10 mx-auto rounded-full"
                                 />
                             </td>
                             <td className="p-2 border">{user.fullName}</td>
@@ -143,7 +140,7 @@ const UserList = () => {
                             <td className="p-2 border">
                                 <Link
                                     to={`/main/user_detail/${user.userID}`}
-                                    className="bg-blue-500 text-white py-1 px-3 rounded"
+                                    className="px-3 py-1 text-white bg-blue-500 rounded"
                                 >
                                     Xem chi tiết
                                 </Link>

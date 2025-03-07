@@ -11,6 +11,7 @@ import {
     Title,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -67,6 +68,10 @@ const ReportDetailPage = () => {
             .then((res) => {
                 console.log(res);
                 queryClient.invalidateQueries(["report", id]);
+                notifications.show({
+                    color: "green",
+                    title: "Đã gửi phản hồi thành công!",
+                });
             })
             .catch((err) => {
                 console.log(err);
@@ -88,14 +93,6 @@ const ReportDetailPage = () => {
                     >
                         {report.priority}
                     </Badge>
-                    <Badge
-                        size="lg"
-                        variant="filled"
-                        color={getStatusColor(report.status)}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        {report.status}
-                    </Badge>
                 </Group>
 
                 <Divider />
@@ -109,6 +106,18 @@ const ReportDetailPage = () => {
                     <Group>
                         <Text fw={600}>Phân loại:</Text>
                         <Text style={{ textTransform: "capitalize" }}>{report.report_type}</Text>
+                    </Group>
+
+                    <Group>
+                        <Text fw={600}>Trạng thái: </Text>
+                        <Badge
+                            size="lg"
+                            variant="filled"
+                            color={getStatusColor(report.status)}
+                            sx={{ textTransform: "capitalize" }}
+                        >
+                            {report.status}
+                        </Badge>
                     </Group>
 
                     <Group>
@@ -127,7 +136,12 @@ const ReportDetailPage = () => {
                 <Divider />
 
                 <Group>
-                    <Text fw={600}>Thời gian:</Text>
+                    <Text fw={600}>Thời gian xảy ra vấn đề:</Text>
+                    <Text>{formatDate(report.problem_time)}</Text>
+                </Group>
+
+                <Group>
+                    <Text fw={600}>Thời gian tạo yêu cầu:</Text>
                     <Text>{formatDate(report.createdAt)}</Text>
                 </Group>
 

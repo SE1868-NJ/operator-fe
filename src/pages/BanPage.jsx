@@ -1,12 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAccountProfile } from "../hooks/useAccountProfile.js";
 import BanService from "../services/BanService";
 
 const BanAccountForm = () => {
-    const { data, isLoading, error } = useAccountProfile();
+    const { data } = useAccountProfile();
     const queryClient = useQueryClient();
 
     const [searchParams] = useSearchParams();
@@ -97,12 +97,16 @@ const BanAccountForm = () => {
         try {
             // Gọi service để thực hiện hành động ban tài khoản
             const response = await BanService.banUser(payload);
-            if (response?.success) {
+            if (response?.success && userType === "customer") {
                 alert("Đình chỉ thành công!");
-
-                // xóa cache và refetch dữ liệu user
-                queryClient.invalidateQueries(["user", userId]);
-                Navigate(`/main/user_detail/${userId}`);
+                if (userType === "shipper") {
+                    queryClient.invalidateQueries(["shipper", userId]);
+                    Navigate(`/main/shipperslist/${userId}`);
+                } else if (userType === "shop") {
+                    Navigate(`/main/shop/${userId}`);
+                } else if (userType === "customer") {
+                    Navigate(`/main/user_detail/${userId}`);
+                }
             } else {
                 alert("Có lỗi xảy ra, vui lòng thử lại!");
             }
@@ -126,14 +130,14 @@ const BanAccountForm = () => {
                         type="hidden"
                         value={formData.userId}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                     <input
                         id="userName"
                         type="text"
                         value={userName}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
                 <div>
@@ -145,7 +149,7 @@ const BanAccountForm = () => {
                         type="text"
                         value={formData.userType}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
                 <div>
@@ -157,14 +161,14 @@ const BanAccountForm = () => {
                         type="hidden"
                         value={formData.operatorId}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                     <input
                         id="operatorName"
                         type="text"
                         value={operatorName}
                         disabled
-                        className="w-full p-2 border rounded bg-gray-200"
+                        className="w-full p-2 bg-gray-200 border rounded"
                     />
                 </div>
 
@@ -201,7 +205,7 @@ const BanAccountForm = () => {
                                 handleChangeReason(e);
                             }}
                             placeholder="Nhập lý do khác"
-                            className="w-full p-2 border rounded mt-2"
+                            className="w-full p-2 mt-2 border rounded"
                         />
                     )}
                 </div>
@@ -284,7 +288,7 @@ const BanAccountForm = () => {
                 {/* Nút submit */}
                 <button
                     type="submit"
-                    className="w-full bg-red-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
+                    className="w-full py-3 text-lg font-semibold text-white transition bg-red-600 rounded-lg hover:bg-red-700"
                 >
                     Đình chỉ
                 </button>

@@ -46,7 +46,11 @@ const ReportsPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
 
-    const { data, isFetching, error } = useReports({
+    const {
+        data,
+        isLoading: isFetching,
+        error,
+    } = useReports({
         page: currentPage,
         limit: ITEMS_PER_PAGE,
         search,

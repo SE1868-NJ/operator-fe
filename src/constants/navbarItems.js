@@ -1,8 +1,8 @@
+import { IconSettings } from "@tabler/icons-react";
 import { IconReport } from "@tabler/icons-react";
 import {
     IconCalendarStats,
     IconGauge,
-    IconLock,
     IconNotes,
     IconPresentationAnalytics,
 } from "@tabler/icons-react";
@@ -27,12 +27,22 @@ export const NAVBAR_ITEMS = [
         ],
     },
     { label: "Người dùng", icon: IconPresentationAnalytics, link: "/main/users" },
+
     {
         label: "Khiếu nại",
         icon: IconReport,
         links: [
             { label: "Tất cả khiếu nại", link: "/main/reports" },
             { label: "Danh mục khiếu nại", link: "/main/report-categories" },
+        ],
+    },
+    {
+        label: "Cài đặt",
+        icon: IconSettings,
+        links: [
+            { label: "Chung", link: "/main" },
+            { label: "Phương thức vận chuyển", link: "/main/shipping-methods" },
+            { label: "Phương thức vận chuyển - Demo", link: "/main/shipping-methods/demo" },
         ],
     },
 ];

@@ -7,7 +7,9 @@ const ShipperServices = {
         if (search) params.search = search;
         if (status) params.status = status;
 
-        const shippers = await instance.get("/shippers", { params }).then(({ data }) => data);
+        const shippers = await instance
+            .get("/shippers", { params })
+            .then(({ data }) => data.shippers);
 
         return shippers;
     },

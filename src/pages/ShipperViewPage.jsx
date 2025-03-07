@@ -1,6 +1,6 @@
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useState } from "react";
+import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePendingShipper } from "../hooks/useShippers";

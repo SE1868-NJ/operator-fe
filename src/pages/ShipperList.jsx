@@ -121,7 +121,7 @@ export default function ShipperList() {
                                         className={
                                             shipper.Shipper.status === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.Shipper.status === "pending"
+                                                : shipper.status === "pending"
                                                   ? "text-yellow-700 bg-yellow-100 p-1 rounded"
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }

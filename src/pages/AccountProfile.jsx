@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccountProfile } from "../hooks/useAccountProfile.js";
+import OperatorService from "../services/OperatorService.js";
 
 const AccountProfile = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const { data, isLoading, error } = useAccountProfile();
     const [editableUser, setEditableUser] = useState({
-        user_id: "12345",
-        google_id: "",
-        email: "admin@gmail.com",
-        password: "********",
-        phone: "0123456789",
-        firstname: "Nguyễn",
-        lastname: "Văn A",
-        dob: "1990-01-01",
-        gender: "Nam",
-        status: "Hoạt động",
-        role_id: "1",
-        createdAt: "2024-01-01",
-        avatar: "https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg",
+        operatorID: "",
+        firstName: "",
+        lastName: "",
+        gender: "",
+        email: "",
+        phoneNumber: "",
+        dateOfBirth: "",
+        status: "",
+        avatar: "",
     });
+
+    useEffect(() => {
+        if (data) {
+            setEditableUser({
+                operatorID: data.operatorID || "",
+                firstName: data.firstName || "",
+                lastName: data.lastName || "",
+                gender: data.gender || "",
+                email: data.email || "",
+                phoneNumber: data.phoneNumber || "",
+                dateOfBirth: data.dateOfBirth || "",
+                status: data.status || "",
+                avatar: data.avatar || "",
+            });
+        }
+    }, [data]); // Chỉ chạy lại khi `data` thay đổi
+
     const [isEditing, setIsEditing] = useState(false);
 
     const handleInputChange = (e) => {
@@ -35,7 +55,16 @@ const AccountProfile = () => {
     };
 
     const handleSave = () => {
-        alert("Cập nhật thông tin thành công!");
+        //alert("Cập nhật thông tin thành công!");
+        OperatorService.updateAccountProfile(editableUser);
+        window.location.reload();
+        queryClient.invalidateQueries(["accountProfile"]);
+        notifications.show({
+            title: "Đổi thông tin người dùng thành công",
+            message: "Thông tin tài khoản của bạn đã được cập nhật",
+            color: "green",
+        });
+
         setIsEditing(false);
     };
 
@@ -83,8 +112,8 @@ const AccountProfile = () => {
                             <input
                                 id="name"
                                 type="text"
-                                name="firstname"
-                                value={editableUser.firstname}
+                                name="firstName"
+                                value={editableUser.firstName}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"
                                 disabled={!isEditing}
@@ -97,8 +126,8 @@ const AccountProfile = () => {
                             <input
                                 id="ho"
                                 type="text"
-                                name="lastname"
-                                value={editableUser.lastname}
+                                name="lastName"
+                                value={editableUser.lastName}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"
                                 disabled={!isEditing}
@@ -115,7 +144,7 @@ const AccountProfile = () => {
                                 value={editableUser.email}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"
-                                disabled={!isEditing}
+                                disabled="true"
                             />
                         </div>
                         <div>
@@ -125,8 +154,8 @@ const AccountProfile = () => {
                             <input
                                 id="phone"
                                 type="text"
-                                name="phone"
-                                value={editableUser.phone}
+                                name="phoneNumber"
+                                value={editableUser.phoneNumber}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"
                                 disabled={!isEditing}
@@ -139,8 +168,8 @@ const AccountProfile = () => {
                             <input
                                 id="dob"
                                 type="date"
-                                name="dob"
-                                value={editableUser.dob}
+                                name="dateOfBirth"
+                                value={editableUser.dateOfBirth}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"
                                 disabled={!isEditing}
@@ -158,9 +187,9 @@ const AccountProfile = () => {
                                 className="w-full border p-2 rounded"
                                 disabled={!isEditing}
                             >
-                                <option value="Nam">Nam</option>
-                                <option value="Nữ">Nữ</option>
-                                <option value="Khác">Khác</option>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                                <option value="other">Khác</option>
                             </select>
                         </div>
                         <div>
@@ -178,13 +207,13 @@ const AccountProfile = () => {
                         </div>
                         <div>
                             <label htmlFor="id" className="font-medium text-amber-700">
-                                Mã vai trò:
+                                Mã số:
                             </label>
                             <input
                                 id="id"
                                 type="text"
                                 name="role_id"
-                                value={editableUser.role_id}
+                                value={editableUser.operatorID}
                                 className="w-full border p-2 rounded bg-gray-100"
                                 disabled
                             />

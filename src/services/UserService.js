@@ -1,13 +1,11 @@
 import { instance } from "../lib/axios.js";
 const UserService = {
     async getAllUsers(page = 1, whereCondition = "", limit = 10) {
-        console.log(whereCondition);
-
         const query = `page=${page}&limit=${limit}&${whereCondition}`;
 
-        const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
+        console.log(query);
 
-        console.log(users);
+        const users = await instance.get(`/user?${query}`).then(({ data }) => data.data);
 
         return users;
     },
@@ -36,6 +34,28 @@ const UserService = {
         const users = await instance.get(`user/${query}`).then(({ data }) => data.data);
         return users;
     },
-};
 
+    async getOrderList(id, page = 1, limit = 5) {
+        const data = await instance
+            .get(`/user/orders?id=${id}&page=${page}&limit=${limit}`)
+            .then(({ data }) => data.data)
+            .catch((err) => console.error(err));
+        console.log(data);
+        return data;
+    },
+
+    async getOrderRecent4Months(id) {
+        const data = await instance
+            .get(`/user/orders/recent4months/${id}`)
+            .then(({ data }) => data.data)
+            .catch((err) => console.error(err));
+        return data;
+    },
+
+    async getTop3Customer() {
+        const data = await instance.get("/user/top3").then(({ data }) => data.data);
+        console.log(data);
+        return data;
+    },
+};
 export default UserService;

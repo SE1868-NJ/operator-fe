@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { ArrowRight } from "iconsax-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useUsers } from "../hooks/useUser";
+import { useExportUsers, useUsers } from "../hooks/useUser";
+import ExportExcelButton from "./ExportExcelButton.jsx";
+import Top3Customer from "./Top3Customer.jsx";
 
 const UserList = () => {
-    // Lấy giá trị từ URL
-    //const page = Number(searchParams.get("page")) || 1;
-    // const search = searchParams.get("search") || "";
-    // const phoneSearch = searchParams.get("phoneSearch") || "";
-    // const statusFilter = searchParams.get("statusFilter") || "";
-
     const [whereCondition, setWhereCondition] = useState("name=&phone=&status=");
 
     const [page, setPage] = useState(1);
@@ -21,11 +18,15 @@ const UserList = () => {
 
     // Fetch dữ liệu dựa trên page + filter
     const { data, isLoading, error } = useUsers(page, whereCondition);
+    const { data: dataExport } = useExportUsers(page, whereCondition);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading users</p>;
 
+    console.log(dataExport);
+
     const users = data?.users || [];
+    const exportUsers = dataExport?.users || [];
     const totalPages = data?.totalPages || 1;
 
     // Xử lý khi nhấn "Tìm kiếm"
@@ -44,9 +45,19 @@ const UserList = () => {
     };
 
     return (
-        <div className="max-w-4xl p-4 mx-auto mt-10 bg-white rounded-lg shadow-md">
-            {/* 🔎 Search và Filter */}
-            <div className="flex justify-between gap-2 mb-4">
+        <div className="max-w-full mx-auto mt-10 p-4 bg-white shadow-md rounded-lg">
+            {/* Hiển thị Top 3 Khách Hàng */}
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-4xl font-bold text-green-600 flex items-center gap-4">
+                    🏆 Top 3 khách hàng thân thiết nhất
+                    <ArrowRight size={80} className="text-green-600" />
+                </h3>
+                {/* Hiển thị Top 3 Khách Hàng */}
+                <Top3Customer />
+            </div>
+
+            {/* Search và Filter */}
+            <div className="flex justify-between mb-4 gap-2">
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."
@@ -87,7 +98,11 @@ const UserList = () => {
                 </button>
             </div>
 
-            <h2 className="mb-4 text-2xl font-bold">Danh sách người dùng</h2>
+            <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold">Danh sách người dùng</h2>
+                <ExportExcelButton data={exportUsers} fileName="UserList" />
+            </div>
+
             <table className="min-w-full border border-gray-300">
                 <thead>
                     <tr className="bg-gray-100">
@@ -115,18 +130,10 @@ const UserList = () => {
                             <td className="p-2 border">
                                 <span
                                     className={`px-4 py-1 rounded-full text-white text-sm ${
-                                        user.status === "active"
-                                            ? "bg-green-500"
-                                            : user.status === "inactive"
-                                              ? "bg-red-500"
-                                              : "bg-yellow-500"
+                                        user.status === "active" ? "bg-green-500" : "bg-yellow-500"
                                     }`}
                                 >
-                                    {user.status === "active"
-                                        ? "Đang hoạt động"
-                                        : user.status === "inactive"
-                                          ? "Không hoạt động"
-                                          : "Đình chỉ"}
+                                    {user.status || "Hello"}
                                 </span>
                             </td>
                             <td className="p-2 border">

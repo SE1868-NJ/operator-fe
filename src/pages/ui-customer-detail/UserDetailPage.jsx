@@ -1,16 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUserById } from "../hooks/useUser";
-import BanService from "../services/BanService";
-import UserService from "../services/UserService";
-
-const statusStyles = {
-    "Hoạt động": "bg-green-100 text-green-700 border-green-500",
-    "Không hoạt động": "bg-red-100 text-red-700 border-red-500",
-    "Đình chỉ": "bg-yellow-100 text-yellow-700 border-yellow-500",
-};
+import { useUserById } from "../../hooks/useUser";
+import BanService from "../../services/BanService";
+import CustomerDashboardChart from "./CustomerDashboardChart.jsx";
+import CustomerOrderList from "./CustomerOrderList.jsx";
 
 const UserDetail = () => {
     const Navigate = useNavigate();
@@ -49,7 +44,9 @@ const UserDetail = () => {
             const operatorData = jwtDecode(token);
             console.log(operatorData);
             // Điều hướng đến trang đình chỉ, truyền userId & operatorId qua URL
-            Navigate(`/main/ban_account?userId=${user.userID}&operatorId=1&accountType=customer`); // sau này chỉnh lại thành operatorID
+            Navigate(
+                `/main/ban_account?userId=${user.userID}&userName=${user.fullName}&operatorId=1&accountType=customer`,
+            ); // sau này chỉnh lại thành operatorID
         } else {
             const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
 
@@ -62,8 +59,8 @@ const UserDetail = () => {
     };
 
     return (
-        <div className="flex items-center justify-center pt-10 ">
-            <div className="container px-4">
+        <div className="flex items-center justify-center pt-10">
+            <div className="container  px-4">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <div className="p-6 text-center bg-white rounded-lg shadow-md">
                         <img
@@ -100,6 +97,12 @@ const UserDetail = () => {
                                             {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
                                         </span>
                                     </p>
+                                    <div className="mt-2 p-2 bg-red-50 border border-red-300 rounded-md">
+                                        <p className="text-sm text-red-700">
+                                            <span className="font-semibold">Lý do: </span>{" "}
+                                            {banInfo.reason}
+                                        </p>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -228,12 +231,24 @@ const UserDetail = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => Navigate("/main/users")}
+                                onClick={() => {
+                                    queryClient.invalidateQueries(["users"]); // Invalidate cache danh sách users
+                                    queryClient.invalidateQueries(["exportUsers"]); // Invalidate cache danh sách users cho việc export excel
+                                    Navigate("/main/users");
+                                }}
                                 className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                             >
                                 Quay lại
                             </button>
                         </div>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4 mt-6 md:flex-row">
+                    <div className="w-full md:w-1/2">
+                        <CustomerDashboardChart id={user?.userID} />
+                    </div>
+                    <div className="w-full md:w-1/2">
+                        <CustomerOrderList id={user?.userID} />
                     </div>
                 </div>
             </div>

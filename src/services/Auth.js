@@ -23,7 +23,12 @@ const AuthService = {
     async logout() {
         localStorage.removeItem("token");
     },
-    async changePassword(oldPassword, newPassword) {},
+    async changePassword(userId, password, newPassword) {
+        const data = authInstance.post("/users/changePassword/operator").then(({ data }) => {
+            return data;
+        });
+        return data;
+    },
     async getAccountInfo() {
         const token = localStorage.getItem("token");
         console.log(token);

@@ -1,16 +1,16 @@
 import { LineChart } from "@mantine/charts";
 import { Select } from "@mantine/core";
 import { useEffect, useState } from "react";
-import ReportServices from "../services/ReportServices";
+import OrderServices from "../services/OrderServices";
 
-const ReportChart = () => {
+const OrderChart = () => {
     const [data, setData] = useState([]);
     const [timeRange, setTimeRange] = useState("24h");
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await ReportServices.getReportStatistic(timeRange).then(
+                const res = await OrderServices.getOrderStatistic(timeRange).then(
                     ({ data }) => data,
                 );
 
@@ -96,7 +96,7 @@ const ReportChart = () => {
                 data={data}
                 series={[{ name: "value", label: "Report Data" }]}
                 dataKey="timestamp"
-                yAxisProps={{ domain: [0, Math.ceil((5 + maxCount) / 10) * 10] }}
+                yAxisProps={{ domain: [0, Math.ceil((20 + maxCount) / 10) * 10] }}
                 valueFormatter={(value) => `${value}`}
                 className="transition-all duration-300"
             />
@@ -104,4 +104,4 @@ const ReportChart = () => {
     );
 };
 
-export default ReportChart;
+export default OrderChart;

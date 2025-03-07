@@ -1,14 +1,20 @@
 import { Avatar, Button, Group, Menu, Modal, Popover, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight, IconLock, IconLogout, IconUser } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccountProfile } from "../../../hooks/useAccountProfile.js";
 import AuthService from "../../../services/Auth.js";
+import OperatorService from "../../../services/OperatorService.js";
 import classes from "./UserButton.module.css";
 
 export function UserButton() {
     const [opened, setOpened] = useState(false);
     const [logoutModalOpen, setLogoutModalOpen] = useState(false);
     const navigate = useNavigate();
+    const { data, isLoading, error } = useAccountProfile();
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error loading users</p>;
 
     const handleLogout = () => {
         AuthService.logout();
@@ -20,7 +26,7 @@ export function UserButton() {
     };
 
     const handleProfile = () => {
-        navigate("/profile");
+        navigate("/main/profile");
     };
 
     return (
@@ -37,17 +43,17 @@ export function UserButton() {
                     <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.user}>
                         <Group>
                             <Avatar
-                                src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
+                                src={data?.avatar || "https://via.placeholder.com/150"}
                                 radius="xl"
                             />
 
                             <div style={{ flex: 1 }}>
                                 <Text size="sm" fw={500}>
-                                    Harriette Spoonlicker
+                                    {data?.firstName || "hello"}
                                 </Text>
 
                                 <Text c="dimmed" size="xs">
-                                    hspoonlicker@outlook.com
+                                    {data?.email || "hspoonlicker@outlook.com"}
                                 </Text>
                             </div>
 

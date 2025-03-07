@@ -1,4 +1,5 @@
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccountProfile } from "../hooks/useAccountProfile.js";
@@ -6,6 +7,7 @@ import OperatorService from "../services/OperatorService.js";
 
 const AccountProfile = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const { data, isLoading, error } = useAccountProfile();
     const [editableUser, setEditableUser] = useState({
@@ -55,6 +57,8 @@ const AccountProfile = () => {
     const handleSave = () => {
         //alert("Cập nhật thông tin thành công!");
         OperatorService.updateAccountProfile(editableUser);
+        window.location.reload();
+        queryClient.invalidateQueries(["accountProfile"]);
         notifications.show({
             title: "Đổi thông tin người dùng thành công",
             message: "Thông tin tài khoản của bạn đã được cập nhật",

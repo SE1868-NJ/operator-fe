@@ -12,18 +12,6 @@ export function UserButton() {
     const [logoutModalOpen, setLogoutModalOpen] = useState(false);
     const navigate = useNavigate();
     const { data, isLoading, error } = useAccountProfile();
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await OperatorService.getAccountProfile("trunkvtv123@gmail.com");
-    //             setData(response); // Lưu dữ liệu vào state
-    //         } catch (err) {
-    //             setError(err.message);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading users</p>;

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { ArrowRight } from "iconsax-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useExportUsers, useUsers } from "../hooks/useUser";
 import ExportExcelButton from "./ExportExcelButton.jsx";
+import Top3Customer from "./Top3Customer.jsx";
 
 const UserList = () => {
     const [whereCondition, setWhereCondition] = useState("name=&phone=&status=");
@@ -43,9 +45,20 @@ const UserList = () => {
     };
 
     return (
-        <div className="max-w-4xl p-4 mx-auto mt-10 bg-white rounded-lg shadow-md">
-            {/* 🔎 Search và Filter */}
-            <div className="flex justify-between gap-2 mb-4">
+        <div className="max-w-full mx-auto mt-10 p-4 bg-white shadow-md rounded-lg">
+            {/* Hiển thị Top 3 Khách Hàng */}
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-4xl font-bold text-green-600 flex items-center gap-4">
+                    🏆 Top 3 khách hàng thân thiết nhất
+                    <ArrowRight size={80} className="text-green-600" />
+                </h3>
+                {/* Hiển thị Top 3 Khách Hàng */}
+                <Top3Customer />
+            </div>
+
+            {/* Search và Filter */}
+            <div className="flex justify-between mb-4 gap-2">
+
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."

@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { instance } from "../lib/axios";
+import { authInstance, instance } from "../lib/axios";
 
 const OperatorService = {
     async getAccountProfile() {
@@ -28,15 +28,31 @@ const OperatorService = {
     decodeToken() {
         try {
             const token = localStorage.getItem("token");
-            console.log("Token: ", token);
+
             const data = jwtDecode(token);
-            console.log("Data ", data);
+
             const { email } = data;
-            console.log("Email after decode: ", email);
+
             return email;
         } catch (error) {
             console.error(error);
         }
+    },
+    async changePassword(password, newPassword) {
+        const accountInfo = await this.getAccountProfile();
+        console.log("accountInfo: ", accountInfo);
+
+        const data = authInstance
+            .post("/users/changePassword/operator", {
+                userId: accountInfo.operatorID,
+                password,
+                newPassword,
+            })
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => console.error(err));
+        return data;
     },
 };
 

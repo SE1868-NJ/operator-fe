@@ -1,14 +1,12 @@
+import { Button, Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePendingShipper } from "../hooks/useShippers.js";
 import ShipperServices from "../services/ShipperServices.js";
-
-import { Button, Modal, Textarea } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import { IconAlertCircle } from "@tabler/icons-react";
-import { useQueryClient } from "@tanstack/react-query";
 
 const ShipperViewPage = () => {
     const { id } = useParams();
@@ -97,9 +95,7 @@ const ShipperViewPage = () => {
                 notifications.show({
                     color: "green",
                     title: "Cập nhật thành công!",
-                    message: `Shipper đã được ${
-                        data.status === "accepted" ? "chấp nhận" : "từ chối"
-                    }.`,
+                    message: `Shipper đã được ${data.status === "accepted" ? "chấp nhận" : "từ chối"}.`,
                 });
             } else {
                 notifications.show({
@@ -194,7 +190,7 @@ const ShipperViewPage = () => {
                         <button
                             type="button"
                             className="px-4 py-2 bg-green-500 text-white rounded mr-2"
-                            onClick={handleDecision("accepted")}
+                            // onClick={handleDecision("accepted")}
                         >
                             Chấp nhận
                         </button>
@@ -231,7 +227,7 @@ const ShipperViewPage = () => {
                                     <Button
                                         type="submit"
                                         color="red"
-                                        onClick={handleDecision("rejected")}
+                                        // onClick={handleDecision("rejected")}
                                     >
                                         Xác nhận
                                     </Button>
@@ -240,8 +236,8 @@ const ShipperViewPage = () => {
                         </Modal>
                         <button
                             type="button"
-                            variant="default"
-                            className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+                            // className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+                            className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
                             onClick={open}
                         >
                             Từ chối

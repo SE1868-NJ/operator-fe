@@ -36,7 +36,7 @@ const LoginPage = () => {
                 setIsLoading(false);
                 notifications.show({
                     color: "red",
-                    title: "Đăng nhập thất bại!",
+                    title: "Sai tài khoảng hoặc mật khẩu!",
                     message: "Vui lòng thử lại!",
                 });
             });

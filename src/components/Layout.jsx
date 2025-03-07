@@ -1,4 +1,4 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, Button } from "@mantine/core";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
@@ -34,6 +34,16 @@ const Layout = () => {
             </AppShell.Header>
             {/* Main App */}
             <AppShell.Main bg={"gray.0"}>
+                <Button
+                    onClick={() => navigate(-1)}
+                    variant="outline"
+                    color="blue"
+                    mb="md"
+                    ml={10}
+                    mt={10}
+                >
+                    ← Trang trước
+                </Button>
                 <Outlet />
             </AppShell.Main>
         </AppShell>

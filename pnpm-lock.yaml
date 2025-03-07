@@ -10,7 +10,15 @@ importers:
     dependencies:
       '@mantine/charts':
         specifier: ^7.17.1
+<<<<<<< HEAD
         version: 7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+=======
+<<<<<<< HEAD
+        version: 7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.15.3(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+=======
+        version: 7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
       '@mantine/core':
         specifier: ^7.15.3
         version: 7.15.3(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -56,9 +64,15 @@ importers:
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
+<<<<<<< HEAD
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
+=======
+      framer-motion:
+        specifier: ^12.4.10
+        version: 12.4.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
       iconsax-react:
         specifier: ^0.0.8
         version: 0.0.8(react@18.3.1)
@@ -113,6 +127,7 @@ importers:
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5
+<<<<<<< HEAD
       xlsx-js-style:
         specifier: ^1.2.0
         version: 1.2.0
@@ -122,6 +137,14 @@ importers:
       xlsx-js-style:
         specifier: ^1.2.0
         version: 1.2.0
+=======
+<<<<<<< HEAD
+=======
+      xlsx-js-style:
+        specifier: ^1.2.0
+        version: 1.2.0
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.3.16)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
@@ -579,9 +602,18 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+<<<<<<< HEAD
   '@kurkle/color@0.3.4':
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
+=======
+<<<<<<< HEAD
+=======
+  '@kurkle/color@0.3.4':
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
+
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   '@mantine/charts@7.17.1':
     resolution: {integrity: sha512-qS6UOF1wayF86h+s1pI/rUJiZVkj4244JTgFToLsgvYIKoQaSibHjUjdBDfsMTLEIz4nunfPct0r75JR9YBBVQ==}
     peerDependencies:
@@ -884,11 +916,20 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   adler-32@1.2.0:
     resolution: {integrity: sha512-/vUqU/UY4MVeFsg+SsK6c+/05RZXIHZMGJA+PX5JyWI0ZRcBpupnRuPLU/NXXoFwMYCPCoxIfElM2eS+DUXCqQ==}
     engines: {node: '>=0.8'}
     hasBin: true
 
+<<<<<<< HEAD
+=======
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   adler-32@1.3.1:
     resolution: {integrity: sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==}
     engines: {node: '>=0.8'}
@@ -1054,11 +1095,20 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   codepage@1.14.0:
     resolution: {integrity: sha512-iz3zJLhlrg37/gYRWgEPkaFTtzmnEv1h+r7NgZum2lFElYQPi0/5bnmuDfODHxfp0INEfnRqyfyeIJDbb7ahRw==}
     engines: {node: '>=0.8'}
     hasBin: true
 
+<<<<<<< HEAD
+=======
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   codepage@1.15.0:
     resolution: {integrity: sha512-3g6NUTPd/YtuuGrhMnOMRjFc+LJw/bnMp3+0r/Wcz3IXUuCosKRJvMphm5+Q+bvTVGcJJuRvVLuYba+WojaFaA==}
     engines: {node: '>=0.8'}
@@ -1461,6 +1511,20 @@ packages:
 
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
+
+  framer-motion@12.4.10:
+    resolution: {integrity: sha512-3Msuyjcr1Pb5hjkn4EJcRe1HumaveP0Gbv4DBMKTPKcV/1GSMkQXj+Uqgneys+9DPcZM18Hac9qY9iUEF5LZtg==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -1867,6 +1931,12 @@ packages:
 
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+
+  motion-dom@12.4.10:
+    resolution: {integrity: sha512-ISP5u6FTceoD6qKdLupIPU/LyXBrxGox+P2e3mBbm1+pLdlBbwv01YENJr7+1WZnW5ucVKzFScYsV1eXTCG4Xg==}
+
+  motion-utils@12.4.10:
+    resolution: {integrity: sha512-NPwZd94V013SwRf++jMrk2+HEBgPkeIE2RiOzhAuuQlqxMJPkKt/LXVh6Upl+iN8oarSGD2dlY5/bqgsYXDABA==}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -2621,11 +2691,20 @@ packages:
       utf-8-validate:
         optional: true
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   xlsx-js-style@1.2.0:
     resolution: {integrity: sha512-DDT4FXFSWfT4DXMSok/m3TvmP1gvO3dn0Eu/c+eXHW5Kzmp7IczNkxg/iEPnImbG9X0Vb8QhROda5eatSR/97Q==}
     engines: {node: '>=0.8'}
     hasBin: true
 
+<<<<<<< HEAD
+=======
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   xlsx@0.18.5:
     resolution: {integrity: sha512-dmg3LCjBPHZnQp5/F/+nnTa+miPJxUXB6vtk42YjBBKayDNagxGEeIdWApkYPOf3Z3pm3k62Knjzp7lMeTEtFQ==}
     engines: {node: '>=0.8'}
@@ -3010,17 +3089,40 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  '@mantine/charts@7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.15.3(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+    dependencies:
+      '@mantine/core': 7.15.3(@mantine/hooks@7.15.3(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.15.3(react@18.3.1)
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   '@kurkle/color@0.3.4': {}
 
   '@mantine/charts@7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
     dependencies:
+<<<<<<< HEAD
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.1(react@18.3.1)
+=======
+      '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.17.0(react@18.3.1)
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       recharts: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
+<<<<<<< HEAD
   '@mantine/core@7.15.3(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+=======
+<<<<<<< HEAD
+  '@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+=======
+  '@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.1(react@18.3.1)
@@ -3278,11 +3380,20 @@ snapshots:
 
   acorn@8.14.0: {}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   adler-32@1.2.0:
     dependencies:
       exit-on-epipe: 1.0.1
       printj: 1.1.2
 
+<<<<<<< HEAD
+=======
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   adler-32@1.3.1: {}
 
   ajv@6.12.6:
@@ -3485,11 +3596,20 @@ snapshots:
 
   clsx@2.1.1: {}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   codepage@1.14.0:
     dependencies:
       commander: 2.14.1
       exit-on-epipe: 1.0.1
 
+<<<<<<< HEAD
+=======
+>>>>>>> 27398b03ec1b514eca989674f15e1421e46af6c1
+>>>>>>> abc92bf3a9fee82b0748bf911a764738921cdd2d
   codepage@1.15.0: {}
 
   color-convert@2.0.1:
@@ -3979,6 +4099,15 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
+  framer-motion@12.4.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      motion-dom: 12.4.10
+      motion-utils: 12.4.10
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   fsevents@2.3.3:
     optional: true
 
@@ -4362,6 +4491,12 @@ snapshots:
       moment: 2.30.1
 
   moment@2.30.1: {}
+
+  motion-dom@12.4.10:
+    dependencies:
+      motion-utils: 12.4.10
+
+  motion-utils@12.4.10: {}
 
   ms@2.1.3: {}
 

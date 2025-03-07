@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccountProfile } from "../hooks/useAccountProfile.js";
@@ -52,9 +53,14 @@ const AccountProfile = () => {
     };
 
     const handleSave = () => {
-        alert("Cập nhật thông tin thành công!");
+        //alert("Cập nhật thông tin thành công!");
         OperatorService.updateAccountProfile(editableUser);
-        window.location.reload();
+        notifications.show({
+            title: "Đổi thông tin người dùng thành công",
+            message: "Thông tin tài khoản của bạn đã được cập nhật",
+            color: "green",
+        });
+
         setIsEditing(false);
     };
 
@@ -158,7 +164,7 @@ const AccountProfile = () => {
                             <input
                                 id="dob"
                                 type="date"
-                                name="dob"
+                                name="dateOfBirth"
                                 value={editableUser.dateOfBirth}
                                 onChange={handleInputChange}
                                 className="w-full border p-2 rounded"

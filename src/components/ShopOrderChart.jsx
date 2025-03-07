@@ -1,16 +1,16 @@
 import { LineChart } from "@mantine/charts";
 import { Select } from "@mantine/core";
 import { useEffect, useState } from "react";
-import ReportServices from "../services/ReportServices";
+import ShopService from "../services/ShopService";
 
-const ReportChart = () => {
+const OrderChart = ({ id }) => {
     const [data, setData] = useState([]);
-    const [timeRange, setTimeRange] = useState("24h");
+    const [timeRange, setTimeRange] = useState("7d");
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await ReportServices.getReportStatistic(timeRange).then(
+                const res = await ShopService.getOrdersStatistic(id, timeRange).then(
                     ({ data }) => data,
                 );
 
@@ -26,10 +26,10 @@ const ReportChart = () => {
                     });
 
                     // Match fetched data
-                    for (const { time, count } of res) {
-                        const reportTime = new Date(time);
+                    for (const { date, count } of res) {
+                        const orderTime = new Date(date);
                         const hourIndex = formattedData.findIndex(
-                            (h) => h.timestamp === `${reportTime.getHours()}:00`,
+                            (h) => h.timestamp === `${orderTime.getHours()}:00`,
                         );
                         if (hourIndex !== -1) {
                             formattedData[hourIndex].value = count;
@@ -44,9 +44,9 @@ const ReportChart = () => {
                     });
 
                     // Match fetched data
-                    for (const { time, count } of res) {
-                        const reportDate = new Date(time).toLocaleDateString("en-GB");
-                        const dayIndex = formattedData.findIndex((d) => d.timestamp === reportDate);
+                    for (const { date, count } of res) {
+                        const orderTime = new Date(date).toLocaleDateString("en-GB");
+                        const dayIndex = formattedData.findIndex((d) => d.timestamp === orderTime);
                         if (dayIndex !== -1) {
                             formattedData[dayIndex].value = count;
                         }
@@ -60,9 +60,9 @@ const ReportChart = () => {
                     });
 
                     // Match fetched data
-                    for (const { time, count } of res) {
-                        const reportDate = new Date(time).toLocaleDateString("en-GB");
-                        const dayIndex = formattedData.findIndex((d) => d.timestamp === reportDate);
+                    for (const { date, count } of res) {
+                        const orderTime = new Date(date).toLocaleDateString("en-GB");
+                        const dayIndex = formattedData.findIndex((d) => d.timestamp === orderTime);
                         if (dayIndex !== -1) {
                             formattedData[dayIndex].value = count;
                         }
@@ -75,12 +75,12 @@ const ReportChart = () => {
             }
         }
         fetchData();
-    }, [timeRange]);
+    }, [id, timeRange]);
 
     const maxCount = Math.max(...data.map((d) => d.value), 0);
-
+    // console.log("Order report data:", data);
     return (
-        <div className="p-5 bg-gray-200 rounded-md shadow mb-10 space-y-10">
+        <div className="p-5 bg-gray-100 rounded-md shadow mb-10 space-y-10">
             <Select
                 value={timeRange}
                 onChange={setTimeRange}
@@ -94,9 +94,9 @@ const ReportChart = () => {
             <LineChart
                 h={300}
                 data={data}
-                series={[{ name: "value", label: "Report Data" }]}
+                series={[{ name: "value", label: "Orders Data" }]}
                 dataKey="timestamp"
-                yAxisProps={{ domain: [0, Math.ceil((5 + maxCount) / 10) * 10] }}
+                yAxisProps={{ domain: [0, Math.ceil((10 + maxCount) / 10) * 10] }}
                 valueFormatter={(value) => `${value}`}
                 className="transition-all duration-300"
             />
@@ -104,4 +104,4 @@ const ReportChart = () => {
     );
 };
 
-export default ReportChart;
+export default OrderChart;

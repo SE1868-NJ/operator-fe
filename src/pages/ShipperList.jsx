@@ -1,5 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useShippers } from "../hooks/useShippers";
 
 function formatDate(dateString) {
@@ -7,12 +9,21 @@ function formatDate(dateString) {
     return `${day}-${month}-${year}`;
 }
 
+function translateStatus(status) {
+    const statusMap = {
+        Active: "Đang hoạt động",
+        Pending: "Đang duyệt",
+        Deactive: "Dừng hoạt động",
+    };
+    return statusMap[status] || status;
+}
+
 export default function ShipperList() {
     const [search, setSearch] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const navigate = useNavigate();
 
     const offset = (currentPage - 1) * itemsPerPage;
@@ -20,9 +31,12 @@ export default function ShipperList() {
 
     const { data, isLoading } = useShippers(offset, itemsPerPage, search, filterStatus);
 
-    console.log(data);
+    console.log("data-----", data);
 
     const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);
+
+    const queryClient = useQueryClient();
+    queryClient.invalidateQueries(["shipper"]);
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
@@ -53,9 +67,9 @@ export default function ShipperList() {
                     onChange={handleStatusChange}
                 >
                     <option value="">Tất cả trạng thái</option>
-                    <option value="Đang hoạt động">Đang hoạt động</option>
-                    <option value="Dừng hoạt động">Dừng hoạt động</option>
-                    <option value="Đang duyệt">Đang duyệt</option>
+                    <option value="Pending">Đang hoạt động</option>
+                    <option value="Deactive">Dừng hoạt động</option>
+                    <option value="Active">Đang duyệt</option>
                 </select>
                 <input
                     type="date"
@@ -85,32 +99,32 @@ export default function ShipperList() {
                     </tr>
                 ) : (
                     <tbody>
-                        {data?.shippers?.map((shipper) => (
+                        {data?.map((shipper) => (
                             <tr key={shipper.id} className="border">
-                                <td className="p-2 border">{shipper.id}</td>
-                                <td className="p-2 border">{shipper.name}</td>
-                                <td className="p-2 border">{shipper.phone}</td>
-                                <td className="p-2 border">{shipper.email}</td>
-                                <td className="p-2 border">
+                                <td className="p-2 text-center border">{shipper.id}</td>
+                                <td className="p-2 text-center border">{shipper.name}</td>
+                                <td className="p-2 text-center border">{shipper.phone}</td>
+                                <td className="p-2 text-center border">{shipper.email}</td>
+                                <td className="p-2 text-center border">
                                     <span
                                         className={
-                                            shipper.status === "Đang hoạt động"
+                                            shipper.status === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.status === "Đang duyệt"
+                                                : shipper.status === "pending"
                                                   ? "text-yellow-700 bg-yellow-100 p-1 rounded"
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }
                                     >
-                                        {shipper.status}
+                                        {translateStatus(shipper.status)}
                                     </span>
                                 </td>
-                                <td className="p-2 border">
+                                <td className="p-2 text-center border">
                                     <button
                                         type="button"
                                         className="text-blue-500 underline"
                                         onClick={() => navigate(`/main/shipperslist/${shipper.id}`)}
                                     >
-                                        Xem chi tiết
+                                        Chi tiết
                                     </button>
                                 </td>
                             </tr>

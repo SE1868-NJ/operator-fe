@@ -96,7 +96,7 @@ const ReportChart = () => {
                 data={data}
                 series={[{ name: "value", label: "Report Data" }]}
                 dataKey="timestamp"
-                yAxisProps={{ domain: [0, Math.ceil((20 + maxCount) / 10) * 10] }}
+                yAxisProps={{ domain: [0, Math.ceil((5 + maxCount) / 10) * 10] }}
                 valueFormatter={(value) => `${value}`}
                 className="transition-all duration-300"
             />

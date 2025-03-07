@@ -32,9 +32,13 @@ import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 
 import AccountProfile from "./pages/AccountProfile.jsx";
+import DemoShippingMethod from "./pages/DemoShippingMethod.jsx";
 import MainPage from "./pages/MainPage.jsx";
+import NewShippingMethod from "./pages/NewShippingMethod.jsx";
 import ReportDetailPage from "./pages/ReportDetailPage.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
+import ShippingMethodDetail from "./pages/ShippingMethodDetail.jsx";
+import ShippingMethods from "./pages/ShippingMethods.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 
 const theme = createTheme({
@@ -126,6 +130,22 @@ const router = createBrowserRouter([
             {
                 path: "/main/profile",
                 element: <AccountProfile />,
+            },
+            {
+                path: "/main/shipping-methods",
+                element: <ShippingMethods />,
+            },
+            {
+                path: "/main/shipping-methods/:id",
+                element: <ShippingMethodDetail />,
+            },
+            {
+                path: "/main/shipping-methods/new",
+                element: <NewShippingMethod />,
+            },
+            {
+                path: "/main/shipping-methods/demo",
+                element: <DemoShippingMethod />,
             },
             {
                 path: "*",

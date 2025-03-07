@@ -2,7 +2,6 @@ import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePendingShipper } from "../hooks/useShippers.js";
@@ -205,7 +204,7 @@ const ShipperViewPage = () => {
                                             required: "Hãy nhập lý do của bạn",
                                         })}
                                         name="description"
-                                        className="w-full p-2 border border-4 rounded-md focus:outline-none focus:border-pink-300"
+                                        className="w-full p-2 border rounded-md focus:outline-none focus:border-pink-300"
                                         placeholder="Nhập lý do..."
                                     />
                                     {errors.description && (

@@ -78,3 +78,10 @@ export const useApprovedShops = (limit = 10, page = 1, filterData = {}) => {
         queryFn: () => ShopService.getApprovedShops(limit, page, filterData),
     });
 };
+
+export const getTopShippers = () => {
+    return useQuery({
+        queryKey: ["topShippers"],
+        queryFn: () => ShopService.getTopShippers(),
+    });
+};

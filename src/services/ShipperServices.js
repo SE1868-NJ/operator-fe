@@ -39,16 +39,27 @@ const ShipperServices = {
         return shippers;
     },
 
-    async updatePendingShipper(data) {
-        const shipper = await instance
-            .patch(`/shippers/pendingShipper/${data.id}`, data)
+    async getSumShippingFeeAllShippers(offset, limit) {
+        const sumShippingFee = await instance
+            .get("/shippers/sumShippingFee", { params: { offset, limit } })
             .then(({ data }) => {
-                return data;
-            })
-            .catch((err) => {
-                console.error(err);
+                return data?.data;
             });
-        return shipper;
+        return sumShippingFee;
+    },
+
+    async getOrdersOfShipper(id) {
+        const orders = await instance.get(`/shippers/ordersOfShipper/${id}`).then(({ data }) => {
+            return data?.data;
+        });
+        return orders;
+    },
+
+    async getTopShippers() {
+        const topShippers = await instance
+            .get("/shippers/topShippers")
+            .then(({ data }) => data?.data);
+        return topShippers;
     },
 };
 

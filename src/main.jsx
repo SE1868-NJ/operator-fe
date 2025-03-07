@@ -14,32 +14,33 @@ import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
+import AccountProfile from "./pages/AccountProfile.jsx";
 import BanPage from "./pages/BanPage.jsx";
 import ChangePassPage from "./pages/ChangePassPage.jsx";
+import DemoShippingMethod from "./pages/DemoShippingMethod.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import MainPage from "./pages/MainPage.jsx";
+import NewShippingMethod from "./pages/NewShippingMethod.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
+import OrderManagement from "./pages/OrderManagement.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
 import ReportCategoriesPage from "./pages/ReportCategories.jsx";
+import ReportDetailPage from "./pages/ReportDetailPage.jsx";
+import ReportsPage from "./pages/ReportsPage.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
 import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
-import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
-import ShopsPage from "./pages/ShopsPage.jsx";
-import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
-
-import AccountProfile from "./pages/AccountProfile.jsx";
-import DemoShippingMethod from "./pages/DemoShippingMethod.jsx";
-import MainPage from "./pages/MainPage.jsx";
-import NewShippingMethod from "./pages/NewShippingMethod.jsx";
-import ReportDetailPage from "./pages/ReportDetailPage.jsx";
-import ReportsPage from "./pages/ReportsPage.jsx";
 import ShippingMethodDetail from "./pages/ShippingMethodDetail.jsx";
 import ShippingMethods from "./pages/ShippingMethods.jsx";
+import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
+import ShopsPage from "./pages/ShopsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
+import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 
 const theme = createTheme({
     /** Put your mantine theme override here */
@@ -110,6 +111,14 @@ const router = createBrowserRouter([
             {
                 path: "/main/pendding-shippers/:id",
                 element: <ShipperViewPage />,
+            },
+            {
+                path: "/main/ordermanagement",
+                element: <OrderManagement />,
+            },
+            {
+                path: "/main/orderdetail/:id",
+                element: <OrderDetail />,
             },
             {
                 path: "/main/reports",

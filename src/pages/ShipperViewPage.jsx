@@ -1,6 +1,6 @@
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useState } from "react";
+import { notifications } from "@mantine/notifications";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePendingShipper } from "../hooks/useShippers";
@@ -27,9 +27,7 @@ const ShipperViewPage = () => {
                 notifications.show({
                     color: "green",
                     title: "Cập nhật thành công!",
-                    message: `Shipper đã được ${
-                        data.status === "accepted" ? "chấp nhận" : "từ chối"
-                    }.`,
+                    message: `Shipper đã được ${data.status === "accepted" ? "chấp nhận" : "từ chối"}.`,
                 });
             } else {
                 notifications.show({
@@ -64,7 +62,7 @@ const ShipperViewPage = () => {
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
+                                "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-dep-8.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"
@@ -175,7 +173,6 @@ const ShipperViewPage = () => {
                         </Modal>
                         <button
                             type="button"
-                            variant="default"
                             className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
                             onClick={open}
                         >

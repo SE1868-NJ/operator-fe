@@ -98,6 +98,17 @@ const ShopService = {
             });
         return shop;
     },
+    async updateShopStatus(data) {
+        const shop = await instance
+            .patch(`/shops/${data.id}`, data)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shop;
+    },
     async getApprovedShops(limit = 10, page = 1, filterData = {}) {
         const offset = (page - 1) * limit;
         const { shopName, ownerName, shopEmail, shopPhone } = filterData;

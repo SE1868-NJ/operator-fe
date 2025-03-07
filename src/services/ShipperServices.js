@@ -36,6 +36,18 @@ const ShipperServices = {
 
         return shippers;
     },
+
+    async updatePendingShipper(data) {
+        const shipper = await instance
+            .patch(`/shippers/pendingShipper/${data.id}`, data)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shipper;
+    },
 };
 
 export default ShipperServices;

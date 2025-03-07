@@ -1,10 +1,12 @@
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { usePendingShipper } from "../hooks/useShippers";
-import ShipperServices from "../services/ShipperServices";
+import { usePendingShipper } from "../hooks/useShippers.js";
+import ShipperServices from "../services/ShipperServices.js";
 
 const ShipperViewPage = () => {
     const { id } = useParams();
@@ -13,16 +15,82 @@ const ShipperViewPage = () => {
     console.log("Lấy ra shipper: ", shipper);
     const navigate = useNavigate();
     const [opened, { open, close }] = useDisclosure(false);
+
+    const queryClient = useQueryClient();
+
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        mode: "onSubmit", // Xác thực khi submit form
+    });
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-lg">Loading...</p>
+            </div>
+        );
+    }
+
+    const handleAccept = async () => {
+        try {
+            await ShipperServices.updatePendingShipper({
+                id: id,
+                status: "accepted",
+            });
+            notifications.show({
+                color: "green",
+                title: "Shipper Accepted",
+                message: "The shop has been successfully accepted.",
+            });
+            queryClient.invalidateQueries("shippers");
+            navigate("/main/pendding-shippers");
+        } catch (error) {
+            console.error("Error accepting shipper:", error);
+            notifications.show({
+                color: "red",
+                title: "Error",
+                message: "Failed to accept shipper. Please try again.",
+            });
+        }
+    };
+
+    const handleReject = () => {
+        open();
+    };
+
+    const onSubmitReject = async (data) => {
+        try {
+            await ShipperServices.updatePendingShipper({
+                id: id,
+                status: "rejected",
+                description: data.description, // Sử dụng dữ liệu từ form
+            });
+            notifications.show({
+                color: "green",
+                title: "Shop Rejected",
+                message: "The shop has been successfully rejected.",
+            });
+            queryClient.invalidateQueries("shippers");
+            navigate("/main/pendding-shippers");
+        } catch (error) {
+            console.error("Error rejecting shop:", error);
+            notifications.show({
+                color: "red",
+                title: "Error",
+                message: "Failed to reject shop. Please try again.",
+            });
+        } finally {
+            close();
+        }
+    };
+    // --------------------------
 
     const onSubmit = async (data) => {
         try {
-            const shipper = ShipperServices.updatePendingShipper(data);
+            const shipper = await ShipperServices.updatePendingShipper(data);
             if (shipper) {
                 notifications.show({
                     color: "green",
@@ -48,21 +116,16 @@ const ShipperViewPage = () => {
         navigate("/main/pendding-shippers");
     };
 
-    const handleDecision = (status) => {
-        const description = watch("description");
-        handleSubmit(() => onSubmit({ id: id, status, description }));
-    };
-
     return (
         <div className="flex items-center justify-center pt-10">
-            <div className="grid w-full max-w-6xl grid-cols-1 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
                 {/* Profile Section */}
-                <div className="p-5 bg-white rounded-lg shadow-md">
-                    <div className="container mt-4 text-center">
+                <div className="bg-white p-5 rounded-lg shadow-md">
+                    <div className="text-center mt-4 container">
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-dep-8.jpg"
+                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"
@@ -126,16 +189,16 @@ const ShipperViewPage = () => {
                     <div className="mt-5 text-center">
                         <button
                             type="button"
-                            className="px-4 py-2 mr-2 text-white bg-green-500 rounded"
-                            onClick={handleDecision("accepted")}
+                            className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+                            // onClick={handleDecision("accepted")}
                         >
                             Chấp nhận
                         </button>
                         <Modal opened={opened} onClose={close} withCloseButton={false} centered>
                             <form>
                                 <label className="block mb-4">
-                                    <p className="flex mb-2 text-xl font-semibold">
-                                        Nhập lý do từ chối <p className="ml-2 text-red-500">*</p>
+                                    <p className="flex text-xl font-semibold mb-2">
+                                        Nhập lý do từ chối <p className="text-red-500 ml-2">*</p>
                                     </p>
                                     <textarea
                                         {...register("description", {
@@ -146,7 +209,7 @@ const ShipperViewPage = () => {
                                         placeholder="Nhập lý do..."
                                     />
                                     {errors.description && (
-                                        <p className="mt-1 text-sm text-red-500">
+                                        <p className="text-red-500 text-sm mt-1">
                                             {errors.description.message}
                                         </p>
                                     )}
@@ -164,7 +227,7 @@ const ShipperViewPage = () => {
                                     <Button
                                         type="submit"
                                         color="red"
-                                        onClick={handleDecision("rejected")}
+                                        // onClick={handleDecision("rejected")}
                                     >
                                         Xác nhận
                                     </Button>
@@ -173,6 +236,7 @@ const ShipperViewPage = () => {
                         </Modal>
                         <button
                             type="button"
+                            // className="px-4 py-2 bg-red-500 text-white rounded mr-2"
                             className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
                             onClick={open}
                         >
@@ -180,7 +244,7 @@ const ShipperViewPage = () => {
                         </button>
                         <button
                             type="button"
-                            className="px-4 py-2 text-white bg-blue-500 rounded"
+                            className="px-4 py-2 bg-blue-500 text-white rounded"
                             onClick={() => navigate(-1)}
                         >
                             Quay lại

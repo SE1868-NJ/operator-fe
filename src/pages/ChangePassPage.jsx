@@ -27,15 +27,21 @@ const ChangePassword = () => {
             const data = await OperatorService.changePassword(password, newPassword);
             if (data) {
                 AuthService.logout();
+                notifications.show({
+                    title: "Đổi mật khẩu thành công!",
+                    message: "Bạn sẽ được chuyển hướng sau 2 giây.",
+                    color: "green",
+                    autoClose: 2000,
+                });
+                setTimeout(() => navigate("/", { replace: true }), 2000);
+            } else {
+                console.log("err: ", err);
+                notifications.show({
+                    title: "Mật khẩu nhập không đúng!",
+                    message: "Vui lòng thử lại!",
+                    color: "red",
+                });
             }
-
-            notifications.show({
-                title: "Đổi mật khẩu thành công!",
-                message: "Bạn sẽ được chuyển hướng sau 2 giây.",
-                color: "green",
-                autoClose: 2000,
-            });
-            setTimeout(() => navigate("/", { replace: true }), 2000);
         } catch (err) {
             console.log("err: ", err);
             notifications.show({

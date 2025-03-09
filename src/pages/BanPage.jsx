@@ -105,6 +105,7 @@ const BanAccountForm = () => {
                 } else if (userType === "shop") {
                     Navigate(`/main/shop/${userId}`);
                 } else if (userType === "customer") {
+                    queryClient.invalidateQueries(["user", userId]);
                     Navigate(`/main/user_detail/${userId}`);
                 }
             } else {

@@ -6,6 +6,7 @@ const CustomerDashboardChart = ({ id }) => {
     // Dữ liệu tĩnh cho 4 tháng gần nhất
 
     const { data: order, isLoading, error } = useUserOrderRecent4Month(id);
+    console.log(order);
 
     const chartData = Array.from({ length: 4 }, (_, index) => ({
         name: order?.[index]?.name || "",

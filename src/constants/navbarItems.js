@@ -16,6 +16,7 @@ export const NAVBAR_ITEMS = [
         links: [
             { label: "Danh sách tất cả cửa hàng", link: "/main/shops" },
             { label: "Cửa hàng đang duyệt", link: "/main/pendingshops/" },
+            { label: "Thống kê doanh thu", link: "/main/shops-revenue" },
         ],
     },
     {

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useShops } from "../hooks/useShop.js";
+import DashboardChart from "./AllShopChart.jsx";
 
 // import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -55,17 +56,19 @@ export default function ShopsPage() {
 
     const { data, isLoading, error } = useShops(page, limit, filterData);
 
+    const [dataChart, setDataChart] = useState("line");
+
     console.log(data?.shops);
 
     const totalPages = Number.parseInt(data?.totalShops / limit) + 1;
 
-    // if (isLoading) {
-    //     return <div className="flex justify-center items-center h-screen">Loading...</div>;
-    // }
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
 
-    // if (error || !data?.shops) {
-    //     return <div className="flex justify-center items-center h-screen">Shop not found</div>;
-    // }
+    if (error || !data?.shops) {
+        return <div className="flex justify-center items-center h-screen">Shop not found</div>;
+    }
 
     return (
         <div className="flex h-screen">
@@ -87,8 +90,35 @@ export default function ShopsPage() {
                         <h2 className="text-xl font-semibold text-yellow-800">Total Products</h2>
                         <p className="text-2xl font-bold">215,542</p>
                     </div>
+
+                    {/* Thông tin thống kê trong ngày */}
+                    {/* <div className="bg-blue-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer" onClick={() => setDataChart("line")}>
+            <h2 className="text-xl font-semibold text-blue-800">Doanh thu trong ngày</h2>
+            <p className="text-2xl font-bold">150 triệu VNĐ</p>
+          </div>
+          <div className="bg-green-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer" onClick={() => setDataChart("month")}>
+            <h2 className="text-xl font-semibold text-green-800">
+              Doanh thu trong tuần
+            </h2>
+            <p className="text-2xl font-bold">500 triệu VNĐ</p>
+          </div>
+          <div className="bg-yellow-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer" onClick={() => setDataChart("bar")}>
+            <h2 className="text-xl font-semibold text-yellow-800">
+            Doanh thu trong tháng 2
+            </h2>
+            <p className="text-2xl font-bold">1.5 tỷ VNĐ</p>
+          </div>
+          <div className="bg-red-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer" onClick={() => setDataChart("pie")}>
+            <h2 className="text-xl font-semibold text-red-800">
+            Nộp thuế tháng 2
+            </h2>
+            <p className="text-2xl font-bold">150 triệu VNĐ</p>
+          </div> */}
                 </div>
 
+                <div className="my-8">
+                    <DashboardChart data={dataChart} />
+                </div>
                 {/* <ShopStatistics /> */}
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Tìm kiếm</h1>

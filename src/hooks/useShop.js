@@ -47,3 +47,60 @@ export const useApprovedShops = (limit = 10, page = 1, filterData = {}) => {
         queryFn: () => ShopService.getApprovedShops(limit, page, filterData),
     });
 };
+
+export const useAllShopRevenues = (
+    day,
+    month,
+    year = 2025,
+    limit = 10,
+    page = 1,
+    filterData = {},
+) => {
+    return useQuery({
+        queryKey: ["allShopRevenues", year, month, day, limit, page, filterData],
+        queryFn: () => ShopService.getAllShopsRevenues(day, month, year, limit, page, filterData),
+    });
+};
+
+export const useOneShopRevenue = (
+    id,
+    day,
+    month,
+    year = 2025,
+    limit = 10,
+    page = 1,
+    filterData = {},
+) => {
+    return useQuery({
+        queryKey: ["oneShopRevenue", id, year, month, day, limit, page, filterData],
+        queryFn: () => ShopService.getOneShopRevenue(id, day, month, limit, year, page, filterData),
+    });
+};
+
+export const useRevenuesAllShopLastTime = (distanceTime) => {
+    return useQuery({
+        queryKey: ["revenuesAllShopLastTime", distanceTime],
+        queryFn: () => ShopService.getRevenuesAllShopLastTime(distanceTime),
+    });
+};
+
+export const useRevenuesOneShopLastTime = (id, distanceTime) => {
+    return useQuery({
+        queryKey: ["revenuesOneShopLastTime", id, distanceTime],
+        queryFn: () => ShopService.getRevenuesOneShopLastTime(id, distanceTime),
+    });
+};
+
+export const useOneOrder = (id) => {
+    return useQuery({
+        queryKey: ["oneOrder", id],
+        queryFn: () => ShopService.getOneOrder(id),
+    });
+};
+
+export const useAllShopsChart = (rangeTime) => {
+    return useQuery({
+        queryKey: ["allShopsChart", rangeTime],
+        queryFn: () => ShopService.getAllShopsChartData(rangeTime),
+    });
+};

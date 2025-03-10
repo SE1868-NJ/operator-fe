@@ -144,10 +144,10 @@ const FeedbackList = ({ feedbacks }) => {
                                             <div className="flex items-center space-x-4">
                                                 <div className="flex-1">
                                                     <p className="text-sm font-bold">
-                                                        {fb.OrderItem?.ProductIT?.product_name}
+                                                        {fb.OrderItem?.Product?.product_name}
                                                     </p>
                                                     <p className="text-sm text-gray-500">
-                                                        {fb.OrderItem?.ProductIT?.description}
+                                                        {fb.OrderItem?.Product?.description}
                                                     </p>
                                                     <p className="text-sm text-gray-600">
                                                         Số lượng: {fb.OrderItem?.quantity}
@@ -215,7 +215,7 @@ const FeedbackList = ({ feedbacks }) => {
                         </Button>
                     </motion.div>
                 ) : (
-                    visibleCount > 5 && (
+                    visibleCount >= 5 && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}

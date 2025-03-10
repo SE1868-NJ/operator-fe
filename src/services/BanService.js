@@ -3,6 +3,7 @@ import { instance } from "../lib/axios";
 
 const BanService = {
     async banUser({ userId, operatorId, userType, reason, banEnd }) {
+        console.log(userId, operatorId, userType, reason, banEnd);
         const banData = await instance
             .post("/ban/", {
                 userId,

@@ -5,14 +5,14 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
 import BanService from "../services/BanService";
-import ShipperDashboardChart from "./ShipperDashboardChart";
+// import ShipperDashboardChart from "./ShipperDashboardChart";
 import ShipperOrdersList from "./ShipperOrdersList";
 
 function translateStatus(status) {
     const statusMap = {
         active: "Đang hoạt động",
         pending: "Đang duyệt",
-        deactive: "Dừng hoạt động",
+        inactive: "Dừng hoạt động",
     };
     return statusMap[status] || status;
 }
@@ -45,7 +45,7 @@ export default function ShipperDetails() {
     }
 
     const handleChangeStatus = async (status) => {
-        if (status === "deactive") {
+        if (status === "inactive") {
             navigate(`/main/ban_account?userId=${shipper.id}&operatorId=1&accountType=shipper`);
         } else {
             const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
@@ -233,7 +233,7 @@ export default function ShipperDetails() {
                                     color={shipper?.status === "active" ? "red" : "teal"}
                                     onClick={() =>
                                         handleChangeStatus(
-                                            shipper?.status === "active" ? "deactive" : "active",
+                                            shipper?.status === "active" ? "inactive" : "active",
                                         )
                                     }
                                 >
@@ -255,10 +255,12 @@ export default function ShipperDetails() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-4 mt-6 md:flex-row">
-                    <div className="w-full md:w-1/2">
+                    {/* <div className="w-full md:w-1/2">
                         <ShipperDashboardChart />
-                    </div>
-                    <div className="w-full md:w-1/2">
+                    </div> */}
+                    <div className="w-full ">
+                        {" "}
+                        {/* md:w-1/2 */}
                         <ShipperOrdersList shipperId={shipper.id} />
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-//.services/ShipperService.js
 import { instance } from "../lib/axios";
 
 const ShipperServices = {
@@ -64,6 +63,17 @@ const ShipperServices = {
         return topShippers;
     },
 
+    async updatePendingShipper(data) {
+        const shipper = await instance
+            .patch(`/shippers/pendingShipper/${data.id}`, data)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return shipper;
+    },
     async getTop10Shippers() {
         const topShippers = await instance
             .get("/shippers/top10Shippers")

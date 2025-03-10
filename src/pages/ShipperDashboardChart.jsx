@@ -1,7 +1,7 @@
 import { BarChart } from "@mantine/charts";
 import { Card, Loader, Select, Text, Title } from "@mantine/core";
 import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGetTop10Shippers } from "../hooks/useShippers";
 
 export default function ShipperDashboardChart() {

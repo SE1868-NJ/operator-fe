@@ -91,11 +91,7 @@ importers:
         version: 5.5.0(react@18.3.1)
       react-router-dom:
         specifier: ^7.1.1
-<<<<<<< HEAD
-        version: 7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 7.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
       recharts:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

@@ -10,22 +10,53 @@ export const useShops = (page, limit, filterData) => {
     });
 };
 
-export const useShop = (id) => {
+export const useExportShops = (page, limit, filterData) => {
+    const offset = (page - 1) * limit;
     return useQuery({
-        queryKey: ["shop", id],
-        queryFn: () => ShopService.getOneShop(id),
+        queryKey: ["shops", page, limit, filterData],
+        queryFn: () => ShopService.getAllShops(offset, limit, filterData),
     });
 };
 
-// export const useUpdateShopStatus = () => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationFn: ({ id, status }) => ShopService.updateShopStatus(id, status),
-//         onSuccess: () => {
-//             queryClient.invalidateQueries(["shop"]);
-//         },
-//     });
-// };
+export const useShop = (id) => {
+    return useQuery({
+        queryKey: ["shop", id], // Thay đổi queryKey
+        queryFn: () => ShopService.getOneShop(id), // Thay đổi queryFn
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useShopOrders = (id, offset, limit) => {
+    return useQuery({
+        queryKey: ["shopOrders", id, offset, limit],
+        queryFn: () => ShopService.getOrderByShopId(id, offset, limit),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useExportShopOrders = (id, offset, limit) => {
+    return useQuery({
+        queryKey: ["shopOrders", id, offset, limit],
+        queryFn: () => ShopService.getOrderByShopId(id, offset, limit),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useShopProducts = (id, offset, limit, filterData) => {
+    return useQuery({
+        queryKey: ["shopProducts", id, offset, limit, filterData],
+        queryFn: () => ShopService.getProductsByShopId(id, offset, limit, filterData),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
+
+export const useExportShopProducts = (id, offset, limit, filterData) => {
+    return useQuery({
+        queryKey: ["shopProducts", id, offset, limit, filterData],
+        queryFn: () => ShopService.getProductsByShopId(id, offset, limit, filterData),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
+    });
+};
 
 export const usePendingShops = (limit = 10, page = 1, filterData = {}) => {
     return useQuery({
@@ -73,7 +104,7 @@ export const useOneShopRevenue = (
 ) => {
     return useQuery({
         queryKey: ["oneShopRevenue", id, year, month, day, limit, page, filterData],
-        queryFn: () => ShopService.getOneShopRevenue(id, day, month, limit, year, page, filterData),
+        queryFn: () => ShopService.getOneShopRevenue(id, day, month, year, limit, page, filterData),
     });
 };
 
@@ -102,5 +133,12 @@ export const useAllShopsChart = (rangeTime) => {
     return useQuery({
         queryKey: ["allShopsChart", rangeTime],
         queryFn: () => ShopService.getAllShopsChartData(rangeTime),
+    });
+};
+
+export const useOneShopInfor = (id) => {
+    return useQuery({
+        queryKey: ["oneShopInfor", id],
+        queryFn: () => ShopService.getOneShopInfor(id),
     });
 };

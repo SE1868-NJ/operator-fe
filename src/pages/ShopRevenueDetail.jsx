@@ -2,7 +2,7 @@ import { useDebouncedState } from "@mantine/hooks";
 import { useState } from "react";
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useOneShopRevenue, useRevenuesOneShopLastTime, useShop } from "../hooks/useShop";
+import { useOneShopInfor, useOneShopRevenue, useRevenuesOneShopLastTime } from "../hooks/useShop";
 
 const ShopsRevenuePage = () => {
     const { id } = useParams();
@@ -30,13 +30,14 @@ const ShopsRevenuePage = () => {
         [searchShipperName, searchCustomerName],
     );
 
-    const { data: shop } = useShop(id);
+    const { data: shop } = useOneShopInfor(id);
+    console.log("shop to show: ", shop);
 
     const {
         data: responseData,
         isLoading,
         error,
-    } = useOneShopRevenue(id, year, month, day, limit, page, filterData);
+    } = useOneShopRevenue(id, day, month, year, limit, page, filterData);
 
     const { data: totalRevenues } = useRevenuesOneShopLastTime(id, totalRevenuesTime);
 
@@ -54,7 +55,9 @@ const ShopsRevenuePage = () => {
         <div className="h-screen">
             <div className="flex-1 mx-auto bg-white p-6">
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                    Thống kê tổng doanh thu của cửa hàng: {shop?.shopName} ({shop?.Owner.fullName})
+                    Thống kê tổng doanh thu của cửa hàng: {shop?.shopName}
+                    <p className="text-xl">(Chủ cửa hàng: {shop?.Owner.fullName})</p>
+                    <p className="text-xl">→ Gửi email cho cửa hàng</p>
                 </h2>
                 <div className="flex gap-4 mb-4">
                     {/* Thông tin thống kê trong ngày */}
@@ -116,7 +119,12 @@ const ShopsRevenuePage = () => {
                     </div>
                     <div className="bg-red-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer">
                         <h2 className="text-xl font-semibold text-red-800">Nộp thuế tháng 2</h2>
-                        <p className="text-2xl font-bold">150 triệu VNĐ</p>
+                        <p className="text-2xl font-bold">
+                            {(Number.parseInt(totalRevenues?.totalRevenues) * 0.015).toLocaleString(
+                                "vi",
+                            ) || 0}{" "}
+                            VNĐ
+                        </p>
                     </div>
                 </div>
 
@@ -207,7 +215,9 @@ const ShopsRevenuePage = () => {
                                         id=""
                                         onChange={(e) => setDay(e.target.value)}
                                     >
-                                        <option value="">Tất cả ngày</option>
+                                        <option value="" selected={day === ""}>
+                                            Tất cả ngày
+                                        </option>
                                         {days.map((d) => (
                                             <option key={d} value={d} selected={d === day}>
                                                 Ngày {d}

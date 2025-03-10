@@ -5,29 +5,43 @@ import "dayjs/locale/ru";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/nprogress/styles.css";
+
 import { MantineProvider, createTheme } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
+import { NavigationProgress } from "@mantine/nprogress";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
+import AccountProfile from "./pages/AccountProfile.jsx";
+import BanPage from "./pages/BanPage.jsx";
 import ChangePassPage from "./pages/ChangePassPage.jsx";
+import DemoShippingMethod from "./pages/DemoShippingMethod.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import ForgotPassPage from "./pages/ForgotPassPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import MainPage from "./pages/MainPage.jsx";
+import NewShippingMethod from "./pages/NewShippingMethod.jsx";
 import OTPPage from "./pages/OTPPage.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
+import OrderManagement from "./pages/OrderManagement.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
+import ReportCategoriesPage from "./pages/ReportCategories.jsx";
+import ReportDetailPage from "./pages/ReportDetailPage.jsx";
+import ReportsPage from "./pages/ReportsPage.jsx";
 import ShipperDetails from "./pages/ShipperDetails.jsx";
 import ShipperList from "./pages/ShipperList.jsx";
 import ShipperPendingPage from "./pages/ShipperPendingPage.jsx";
 import ShipperViewPage from "./pages/ShipperViewPage.jsx";
+import ShippingMethodDetail from "./pages/ShippingMethodDetail.jsx";
+import ShippingMethods from "./pages/ShippingMethods.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UserDetailPage from "./pages/UserDetailPage.jsx";
 
 import OrderDetailPage from "./pages/OrderDetailPage.jsx";
-import ReportsPage from "./pages/ReportsPage.jsx";
 import ShopRevenueDetail from "./pages/ShopRevenueDetail.jsx";
 import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -53,13 +67,14 @@ const router = createBrowserRouter([
         path: "/forgotpass",
         element: <ForgotPassPage />,
     },
+
     {
         path: "/main/",
         element: <Layout />,
         children: [
             {
                 path: "/main/",
-                element: <div>Home</div>,
+                element: <MainPage />,
             },
             {
                 path: "/main/shops",
@@ -114,8 +129,48 @@ const router = createBrowserRouter([
                 element: <ShipperViewPage />,
             },
             {
+                path: "/main/ordermanagement",
+                element: <OrderManagement />,
+            },
+            {
+                path: "/main/orderdetail/:id",
+                element: <OrderDetail />,
+            },
+            {
                 path: "/main/reports",
                 element: <ReportsPage />,
+            },
+            {
+                path: "/main/reports/:id",
+                element: <ReportDetailPage />,
+            },
+            {
+                path: "/main/report-categories",
+                element: <ReportCategoriesPage />,
+            },
+            {
+                path: "/main/ban_account",
+                element: <BanPage />,
+            },
+            {
+                path: "/main/profile",
+                element: <AccountProfile />,
+            },
+            {
+                path: "/main/shipping-methods",
+                element: <ShippingMethods />,
+            },
+            {
+                path: "/main/shipping-methods/:id",
+                element: <ShippingMethodDetail />,
+            },
+            {
+                path: "/main/shipping-methods/new",
+                element: <NewShippingMethod />,
+            },
+            {
+                path: "/main/shipping-methods/demo",
+                element: <DemoShippingMethod />,
             },
             {
                 path: "*",
@@ -125,7 +180,13 @@ const router = createBrowserRouter([
     },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 30 * 1000,
+        },
+    },
+});
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
@@ -133,6 +194,7 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
             {/* provider cua thu vien ui */}
             <MantineProvider theme={theme} defaultColorScheme="light">
+                <NavigationProgress />
                 {/* toast thong bao */}
                 <Notifications />
                 {/* routes */}

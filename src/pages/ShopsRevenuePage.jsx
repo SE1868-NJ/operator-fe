@@ -37,13 +37,14 @@ const ShopsRevenuePage = () => {
         data: responseData,
         isLoading,
         error,
-    } = useAllShopRevenues(year, month, day, limit, page, filterData);
+    } = useAllShopRevenues(day, month, year, limit, page, filterData);
 
     const { data: totalRevenues } = useRevenuesAllShopLastTime(totalRevenuesTime);
     console.log("count: ", totalRevenues);
 
     const revenueData = responseData?.totalRevenue || [];
     const total = responseData?.total || 0;
+    console.log("total: ", revenueData);
 
     // // Determine which list to display based on active button
     // const shopsToDisplay = useMemo(() => {
@@ -96,9 +97,6 @@ const ShopsRevenuePage = () => {
                                 >
                                     1 năm gần nhất
                                 </option>
-                                <option selected={totalRevenuesTime.toLowerCase === ""} value="">
-                                    Toàn bộ thời gian
-                                </option>
                             </select>
                         </label>
                     </div>
@@ -118,7 +116,12 @@ const ShopsRevenuePage = () => {
                     </div>
                     <div className="bg-red-100 p-4 rounded-lg shadow-md w-1/4 text-center hover:cursor-pointer">
                         <h2 className="text-xl font-semibold text-red-800">Nộp thuế tháng 2</h2>
-                        <p className="text-2xl font-bold">150 triệu VNĐ</p>
+                        <p className="text-2xl font-bold">
+                            {(Number.parseInt(totalRevenues?.totalRevenues) * 0.015).toLocaleString(
+                                "vi",
+                            ) || 0}{" "}
+                            VNĐ
+                        </p>
                     </div>
                 </div>
 

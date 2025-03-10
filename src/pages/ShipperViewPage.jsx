@@ -41,8 +41,8 @@ const ShipperViewPage = () => {
             });
             notifications.show({
                 color: "green",
-                title: "Shipper Accepted",
-                message: "The shipper has been successfully accepted.",
+                title: "Người giao hàng đã được chấp nhận",
+                message: "Người giao hàng đã được chấp nhận thành công.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
@@ -50,8 +50,8 @@ const ShipperViewPage = () => {
             console.error("Error accepting shipper:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to accept shipper. Please try again.",
+                title: "Lỗi",
+                message: "Không thể chấp nhận người giao hàng. Vui lòng thử lại.",
             });
         }
     };
@@ -69,17 +69,17 @@ const ShipperViewPage = () => {
             });
             notifications.show({
                 color: "green",
-                title: "Shop Rejected",
-                message: "The shipper has been successfully rejected.",
+                title: "Người giao hàng đã bị từ chối",
+                message: "Quá trình từ chối người giao hàng đã hoàn tất.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
         } catch (error) {
-            console.error("Error rejecting shop:", error);
+            console.error("Error rejecting shipper:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to reject shipper. Please try again.",
+                title: "Lỗi",
+                message: "Không thể từ chối người giao hàng. Vui lòng thử lại.",
             });
         } finally {
             close();
@@ -126,7 +126,7 @@ const ShipperViewPage = () => {
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
+                                "https://xabuon.com/uploads1/news/31-10-18/xabuon-girl-xinh-haivl-xemvn-sex-31-10-20181540959376626.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"

@@ -2,10 +2,10 @@
 import { useQuery } from "@tanstack/react-query";
 import OrderServices from "../services/OrderServices";
 
-export const useOrders = (offset, limit) => {
+export const useOrders = (offset, limit, filterData) => {
     return useQuery({
-        queryKey: ["orders", offset, limit],
-        queryFn: () => OrderServices.getAllOrders(offset, limit),
+        queryKey: ["orders", offset, limit, filterData],
+        queryFn: () => OrderServices.getAllOrders(offset, limit, filterData),
     });
 };
 

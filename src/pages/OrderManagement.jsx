@@ -1,3 +1,4 @@
+import { useDebouncedState } from "@mantine/hooks";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderChart from "../components/OrderChart.jsx";
@@ -7,24 +8,27 @@ export default function OrderManagement() {
     const navigate = useNavigate();
     const limit = 10;
     const [page, setPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-
     const offset = (page - 1) * limit;
-    const { data, isLoading, error } = useOrders(offset, limit);
-    const totalPages = Math.ceil((data?.total || 0) / limit);
-    const orders = data?.orders || [];
 
-    // Lọc đơn hàng dựa trên từ khóa tìm kiếm
-    const filteredOrders = useMemo(() => {
-        const searchStr = searchTerm.toLowerCase();
-        return orders.filter((order) => {
-            return (
-                String(order.id).toLowerCase().includes(searchStr) ||
-                String(order.shop_id).toLowerCase().includes(searchStr) ||
-                String(order.customer_id).toLowerCase().includes(searchStr)
-            );
-        });
-    }, [orders, searchTerm]);
+    // Lọc đơn hàng
+    const timeOut = 200;
+    const [searchStatus, setSearchStatusName] = useDebouncedState("", timeOut);
+    const [searchPaymentStatus, setSearchPaymentStatus] = useDebouncedState("", timeOut);
+    const [searchShippingStatus, setSearchShippingStatus] = useDebouncedState("", timeOut);
+
+    const filterData = useMemo(
+        () => ({
+            Status: searchStatus,
+            PaymentStatus: searchPaymentStatus,
+            ShippingStatus: searchShippingStatus,
+        }),
+        [searchStatus, searchPaymentStatus, searchShippingStatus],
+    );
+
+    const { data, isLoading, error } = useOrders(offset, limit, filterData);
+    const filteredOrdersData = data || [];
+    const filteredOrders = filteredOrdersData?.orders || [];
+    const totalPages = Math.ceil((filteredOrdersData?.total || 0) / limit);
 
     return (
         <div className="container mx-auto p-6 space-y-8">
@@ -32,15 +36,64 @@ export default function OrderManagement() {
                 <h1 className="text-2xl font-bold">Quản lý đơn hàng</h1>
             </div>
             <OrderChart />
-            <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-xl font-bold mb-4">Tìm kiếm đơn hàng</h2>
-                <input
-                    type="text"
-                    placeholder="Nhập mã đơn hàng, mã cửa hàng hoặc mã khách hàng..."
-                    className="border rounded p-2 w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div>
+                    <label
+                        htmlFor="searchStatus"
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                    >
+                        Tìm trạng thái đơn hàng:
+                    </label>
+                    <input
+                        type="text"
+                        id="searchStatus"
+                        placeholder="Trạng thái đơn hàng"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        defaultValue={searchStatus}
+                        onChange={(e) => {
+                            setSearchStatusName(e.currentTarget.value);
+                            setPage(1);
+                        }}
+                    />
+                </div>
+                <div>
+                    <label
+                        htmlFor="searchShippingStatus"
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                    >
+                        Tìm trạng thái vận chuyển:
+                    </label>
+                    <input
+                        type="text"
+                        id="searchShippingStatus"
+                        placeholder="Trạng thái vận chuyển"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        defaultValue={searchShippingStatus}
+                        onChange={(e) => {
+                            setSearchShippingStatus(e.currentTarget.value);
+                            setPage(1);
+                        }}
+                    />
+                </div>
+                <div>
+                    <label
+                        htmlFor="searchPaymentStatus"
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                    >
+                        Tìm trạng thái thanh toán:
+                    </label>
+                    <input
+                        type="text"
+                        id="searchPaymentStatus"
+                        placeholder="Trạng thái thanh toán"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        defaultValue={searchPaymentStatus}
+                        onChange={(e) => {
+                            setSearchPaymentStatus(e.currentTarget.value);
+                            setPage(1);
+                        }}
+                    />
+                </div>
             </div>
             <div className="rounded-lg shadow-md bg-white overflow-hidden">
                 <table className="w-full text-left">
@@ -51,11 +104,11 @@ export default function OrderManagement() {
                                 "Mã cửa hàng",
                                 "Mã khách hàng",
                                 "Mã người giao hàng",
-                                "Trạng thái",
+                                "Trạng thái đơn hàng",
                                 "Tổng cộng",
                                 "Ghi chú",
-                                "Thanh toán",
-                                "Vận chuyển",
+                                "Trạng thái thanh toán",
+                                "Trạng thái vận chuyển",
                                 "Chi tiết",
                             ].map((header) => (
                                 <th

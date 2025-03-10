@@ -2,6 +2,7 @@ import { Button, Modal, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconAlertCircle } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOnePendingShop } from "../hooks/useShop";
@@ -18,6 +19,7 @@ const PendingShopDetail = () => {
     } = useForm({
         mode: "onSubmit", // Xác thực khi submit form
     });
+    const queryClient = useQueryClient();
     const [opened, { open, close }] = useDisclosure(false);
 
     const { data: response, isLoading, isError } = useOnePendingShop(id);
@@ -43,6 +45,8 @@ const PendingShopDetail = () => {
                 title: "Shop Accepted",
                 message: "The shop has been successfully accepted.",
             });
+            queryClient.invalidateQueries({ queryKey: ["pendingShops"] });
+            queryClient.invalidateQueries({ queryKey: ["approvedShops"] });
             navigate("/main/pendingshops");
         } catch (error) {
             console.error("Error accepting shop:", error);
@@ -70,6 +74,8 @@ const PendingShopDetail = () => {
                 title: "Shop Rejected",
                 message: "The shop has been successfully rejected.",
             });
+            queryClient.invalidateQueries({ queryKey: ["pendingShops"] });
+            queryClient.invalidateQueries({ queryKey: ["approvedShops"] });
             navigate("/main/pendingshops");
         } catch (error) {
             console.error("Error rejecting shop:", error);
@@ -375,14 +381,14 @@ const PendingShopDetail = () => {
                     onClick={() => navigate("/main/pendingshops")}
                     className="flex-grow md:flex-none"
                 >
-                    Back to List
+                    Trở lại
                 </Button>
                 <div className="flex gap-4">
                     <Button color="green" onClick={handleAccept}>
-                        Accept
+                        Chấp nhận
                     </Button>
                     <Button color="red" onClick={handleReject}>
-                        Reject
+                        Từ chối
                     </Button>
                 </div>
             </div>

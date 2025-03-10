@@ -303,7 +303,11 @@ const PendingShopListPage = () => {
                                     : "bg-red-500" // Đỏ
                             }
                             cursor-not-allowed`} // Vô hiệu hóa
-                                                        value={shop.changedStatus}
+                                                        value={
+                                                            shop.changedStatus === "accepted"
+                                                                ? "Đồng ý"
+                                                                : "Từ chối"
+                                                        }
                                                     />
                                                 )}
                                             </td>
@@ -319,7 +323,7 @@ const PendingShopListPage = () => {
                                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                                         type="button"
                                                     >
-                                                        Xem chi tiết
+                                                        Chi tiết
                                                     </button>
                                                 ) : (
                                                     <ActionIcon

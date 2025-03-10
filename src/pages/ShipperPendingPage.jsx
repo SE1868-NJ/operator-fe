@@ -37,7 +37,7 @@ export default function ShipperPendingPage() {
                     <thead>
                         <tr>
                             {[
-                                "ID",
+                                "STT",
                                 "Họ và tên",
                                 "Email",
                                 "Số điện thoại",

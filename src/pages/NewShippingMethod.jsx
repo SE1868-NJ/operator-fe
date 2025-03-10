@@ -12,7 +12,9 @@ import {
     Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ShippingMethodService from "../services/ShippingMethodService";
 
 const NewShippingMethod = () => {
@@ -28,6 +30,8 @@ const NewShippingMethod = () => {
         weekend: false,
         largeSize: false,
     });
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const [externalFactors, setExternalFactors] = useState({
         trafficDensity: {
@@ -243,12 +247,22 @@ const NewShippingMethod = () => {
                         <Button
                             color="blue"
                             onClick={async () => {
-                                ShippingMethodService.create(getPayload()).then(() => {
-                                    notifications.show({
-                                        color: "green",
-                                        title: "Đã tạo thành công!",
+                                ShippingMethodService.create(getPayload())
+                                    .then(() => {
+                                        notifications.show({
+                                            color: "green",
+                                            title: "Đã tạo thành công!",
+                                        });
+                                        navigate("/main/shipping-methods");
+                                        queryClient.invalidateQueries(["shipping-methods"]);
+                                    })
+                                    .catch(() => {
+                                        notifications.show({
+                                            color: "red",
+                                            title: "Đã xảy ra lỗi!",
+                                            message: "Vui lòng thử lại sau",
+                                        });
                                     });
-                                });
                             }}
                         >
                             Lưu phương thức

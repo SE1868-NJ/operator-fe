@@ -101,7 +101,7 @@ export default function ShopsPage() {
     }
 
     return (
-        <div className="flex h-screen w-3/4">
+        <div className="flex h-screen">
             {/* <Sidebar className="fixed top-0 left-0 h-full" /> */}
             <div className="flex-1 mx-auto bg-white p-6">
                 <div className="flex items-center justify-between mb-2">

@@ -41,8 +41,8 @@ const ShipperViewPage = () => {
             });
             notifications.show({
                 color: "green",
-                title: "Shipper Accepted",
-                message: "The shop has been successfully accepted.",
+                title: "Người giao hàng đã được chấp nhận",
+                message: "Người giao hàng đã được chấp nhận thành công.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
@@ -50,8 +50,8 @@ const ShipperViewPage = () => {
             console.error("Error accepting shipper:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to accept shipper. Please try again.",
+                title: "Lỗi",
+                message: "Không thể chấp nhận người giao hàng. Vui lòng thử lại.",
             });
         }
     };
@@ -69,17 +69,17 @@ const ShipperViewPage = () => {
             });
             notifications.show({
                 color: "green",
-                title: "Shop Rejected",
-                message: "The shop has been successfully rejected.",
+                title: "Người giao hàng đã bị từ chối",
+                message: "Quá trình từ chối người giao hàng đã hoàn tất.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
         } catch (error) {
-            console.error("Error rejecting shop:", error);
+            console.error("Error rejecting shipper:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to reject shop. Please try again.",
+                title: "Lỗi",
+                message: "Không thể từ chối người giao hàng. Vui lòng thử lại.",
             });
         } finally {
             close();
@@ -87,33 +87,35 @@ const ShipperViewPage = () => {
     };
     // --------------------------
 
-    const onSubmit = async (data) => {
-        try {
-            const shipper = await ShipperServices.updatePendingShipper(data);
-            if (shipper) {
-                notifications.show({
-                    color: "green",
-                    title: "Cập nhật thành công!",
-                    message: `Shipper đã được ${data.status === "accepted" ? "chấp nhận" : "từ chối"}.`,
-                });
-            } else {
-                notifications.show({
-                    color: "red",
-                    title: "Lỗi câp nhật!",
-                    message: "Vui lòng thử lại!",
-                });
-            }
-            navigate("/main/pendding-shippers");
-        } catch (err) {
-            console.error(err);
-            notifications.show({
-                color: "red",
-                title: "Lỗi đã xảy ra khi cập nhật!",
-                message: "Vui lòng thử lại!",
-            });
-        }
-        navigate("/main/pendding-shippers");
-    };
+    // const onSubmit = async (data) => {
+    //   try {
+    //     const shipper = await ShipperServices.updatePendingShipper(data);
+    //     if (shipper) {
+    //       notifications.show({
+    //         color: "green",
+    //         title: "Cập nhật thành công!",
+    //         message: `Shipper đã được ${
+    //           data.status === "accepted" ? "chấp nhận" : "từ chối"
+    //         }.`,
+    //       });
+    //     } else {
+    //       notifications.show({
+    //         color: "red",
+    //         title: "Lỗi câp nhật!",
+    //         message: "Vui lòng thử lại!",
+    //       });
+    //     }
+    //     navigate("/main/pendding-shippers");
+    //   } catch (err) {
+    //     console.error(err);
+    //     notifications.show({
+    //       color: "red",
+    //       title: "Lỗi đã xảy ra khi cập nhật!",
+    //       message: "Vui lòng thử lại!",
+    //     });
+    //   }
+    //   navigate("/main/pendding-shippers");
+    // };
 
     return (
         <div className="flex items-center justify-center pt-10">
@@ -124,7 +126,7 @@ const ShipperViewPage = () => {
                         <img
                             src={
                                 shipper.avatar ||
-                                "https://tintuc.dienthoaigiakho.vn/wp-content/uploads/2024/01/anh-avatar-trang-nam-12.jpg"
+                                "https://xabuon.com/uploads1/news/31-10-18/xabuon-girl-xinh-haivl-xemvn-sex-31-10-20181540959376626.jpg"
                             }
                             alt={shipper.name}
                             className="w-32 h-32 mx-auto mb-3 transition-transform border-4 border-pink-200 rounded-full hover:border-8 duration-600 hover:scale-150"
@@ -187,6 +189,7 @@ const ShipperViewPage = () => {
 
                     <div className="mt-5 text-center">
                         <button
+                            onClick={handleAccept}
                             type="button"
                             className="px-4 py-2 bg-green-500 text-white rounded mr-2"
                             // onClick={handleDecision("accepted")}
@@ -194,7 +197,7 @@ const ShipperViewPage = () => {
                             Chấp nhận
                         </button>
                         <Modal opened={opened} onClose={close} withCloseButton={false} centered>
-                            <form>
+                            <form onSubmit={handleSubmit(onSubmitReject)}>
                                 <label className="block mb-4">
                                     <p className="flex text-xl font-semibold mb-2">
                                         Nhập lý do từ chối <p className="text-red-500 ml-2">*</p>
@@ -237,7 +240,7 @@ const ShipperViewPage = () => {
                             type="button"
                             // className="px-4 py-2 bg-red-500 text-white rounded mr-2"
                             className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
-                            onClick={open}
+                            onClick={handleReject}
                         >
                             Từ chối
                         </button>

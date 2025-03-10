@@ -90,12 +90,21 @@ const ChangePassword = () => {
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                         />
                     </div>
-                    <Button
-                        type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
-                    >
-                        Đổi Mật Khẩu
-                    </Button>
+                    <div className="mt-3 flex flex-col gap-2">
+                        <Button
+                            type="submit"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                        >
+                            Đổi Mật Khẩu
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-full border-gray-400 text-gray-700 hover:bg-gray-200 py-2 rounded-lg"
+                            onClick={() => navigate(-1)}
+                        >
+                            Quay lại
+                        </Button>
+                    </div>
                 </form>
             </div>
         </div>

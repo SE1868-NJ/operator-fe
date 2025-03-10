@@ -45,6 +45,7 @@ const BanAccountForm = () => {
         ],
     };
 
+    console.log(operatorId); // 4
     const [formData, setFormData] = useState({
         userId,
         operatorId,
@@ -53,6 +54,7 @@ const BanAccountForm = () => {
         banEnd: "",
     });
 
+    console.log(formData);
     const [customReason, setCustomReason] = useState("");
 
     const [banDuration, setBanDuration] = useState("7"); // Default 7 ngày
@@ -94,15 +96,19 @@ const BanAccountForm = () => {
             ...formData,
             banEnd: finalBanEnd,
         };
+        console.log(payload);
 
         try {
             // Gọi service để thực hiện hành động ban tài khoản
+            //console.log(payload)
             const response = await BanService.banUser(payload);
             if (response?.success) {
+                alert("Đình chỉ thành công!");
                 if (userType === "shipper") {
                     queryClient.invalidateQueries(["shipper", userId]);
                     Navigate(`/main/shipperslist/${userId}`);
                 } else if (userType === "shop") {
+                    queryClient.invalidateQueries(["shop", userId]);
                     Navigate(`/main/shop/${userId}`);
                 } else if (userType === "customer") {
                     queryClient.invalidateQueries(["user", userId]);

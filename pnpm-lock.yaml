@@ -10,57 +10,25 @@ importers:
     dependencies:
       '@mantine/charts':
         specifier: ^7.17.1
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
-=======
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
-=======
         version: 7.17.1(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       '@mantine/core':
         specifier: ^7.15.3
         version: 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/dates':
         specifier: ^7.16.0
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 7.16.0(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       '@mantine/hooks':
         specifier: ^7.17.0
         version: 7.17.0(react@18.3.1)
       '@mantine/modals':
         specifier: ^7.15.3
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       '@mantine/notifications':
         specifier: ^7.15.3
         version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/nprogress':
         specifier: ^7.17.0
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
-<<<<<<< HEAD
-        version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 7.17.0(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       '@tabler/icons-react':
         specifier: ^3.28.1
         version: 3.31.0(react@18.3.1)
@@ -69,25 +37,13 @@ importers:
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-router':
         specifier: ^1.95.6
-<<<<<<< HEAD
-        version: 1.114.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
-        version: 1.114.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+        version: 1.114.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       auth-frontend-core:
         specifier: 'link:'
         version: 'link:'
       axios:
         specifier: ^1.7.9
-<<<<<<< HEAD
-        version: 1.8.2
-=======
-<<<<<<< HEAD
-        version: 1.8.2
-=======
         version: 1.7.9
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       chart.js:
         specifier: ^4.4.8
         version: 4.4.8
@@ -102,11 +58,7 @@ importers:
         version: 2.0.5
       framer-motion:
         specifier: ^12.4.10
-<<<<<<< HEAD
-        version: 12.4.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 12.4.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       iconsax-react:
         specifier: ^0.0.8
         version: 0.0.8(react@18.3.1)
@@ -139,15 +91,7 @@ importers:
         version: 5.5.0(react@18.3.1)
       react-router-dom:
         specifier: ^7.1.1
-<<<<<<< HEAD
-        version: 7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
-<<<<<<< HEAD
-        version: 7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-=======
         version: 7.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       recharts:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -184,11 +128,7 @@ importers:
         version: 4.3.4(vite@6.2.1(@types/node@22.13.10)(jiti@1.21.7)(sugarss@4.0.1(postcss@8.5.3))(yaml@2.7.0))
       autoprefixer:
         specifier: ^10.4.20
-<<<<<<< HEAD
         version: 10.4.21(postcss@8.5.3)
-=======
-        version: 10.4.20(postcss@8.5.3)
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       eslint:
         specifier: ^9.15.0
         version: 9.22.0(jiti@1.21.7)
@@ -380,277 +320,152 @@ packages:
     resolution: {integrity: sha512-LRjP623jPyf3Poyfb0ohMj8I3ORyBDOwXAgxxVPbSD0unJuW2mJWeiRfaQinjtccMqC5Wy1HOMfa4btKjbNxbg==}
     engines: {node: '>=v18'}
 
-<<<<<<< HEAD
   '@esbuild/aix-ppc64@0.25.1':
     resolution: {integrity: sha512-kfYGy8IdzTGy+z0vFGvExZtxkFlA4zAxgKEahG9KE1ScBjpQnFsNOX8KTU5ojNru5ed5CVoJYXFtoxaq5nFbjQ==}
-=======
-  '@esbuild/aix-ppc64@0.25.0':
-    resolution: {integrity: sha512-O7vun9Sf8DFjH2UtqK8Ku3LkquL9SZL8OLY1T5NZkA34+wG3OQF7cl4Ql8vdNzM6fzBbYfLaiRLIOZ+2FOCgBQ==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [aix]
 
-<<<<<<< HEAD
   '@esbuild/android-arm64@0.25.1':
     resolution: {integrity: sha512-50tM0zCJW5kGqgG7fQ7IHvQOcAn9TKiVRuQ/lN0xR+T2lzEFvAi1ZcS8DiksFcEpf1t/GYOeOfCAgDHFpkiSmA==}
-=======
-  '@esbuild/android-arm64@0.25.0':
-    resolution: {integrity: sha512-grvv8WncGjDSyUBjN9yHXNt+cq0snxXbDxy5pJtzMKGmmpPxeAmAhWxXI+01lU5rwZomDgD3kJwulEnhTRUd6g==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [android]
 
-<<<<<<< HEAD
   '@esbuild/android-arm@0.25.1':
     resolution: {integrity: sha512-dp+MshLYux6j/JjdqVLnMglQlFu+MuVeNrmT5nk6q07wNhCdSnB7QZj+7G8VMUGh1q+vj2Bq8kRsuyA00I/k+Q==}
-=======
-  '@esbuild/android-arm@0.25.0':
-    resolution: {integrity: sha512-PTyWCYYiU0+1eJKmw21lWtC+d08JDZPQ5g+kFyxP0V+es6VPPSUhM6zk8iImp2jbV6GwjX4pap0JFbUQN65X1g==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm]
     os: [android]
 
-<<<<<<< HEAD
   '@esbuild/android-x64@0.25.1':
     resolution: {integrity: sha512-GCj6WfUtNldqUzYkN/ITtlhwQqGWu9S45vUXs7EIYf+7rCiiqH9bCloatO9VhxsL0Pji+PF4Lz2XXCES+Q8hDw==}
-=======
-  '@esbuild/android-x64@0.25.0':
-    resolution: {integrity: sha512-m/ix7SfKG5buCnxasr52+LI78SQ+wgdENi9CqyCXwjVR2X4Jkz+BpC3le3AoBPYTC9NHklwngVXvbJ9/Akhrfg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [android]
 
-<<<<<<< HEAD
   '@esbuild/darwin-arm64@0.25.1':
     resolution: {integrity: sha512-5hEZKPf+nQjYoSr/elb62U19/l1mZDdqidGfmFutVUjjUZrOazAtwK+Kr+3y0C/oeJfLlxo9fXb1w7L+P7E4FQ==}
-=======
-  '@esbuild/darwin-arm64@0.25.0':
-    resolution: {integrity: sha512-mVwdUb5SRkPayVadIOI78K7aAnPamoeFR2bT5nszFUZ9P8UpK4ratOdYbZZXYSqPKMHfS1wdHCJk1P1EZpRdvw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [darwin]
 
-<<<<<<< HEAD
   '@esbuild/darwin-x64@0.25.1':
     resolution: {integrity: sha512-hxVnwL2Dqs3fM1IWq8Iezh0cX7ZGdVhbTfnOy5uURtao5OIVCEyj9xIzemDi7sRvKsuSdtCAhMKarxqtlyVyfA==}
-=======
-  '@esbuild/darwin-x64@0.25.0':
-    resolution: {integrity: sha512-DgDaYsPWFTS4S3nWpFcMn/33ZZwAAeAFKNHNa1QN0rI4pUjgqf0f7ONmXf6d22tqTY+H9FNdgeaAa+YIFUn2Rg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
 
-<<<<<<< HEAD
   '@esbuild/freebsd-arm64@0.25.1':
     resolution: {integrity: sha512-1MrCZs0fZa2g8E+FUo2ipw6jw5qqQiH+tERoS5fAfKnRx6NXH31tXBKI3VpmLijLH6yriMZsxJtaXUyFt/8Y4A==}
-=======
-  '@esbuild/freebsd-arm64@0.25.0':
-    resolution: {integrity: sha512-VN4ocxy6dxefN1MepBx/iD1dH5K8qNtNe227I0mnTRjry8tj5MRk4zprLEdG8WPyAPb93/e4pSgi1SoHdgOa4w==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [freebsd]
 
-<<<<<<< HEAD
   '@esbuild/freebsd-x64@0.25.1':
     resolution: {integrity: sha512-0IZWLiTyz7nm0xuIs0q1Y3QWJC52R8aSXxe40VUxm6BB1RNmkODtW6LHvWRrGiICulcX7ZvyH6h5fqdLu4gkww==}
-=======
-  '@esbuild/freebsd-x64@0.25.0':
-    resolution: {integrity: sha512-mrSgt7lCh07FY+hDD1TxiTyIHyttn6vnjesnPoVDNmDfOmggTLXRv8Id5fNZey1gl/V2dyVK1VXXqVsQIiAk+A==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [freebsd]
 
-<<<<<<< HEAD
   '@esbuild/linux-arm64@0.25.1':
     resolution: {integrity: sha512-jaN3dHi0/DDPelk0nLcXRm1q7DNJpjXy7yWaWvbfkPvI+7XNSc/lDOnCLN7gzsyzgu6qSAmgSvP9oXAhP973uQ==}
-=======
-  '@esbuild/linux-arm64@0.25.0':
-    resolution: {integrity: sha512-9QAQjTWNDM/Vk2bgBl17yWuZxZNQIF0OUUuPZRKoDtqF2k4EtYbpyiG5/Dk7nqeK6kIJWPYldkOcBqjXjrUlmg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-arm@0.25.1':
     resolution: {integrity: sha512-NdKOhS4u7JhDKw9G3cY6sWqFcnLITn6SqivVArbzIaf3cemShqfLGHYMx8Xlm/lBit3/5d7kXvriTUGa5YViuQ==}
-=======
-  '@esbuild/linux-arm@0.25.0':
-    resolution: {integrity: sha512-vkB3IYj2IDo3g9xX7HqhPYxVkNQe8qTK55fraQyTzTX/fxaDtXiEnavv9geOsonh2Fd2RMB+i5cbhu2zMNWJwg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-ia32@0.25.1':
     resolution: {integrity: sha512-OJykPaF4v8JidKNGz8c/q1lBO44sQNUQtq1KktJXdBLn1hPod5rE/Hko5ugKKZd+D2+o1a9MFGUEIUwO2YfgkQ==}
-=======
-  '@esbuild/linux-ia32@0.25.0':
-    resolution: {integrity: sha512-43ET5bHbphBegyeqLb7I1eYn2P/JYGNmzzdidq/w0T8E2SsYL1U6un2NFROFRg1JZLTzdCoRomg8Rvf9M6W6Gg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [ia32]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-loong64@0.25.1':
     resolution: {integrity: sha512-nGfornQj4dzcq5Vp835oM/o21UMlXzn79KobKlcs3Wz9smwiifknLy4xDCLUU0BWp7b/houtdrgUz7nOGnfIYg==}
-=======
-  '@esbuild/linux-loong64@0.25.0':
-    resolution: {integrity: sha512-fC95c/xyNFueMhClxJmeRIj2yrSMdDfmqJnyOY4ZqsALkDrrKJfIg5NTMSzVBr5YW1jf+l7/cndBfP3MSDpoHw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [loong64]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-mips64el@0.25.1':
     resolution: {integrity: sha512-1osBbPEFYwIE5IVB/0g2X6i1qInZa1aIoj1TdL4AaAb55xIIgbg8Doq6a5BzYWgr+tEcDzYH67XVnTmUzL+nXg==}
-=======
-  '@esbuild/linux-mips64el@0.25.0':
-    resolution: {integrity: sha512-nkAMFju7KDW73T1DdH7glcyIptm95a7Le8irTQNO/qtkoyypZAnjchQgooFUDQhNAy4iu08N79W4T4pMBwhPwQ==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [mips64el]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-ppc64@0.25.1':
     resolution: {integrity: sha512-/6VBJOwUf3TdTvJZ82qF3tbLuWsscd7/1w+D9LH0W/SqUgM5/JJD0lrJ1fVIfZsqB6RFmLCe0Xz3fmZc3WtyVg==}
-=======
-  '@esbuild/linux-ppc64@0.25.0':
-    resolution: {integrity: sha512-NhyOejdhRGS8Iwv+KKR2zTq2PpysF9XqY+Zk77vQHqNbo/PwZCzB5/h7VGuREZm1fixhs4Q/qWRSi5zmAiO4Fw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-riscv64@0.25.1':
     resolution: {integrity: sha512-nSut/Mx5gnilhcq2yIMLMe3Wl4FK5wx/o0QuuCLMtmJn+WeWYoEGDN1ipcN72g1WHsnIbxGXd4i/MF0gTcuAjQ==}
-=======
-  '@esbuild/linux-riscv64@0.25.0':
-    resolution: {integrity: sha512-5S/rbP5OY+GHLC5qXp1y/Mx//e92L1YDqkiBbO9TQOvuFXM+iDqUNG5XopAnXoRH3FjIUDkeGcY1cgNvnXp/kA==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [riscv64]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-s390x@0.25.1':
     resolution: {integrity: sha512-cEECeLlJNfT8kZHqLarDBQso9a27o2Zd2AQ8USAEoGtejOrCYHNtKP8XQhMDJMtthdF4GBmjR2au3x1udADQQQ==}
-=======
-  '@esbuild/linux-s390x@0.25.0':
-    resolution: {integrity: sha512-XM2BFsEBz0Fw37V0zU4CXfcfuACMrppsMFKdYY2WuTS3yi8O1nFOhil/xhKTmE1nPmVyvQJjJivgDT+xh8pXJA==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [s390x]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/linux-x64@0.25.1':
     resolution: {integrity: sha512-xbfUhu/gnvSEg+EGovRc+kjBAkrvtk38RlerAzQxvMzlB4fXpCFCeUAYzJvrnhFtdeyVCDANSjJvOvGYoeKzFA==}
-=======
-  '@esbuild/linux-x64@0.25.0':
-    resolution: {integrity: sha512-9yl91rHw/cpwMCNytUDxwj2XjFpxML0y9HAOH9pNVQDpQrBxHy01Dx+vaMu0N1CKa/RzBD2hB4u//nfc+Sd3Cw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
 
-<<<<<<< HEAD
   '@esbuild/netbsd-arm64@0.25.1':
     resolution: {integrity: sha512-O96poM2XGhLtpTh+s4+nP7YCCAfb4tJNRVZHfIE7dgmax+yMP2WgMd2OecBuaATHKTHsLWHQeuaxMRnCsH8+5g==}
-=======
-  '@esbuild/netbsd-arm64@0.25.0':
-    resolution: {integrity: sha512-RuG4PSMPFfrkH6UwCAqBzauBWTygTvb1nxWasEJooGSJ/NwRw7b2HOwyRTQIU97Hq37l3npXoZGYMy3b3xYvPw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [netbsd]
 
-<<<<<<< HEAD
   '@esbuild/netbsd-x64@0.25.1':
     resolution: {integrity: sha512-X53z6uXip6KFXBQ+Krbx25XHV/NCbzryM6ehOAeAil7X7oa4XIq+394PWGnwaSQ2WRA0KI6PUO6hTO5zeF5ijA==}
-=======
-  '@esbuild/netbsd-x64@0.25.0':
-    resolution: {integrity: sha512-jl+qisSB5jk01N5f7sPCsBENCOlPiS/xptD5yxOx2oqQfyourJwIKLRA2yqWdifj3owQZCL2sn6o08dBzZGQzA==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [netbsd]
 
-<<<<<<< HEAD
   '@esbuild/openbsd-arm64@0.25.1':
     resolution: {integrity: sha512-Na9T3szbXezdzM/Kfs3GcRQNjHzM6GzFBeU1/6IV/npKP5ORtp9zbQjvkDJ47s6BCgaAZnnnu/cY1x342+MvZg==}
-=======
-  '@esbuild/openbsd-arm64@0.25.0':
-    resolution: {integrity: sha512-21sUNbq2r84YE+SJDfaQRvdgznTD8Xc0oc3p3iW/a1EVWeNj/SdUCbm5U0itZPQYRuRTW20fPMWMpcrciH2EJw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [openbsd]
 
-<<<<<<< HEAD
   '@esbuild/openbsd-x64@0.25.1':
     resolution: {integrity: sha512-T3H78X2h1tszfRSf+txbt5aOp/e7TAz3ptVKu9Oyir3IAOFPGV6O9c2naym5TOriy1l0nNf6a4X5UXRZSGX/dw==}
-=======
-  '@esbuild/openbsd-x64@0.25.0':
-    resolution: {integrity: sha512-2gwwriSMPcCFRlPlKx3zLQhfN/2WjJ2NSlg5TKLQOJdV0mSxIcYNTMhk3H3ulL/cak+Xj0lY1Ym9ysDV1igceg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [openbsd]
 
-<<<<<<< HEAD
   '@esbuild/sunos-x64@0.25.1':
     resolution: {integrity: sha512-2H3RUvcmULO7dIE5EWJH8eubZAI4xw54H1ilJnRNZdeo8dTADEZ21w6J22XBkXqGJbe0+wnNJtw3UXRoLJnFEg==}
-=======
-  '@esbuild/sunos-x64@0.25.0':
-    resolution: {integrity: sha512-bxI7ThgLzPrPz484/S9jLlvUAHYMzy6I0XiU1ZMeAEOBcS0VePBFxh1JjTQt3Xiat5b6Oh4x7UC7IwKQKIJRIg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [sunos]
 
-<<<<<<< HEAD
   '@esbuild/win32-arm64@0.25.1':
     resolution: {integrity: sha512-GE7XvrdOzrb+yVKB9KsRMq+7a2U/K5Cf/8grVFRAGJmfADr/e/ODQ134RK2/eeHqYV5eQRFxb1hY7Nr15fv1NQ==}
-=======
-  '@esbuild/win32-arm64@0.25.0':
-    resolution: {integrity: sha512-ZUAc2YK6JW89xTbXvftxdnYy3m4iHIkDtK3CLce8wg8M2L+YZhIvO1DKpxrd0Yr59AeNNkTiic9YLf6FTtXWMw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-<<<<<<< HEAD
   '@esbuild/win32-ia32@0.25.1':
     resolution: {integrity: sha512-uOxSJCIcavSiT6UnBhBzE8wy3n0hOkJsBOzy7HDAuTDE++1DJMRRVCPGisULScHL+a/ZwdXPpXD3IyFKjA7K8A==}
-=======
-  '@esbuild/win32-ia32@0.25.0':
-    resolution: {integrity: sha512-eSNxISBu8XweVEWG31/JzjkIGbGIJN/TrRoiSVZwZ6pkC6VX4Im/WV2cz559/TXLcYbcrDN8JtKgd9DJVIo8GA==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [ia32]
     os: [win32]
 
-<<<<<<< HEAD
   '@esbuild/win32-x64@0.25.1':
     resolution: {integrity: sha512-Y1EQdcfwMSeQN/ujR5VayLOJ1BHaK+ssyk0AEzPjC+t1lITgsnccPqFjb6V+LsTp/9Iov4ysfjxLaGJ9RPtkVg==}
-=======
-  '@esbuild/win32-x64@0.25.0':
-    resolution: {integrity: sha512-ZENoHJBxA20C2zFzh6AI4fT6RraMzjYw4xKWemRTRmRVtN9c5DcH9r/f2ihEkMjOW5eGgrwCslG/+Y/3bL+DHQ==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
@@ -791,35 +606,12 @@ packages:
 
   '@mantine/modals@7.17.1':
     resolution: {integrity: sha512-hTgV4bfITPRo33R4a6Hp+aLN9H2leQA/ei/9cUbolURVh+4syacNtR8AoDKbRhX0vFzNHne99LJS8hlLvAYdjA==}
-<<<<<<< HEAD
     peerDependencies:
       '@mantine/core': 7.17.1
       '@mantine/hooks': 7.17.1
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/notifications@7.17.1':
-    resolution: {integrity: sha512-jsCNkkjgtsGYIMbCrzBY0UBckoXyeaSWbEoJdvMlfA+LaeOQrSLxa+ot+1+wPaoZxR+1Q1xOwC1X5bTxHKudBA==}
-    peerDependencies:
-      '@mantine/core': 7.17.1
-      '@mantine/hooks': 7.17.1
-      react: ^18.x || ^19.x
-      react-dom: ^18.x || ^19.x
-
-  '@mantine/nprogress@7.17.1':
-    resolution: {integrity: sha512-L6gcYUy1uqpSotMeypMWwQcUnXl5ej3ZKbzatzxTsjOjRcDjZVLc1GnYQy8hZxu2LOw9yndmNhgaZUi4zuqKqQ==}
-=======
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
-    peerDependencies:
-      '@mantine/core': 7.17.1
-      '@mantine/hooks': 7.17.1
-      react: ^18.x || ^19.x
-      react-dom: ^18.x || ^19.x
-
-<<<<<<< HEAD
-  '@mantine/store@7.17.1':
-    resolution: {integrity: sha512-is1c0FycakMsbTElKGWO59LarjMIk24JUXfjP/QIrB0XqpXreq3u7aN4hoNqr1IftTZSfVBii4W8pVFeWaV55g==}
-=======
   '@mantine/notifications@7.17.1':
     resolution: {integrity: sha512-jsCNkkjgtsGYIMbCrzBY0UBckoXyeaSWbEoJdvMlfA+LaeOQrSLxa+ot+1+wPaoZxR+1Q1xOwC1X5bTxHKudBA==}
     peerDependencies:
@@ -836,10 +628,6 @@ packages:
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-<<<<<<< HEAD
-  '@mantine/store@7.17.1':
-    resolution: {integrity: sha512-is1c0FycakMsbTElKGWO59LarjMIk24JUXfjP/QIrB0XqpXreq3u7aN4hoNqr1IftTZSfVBii4W8pVFeWaV55g==}
-=======
   '@mantine/store@7.15.3':
     resolution: {integrity: sha512-E3pCEm5ozRF/iK/jM1liKntjqaKhotvPtNAqSBcx6AkWSJ8bt16JhNrmrs3J3RmWvfqzF+fftT8HI/3HYbgu9w==}
     peerDependencies:
@@ -847,8 +635,6 @@ packages:
 
   '@mantine/store@7.17.0':
     resolution: {integrity: sha512-nhWRYRLqvAjrD/ApKCXxuHyTWg2b5dC06Z5gmO8udj4pBgndNf9nmCl+Of90H6bgOa56moJA7UQyXoF1SfxqVg==}
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     peerDependencies:
       react: ^18.x || ^19.x
 
@@ -974,13 +760,8 @@ packages:
   '@tabler/icons@3.31.0':
     resolution: {integrity: sha512-dblAdeKY3+GA1U+Q9eziZ0ooVlZMHsE8dqP0RkwvRtEsAULoKOYaCUOcJ4oW1DjWegdxk++UAt2SlQVnmeHv+g==}
 
-<<<<<<< HEAD
-  '@tanstack/history@1.114.12':
-    resolution: {integrity: sha512-br0AiFLCdTqqgPoZ6V35k1VoDmli1gGVM/YI1YbLZSA1kUnqFlY+Fx5NOgbRfxa7+oYyHUXkmkp3lJ5LueTrhQ==}
-=======
-  '@tanstack/history@1.114.3':
-    resolution: {integrity: sha512-UVJEleUvkVfTwDecq9VbGJKcYQg8J3wMuMn1DGCX4wkNLM2EEQ7BI3oeESmD+DU1uDD/yueSplRjGq8nTtZT2Q==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+  '@tanstack/history@1.114.6':
+    resolution: {integrity: sha512-1enmLzWIxtkh3RRNQrbJfn3tlGBN+s0qQN2eLT/EmoI5iian/4uKg2a3K0nuO1XdrN8HwsbidhVT+xDZt4eDuQ==}
     engines: {node: '>=12'}
 
   '@tanstack/query-core@4.36.1':
@@ -998,13 +779,8 @@ packages:
       react-native:
         optional: true
 
-<<<<<<< HEAD
-  '@tanstack/react-router@1.114.12':
-    resolution: {integrity: sha512-91y3+acSaUNzDgod+sY5Nw+Labz8Vov2cgJSa52Yekjvrq12+Cp6FBA2UWEDEM0VI2b+M2m9hFl9uKWkpEux0Q==}
-=======
-  '@tanstack/react-router@1.114.3':
-    resolution: {integrity: sha512-P1s6snXxkEFqsZDTkoAB4cGtAgTSIPfZhMrUeyM47Lk19pOQSnYcqNhRehtDJdZhVYj7TNegIhI8W267D/xcyw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+  '@tanstack/react-router@1.114.7':
+    resolution: {integrity: sha512-fn+Fjmhvbaxn/D32W5YidhndjQceUYox4h8Mp6XfWKCuts7TZT4lq4Y13R+4zi7uPdvGy3gwu6AWFGIbM33JOA==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=18.0.0 || >=19.0.0'
@@ -1016,13 +792,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-<<<<<<< HEAD
-  '@tanstack/router-core@1.114.12':
-    resolution: {integrity: sha512-cHhQJz3yJ5BkRe3JxtRfvmk4ynV89k1yudMQRK/1PeUV5eVEB0cIEECDk8Nlp3w9mPFS3U1iYby9hje4kP4h4g==}
-=======
-  '@tanstack/router-core@1.114.3':
-    resolution: {integrity: sha512-uKez7bBnFDwqyCJlOtAvu456vx9VCEu/VFw9gs5AALKm6ONXbK66sehn+1sBYgHhkPBnllIaKnmDIGhGuSCheg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+  '@tanstack/router-core@1.114.7':
+    resolution: {integrity: sha512-6jpmqEBDxdhwVzlbLFzu21I5uEXHtWUEa96OF1NKa7Lx4Am7IFZ9GNvEJmbcoOk7xfkwN8djyuyNPJYW2CTYTg==}
     engines: {node: '>=12'}
 
   '@tanstack/store@0.7.0':
@@ -1248,13 +1019,8 @@ packages:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
 
-<<<<<<< HEAD
   caniuse-lite@1.0.30001703:
     resolution: {integrity: sha512-kRlAGTRWgPsOj7oARC9m1okJEXdL/8fekFVcxA8Hl7GH4r/sN4OJn/i6Flde373T50KS7Y37oFbMwlE8+F42kQ==}
-=======
-  caniuse-lite@1.0.30001702:
-    resolution: {integrity: sha512-LoPe/D7zioC0REI5W73PeR1e1MLCipRGq/VkovJnd6Df+QVqT+vT33OXCp8QUd7kA7RZrHWxb1B36OQKI/0gOA==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
 
   cfb@1.2.2:
     resolution: {integrity: sha512-KfdUZsSOw19/ObEWasvBP/Ac4reZvAGauZhs6S/gqNhXhI7cKwvlH7ulj+dOEYnca4bm4SGo8C1bTAQvnTjgQA==}
@@ -1484,13 +1250,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-<<<<<<< HEAD
   electron-to-chromium@1.5.114:
     resolution: {integrity: sha512-DFptFef3iktoKlFQK/afbo274/XNWD00Am0xa7M8FZUepHlHT8PEuiNBoRfFHbH1okqN58AlhbJ4QTkcnXorjA==}
-=======
-  electron-to-chromium@1.5.113:
-    resolution: {integrity: sha512-wjT2O4hX+wdWPJ76gWSkMhcHAV2PTMX+QetUCPYEdCIe+cxmgzzSSiGRCKW8nuh4mwKZlpv0xvoW7OF2X+wmHg==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
 
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
@@ -1544,13 +1305,8 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-<<<<<<< HEAD
   esbuild@0.25.1:
     resolution: {integrity: sha512-BGO5LtrGC7vxnqucAe/rmvKdJllfGaYWdyABvyMoXQlfYMb2bbRuReWR5tEGE//4LcNJj9XrkovTqNYRFZHAMQ==}
-=======
-  esbuild@0.25.0:
-    resolution: {integrity: sha512-BXq5mqc8ltbaN34cDqWuYKyNhX8D/Z0J1xdtdQ8UcIIIyJyz+ZMKUt58tF3SrZ85jcfN/PZYhjR5uDQAYNVbuw==}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1708,8 +1464,8 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  framer-motion@12.4.11:
-    resolution: {integrity: sha512-MHeZlgzo9DnQ6+TFgRqJiOk4vWwsDcXFtxeXlVawVs1nwgcZW3966foGIgkIiIrBSPHB9RlbqspAxiYWosFT9g==}
+  framer-motion@12.4.10:
+    resolution: {integrity: sha512-3Msuyjcr1Pb5hjkn4EJcRe1HumaveP0Gbv4DBMKTPKcV/1GSMkQXj+Uqgneys+9DPcZM18Hac9qY9iUEF5LZtg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -2129,8 +1885,8 @@ packages:
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
-  motion-dom@12.4.11:
-    resolution: {integrity: sha512-wstlyV3pktgFjqsjbXMo1NX9hQD9XTVqxQNvfc+FREAgxr3GVzgWIEKvbyyNlki3J1jmmh+et9X3aCKeqFPcxA==}
+  motion-dom@12.4.10:
+    resolution: {integrity: sha512-ISP5u6FTceoD6qKdLupIPU/LyXBrxGox+P2e3mBbm1+pLdlBbwv01YENJr7+1WZnW5ucVKzFScYsV1eXTCG4Xg==}
 
   motion-utils@12.4.10:
     resolution: {integrity: sha512-NPwZd94V013SwRf++jMrk2+HEBgPkeIE2RiOzhAuuQlqxMJPkKt/LXVh6Upl+iN8oarSGD2dlY5/bqgsYXDABA==}
@@ -3114,7 +2870,6 @@ snapshots:
       '@types/conventional-commits-parser': 5.0.1
       chalk: 5.4.1
 
-<<<<<<< HEAD
   '@esbuild/aix-ppc64@0.25.1':
     optional: true
 
@@ -3188,81 +2943,6 @@ snapshots:
     optional: true
 
   '@esbuild/win32-x64@0.25.1':
-=======
-  '@esbuild/aix-ppc64@0.25.0':
-    optional: true
-
-  '@esbuild/android-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/android-arm@0.25.0':
-    optional: true
-
-  '@esbuild/android-x64@0.25.0':
-    optional: true
-
-  '@esbuild/darwin-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/darwin-x64@0.25.0':
-    optional: true
-
-  '@esbuild/freebsd-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/freebsd-x64@0.25.0':
-    optional: true
-
-  '@esbuild/linux-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/linux-arm@0.25.0':
-    optional: true
-
-  '@esbuild/linux-ia32@0.25.0':
-    optional: true
-
-  '@esbuild/linux-loong64@0.25.0':
-    optional: true
-
-  '@esbuild/linux-mips64el@0.25.0':
-    optional: true
-
-  '@esbuild/linux-ppc64@0.25.0':
-    optional: true
-
-  '@esbuild/linux-riscv64@0.25.0':
-    optional: true
-
-  '@esbuild/linux-s390x@0.25.0':
-    optional: true
-
-  '@esbuild/linux-x64@0.25.0':
-    optional: true
-
-  '@esbuild/netbsd-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/netbsd-x64@0.25.0':
-    optional: true
-
-  '@esbuild/openbsd-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/openbsd-x64@0.25.0':
-    optional: true
-
-  '@esbuild/sunos-x64@0.25.0':
-    optional: true
-
-  '@esbuild/win32-arm64@0.25.0':
-    optional: true
-
-  '@esbuild/win32-ia32@0.25.0':
-    optional: true
-
-  '@esbuild/win32-x64@0.25.0':
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     optional: true
 
   '@eslint-community/eslint-utils@4.4.1(eslint@9.22.0(jiti@1.21.7))':
@@ -3377,31 +3057,13 @@ snapshots:
 
   '@mantine/charts@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
     dependencies:
-<<<<<<< HEAD
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-=======
-<<<<<<< HEAD
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-=======
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.0(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       recharts: 2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-<<<<<<< HEAD
-  '@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-=======
-<<<<<<< HEAD
-  '@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-=======
   '@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.0(react@18.3.1)
@@ -3415,24 +3077,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-<<<<<<< HEAD
-  '@mantine/dates@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-=======
-<<<<<<< HEAD
-  '@mantine/dates@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-=======
   '@mantine/dates@7.16.0(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.0(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       clsx: 2.1.1
       dayjs: 1.11.13
       react: 18.3.1
@@ -3442,34 +3090,6 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-<<<<<<< HEAD
-  '@mantine/modals@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/notifications@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      '@mantine/store': 7.17.1(react@18.3.1)
-=======
-<<<<<<< HEAD
-  '@mantine/modals@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/notifications@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      '@mantine/store': 7.17.1(react@18.3.1)
-=======
   '@mantine/modals@7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3482,34 +3102,10 @@ snapshots:
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mantine/hooks': 7.17.0(react@18.3.1)
       '@mantine/store': 7.15.3(react@18.3.1)
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-<<<<<<< HEAD
-  '@mantine/nprogress@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      '@mantine/store': 7.17.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/store@7.17.1(react@18.3.1)':
-=======
-<<<<<<< HEAD
-  '@mantine/nprogress@7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 7.17.1(react@18.3.1)
-      '@mantine/store': 7.17.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/store@7.17.1(react@18.3.1)':
-=======
   '@mantine/nprogress@7.17.0(@mantine/core@7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@mantine/core': 7.15.3(@mantine/hooks@7.17.0(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3523,8 +3119,6 @@ snapshots:
       react: 18.3.1
 
   '@mantine/store@7.17.0(react@18.3.1)':
->>>>>>> c40ed2b37ba86bdc5432a75e97c3ae1952b52d6e
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
     dependencies:
       react: 18.3.1
 
@@ -3609,11 +3203,7 @@ snapshots:
 
   '@tabler/icons@3.31.0': {}
 
-<<<<<<< HEAD
-  '@tanstack/history@1.114.12': {}
-=======
-  '@tanstack/history@1.114.3': {}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+  '@tanstack/history@1.114.6': {}
 
   '@tanstack/query-core@4.36.1': {}
 
@@ -3625,19 +3215,11 @@ snapshots:
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-<<<<<<< HEAD
-  '@tanstack/react-router@1.114.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-router@1.114.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/history': 1.114.12
+      '@tanstack/history': 1.114.6
       '@tanstack/react-store': 0.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tanstack/router-core': 1.114.12
-=======
-  '@tanstack/react-router@1.114.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@tanstack/history': 1.114.3
-      '@tanstack/react-store': 0.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tanstack/router-core': 1.114.3
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+      '@tanstack/router-core': 1.114.7
       jsesc: 3.1.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -3651,15 +3233,9 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       use-sync-external-store: 1.4.0(react@18.3.1)
 
-<<<<<<< HEAD
-  '@tanstack/router-core@1.114.12':
+  '@tanstack/router-core@1.114.7':
     dependencies:
-      '@tanstack/history': 1.114.12
-=======
-  '@tanstack/router-core@1.114.3':
-    dependencies:
-      '@tanstack/history': 1.114.3
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
+      '@tanstack/history': 1.114.6
       '@tanstack/store': 0.7.0
 
   '@tanstack/store@0.7.0': {}
@@ -3851,17 +3427,10 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-<<<<<<< HEAD
   autoprefixer@10.4.21(postcss@8.5.3):
     dependencies:
       browserslist: 4.24.4
       caniuse-lite: 1.0.30001703
-=======
-  autoprefixer@10.4.20(postcss@8.5.3):
-    dependencies:
-      browserslist: 4.24.4
-      caniuse-lite: 1.0.30001702
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
@@ -3899,13 +3468,8 @@ snapshots:
 
   browserslist@4.24.4:
     dependencies:
-<<<<<<< HEAD
       caniuse-lite: 1.0.30001703
       electron-to-chromium: 1.5.114
-=======
-      caniuse-lite: 1.0.30001702
-      electron-to-chromium: 1.5.113
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -3930,11 +3494,7 @@ snapshots:
 
   camelcase-css@2.0.1: {}
 
-<<<<<<< HEAD
   caniuse-lite@1.0.30001703: {}
-=======
-  caniuse-lite@1.0.30001702: {}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
 
   cfb@1.2.2:
     dependencies:
@@ -4142,11 +3702,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-<<<<<<< HEAD
   electron-to-chromium@1.5.114: {}
-=======
-  electron-to-chromium@1.5.113: {}
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
 
   emoji-regex@10.4.0: {}
 
@@ -4268,7 +3824,6 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-<<<<<<< HEAD
   esbuild@0.25.1:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.25.1
@@ -4296,35 +3851,6 @@ snapshots:
       '@esbuild/win32-arm64': 0.25.1
       '@esbuild/win32-ia32': 0.25.1
       '@esbuild/win32-x64': 0.25.1
-=======
-  esbuild@0.25.0:
-    optionalDependencies:
-      '@esbuild/aix-ppc64': 0.25.0
-      '@esbuild/android-arm': 0.25.0
-      '@esbuild/android-arm64': 0.25.0
-      '@esbuild/android-x64': 0.25.0
-      '@esbuild/darwin-arm64': 0.25.0
-      '@esbuild/darwin-x64': 0.25.0
-      '@esbuild/freebsd-arm64': 0.25.0
-      '@esbuild/freebsd-x64': 0.25.0
-      '@esbuild/linux-arm': 0.25.0
-      '@esbuild/linux-arm64': 0.25.0
-      '@esbuild/linux-ia32': 0.25.0
-      '@esbuild/linux-loong64': 0.25.0
-      '@esbuild/linux-mips64el': 0.25.0
-      '@esbuild/linux-ppc64': 0.25.0
-      '@esbuild/linux-riscv64': 0.25.0
-      '@esbuild/linux-s390x': 0.25.0
-      '@esbuild/linux-x64': 0.25.0
-      '@esbuild/netbsd-arm64': 0.25.0
-      '@esbuild/netbsd-x64': 0.25.0
-      '@esbuild/openbsd-arm64': 0.25.0
-      '@esbuild/openbsd-x64': 0.25.0
-      '@esbuild/sunos-x64': 0.25.0
-      '@esbuild/win32-arm64': 0.25.0
-      '@esbuild/win32-ia32': 0.25.0
-      '@esbuild/win32-x64': 0.25.0
->>>>>>> 278d579a575f9f08a46e27e35dbd62601b104341
 
   escalade@3.2.0: {}
 
@@ -4513,9 +4039,9 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.4.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  framer-motion@12.4.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      motion-dom: 12.4.11
+      motion-dom: 12.4.10
       motion-utils: 12.4.10
       tslib: 2.8.1
     optionalDependencies:
@@ -4919,7 +4445,7 @@ snapshots:
 
   moment@2.30.1: {}
 
-  motion-dom@12.4.11:
+  motion-dom@12.4.10:
     dependencies:
       motion-utils: 12.4.10
 

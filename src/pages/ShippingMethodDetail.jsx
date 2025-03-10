@@ -1,10 +1,15 @@
 import { Badge, Button, Card, Loader, Table, Text, Title } from "@mantine/core";
-import { useParams } from "react-router-dom";
+import { nprogress } from "@mantine/nprogress";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { useShippingMethod } from "../hooks/useShippingMethod";
+import ShippingMethodService from "../services/ShippingMethodService";
 
 const ShippingMethodDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { data: method, isFetching, error } = useShippingMethod(id);
+    const queryClient = useQueryClient();
 
     console.log(method);
 
@@ -13,6 +18,19 @@ const ShippingMethodDetail = () => {
     if (!method) return <p>Shipping method not found.</p>;
 
     const options = JSON.parse(method.options || "{}");
+
+    const handleDeleteMethod = async () => {
+        nprogress.start();
+        await ShippingMethodService.delete(id)
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(() => {
+                nprogress.complete();
+                queryClient.invalidateQueries(["shipping-methods"]);
+                navigate("/main/shipping-methods");
+            });
+    };
 
     return (
         <div className="p-6 mx-auto">
@@ -54,7 +72,7 @@ const ShippingMethodDetail = () => {
                     <Text className="text-gray-500 text-sm">
                         Last updated: {new Date(method.updatedAt).toLocaleString()}
                     </Text>
-                    <Button variant="light" color="red">
+                    <Button variant="light" color="red" onClick={handleDeleteMethod}>
                         Xóa
                     </Button>
                 </div>

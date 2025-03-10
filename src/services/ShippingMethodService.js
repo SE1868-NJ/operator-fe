@@ -18,6 +18,9 @@ const ShippingMethodService = {
             status,
         });
     },
+    async delete(id) {
+        await instance.delete(`/shipping-methods/${id}`);
+    },
     async getById(id, city = "Hanoi") {
         const method = await instance
             .get(`/shipping-methods/${id}?city=${city}`)

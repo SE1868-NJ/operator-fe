@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -97,8 +98,7 @@ const BanAccountForm = () => {
         try {
             // Gọi service để thực hiện hành động ban tài khoản
             const response = await BanService.banUser(payload);
-            if (response?.success && userType === "customer") {
-                alert("Đình chỉ thành công!");
+            if (response?.success) {
                 if (userType === "shipper") {
                     queryClient.invalidateQueries(["shipper", userId]);
                     Navigate(`/main/shipperslist/${userId}`);
@@ -109,11 +109,19 @@ const BanAccountForm = () => {
                     Navigate(`/main/user_detail/${userId}`);
                 }
             } else {
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
+                notifications.show({
+                    title: "Lỗi!",
+                    message: "Có lỗi xảy ra, vui lòng thử lại!",
+                    color: "red",
+                });
             }
         } catch (error) {
             console.error("Lỗi:", error);
-            alert("Lỗi kết nối đến server!");
+            notifications.show({
+                title: "Lỗi!",
+                message: "Lỗi kết nối đến máy chủ",
+                color: "red",
+            });
         }
     };
 

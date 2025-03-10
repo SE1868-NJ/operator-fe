@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { jwtDecode } from "jwt-decode";
 import { authInstance, instance } from "../lib/axios";
 
@@ -21,7 +22,15 @@ const OperatorService = {
                 dataUpdate,
             })
             .then(({ data }) => data)
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.error(err);
+                notifications.show({
+                    title: "Lỗi!",
+                    message: err.message,
+                    color: "red",
+                });
+                return null;
+            });
 
         return data;
     },

@@ -54,17 +54,35 @@ const AccountProfile = () => {
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         //alert("Cập nhật thông tin thành công!");
-        OperatorService.updateAccountProfile(editableUser);
-        window.location.reload();
-        queryClient.invalidateQueries(["accountProfile"]);
-        notifications.show({
-            title: "Đổi thông tin người dùng thành công",
-            message: "Thông tin tài khoản của bạn đã được cập nhật",
-            color: "green",
-        });
+        for (const key in editableUser) {
+            if (!editableUser[key]) {
+                notifications.show({
+                    title: "Lỗi",
+                    message: `Trường "${key}" không được để trống!`,
+                    color: "red",
+                });
+                return;
+            }
+        }
 
+        const response = await OperatorService.updateAccountProfile(editableUser);
+
+        if (response) {
+            // Nếu response không phải null => Thành công
+            notifications.show({
+                title: "Cập nhật thành công",
+                message: response.message || "Thông tin tài khoản đã được cập nhật!",
+                color: "green",
+            });
+
+            queryClient.invalidateQueries(["accountProfile"]);
+            setIsEditing(false);
+        } else {
+            // Nếu response là null => Lỗi đã được catch trong service
+            console.error("Cập nhật thất bại!");
+        }
         setIsEditing(false);
     };
 

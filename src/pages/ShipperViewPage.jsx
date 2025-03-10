@@ -42,7 +42,7 @@ const ShipperViewPage = () => {
             notifications.show({
                 color: "green",
                 title: "Shipper Accepted",
-                message: "The shop has been successfully accepted.",
+                message: "The shipper has been successfully accepted.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
@@ -70,7 +70,7 @@ const ShipperViewPage = () => {
             notifications.show({
                 color: "green",
                 title: "Shop Rejected",
-                message: "The shop has been successfully rejected.",
+                message: "The shipper has been successfully rejected.",
             });
             queryClient.invalidateQueries("shippers");
             navigate("/main/pendding-shippers");
@@ -79,7 +79,7 @@ const ShipperViewPage = () => {
             notifications.show({
                 color: "red",
                 title: "Error",
-                message: "Failed to reject shop. Please try again.",
+                message: "Failed to reject shipper. Please try again.",
             });
         } finally {
             close();
@@ -87,33 +87,35 @@ const ShipperViewPage = () => {
     };
     // --------------------------
 
-    const onSubmit = async (data) => {
-        try {
-            const shipper = await ShipperServices.updatePendingShipper(data);
-            if (shipper) {
-                notifications.show({
-                    color: "green",
-                    title: "Cập nhật thành công!",
-                    message: `Shipper đã được ${data.status === "accepted" ? "chấp nhận" : "từ chối"}.`,
-                });
-            } else {
-                notifications.show({
-                    color: "red",
-                    title: "Lỗi câp nhật!",
-                    message: "Vui lòng thử lại!",
-                });
-            }
-            navigate("/main/pendding-shippers");
-        } catch (err) {
-            console.error(err);
-            notifications.show({
-                color: "red",
-                title: "Lỗi đã xảy ra khi cập nhật!",
-                message: "Vui lòng thử lại!",
-            });
-        }
-        navigate("/main/pendding-shippers");
-    };
+    // const onSubmit = async (data) => {
+    //   try {
+    //     const shipper = await ShipperServices.updatePendingShipper(data);
+    //     if (shipper) {
+    //       notifications.show({
+    //         color: "green",
+    //         title: "Cập nhật thành công!",
+    //         message: `Shipper đã được ${
+    //           data.status === "accepted" ? "chấp nhận" : "từ chối"
+    //         }.`,
+    //       });
+    //     } else {
+    //       notifications.show({
+    //         color: "red",
+    //         title: "Lỗi câp nhật!",
+    //         message: "Vui lòng thử lại!",
+    //       });
+    //     }
+    //     navigate("/main/pendding-shippers");
+    //   } catch (err) {
+    //     console.error(err);
+    //     notifications.show({
+    //       color: "red",
+    //       title: "Lỗi đã xảy ra khi cập nhật!",
+    //       message: "Vui lòng thử lại!",
+    //     });
+    //   }
+    //   navigate("/main/pendding-shippers");
+    // };
 
     return (
         <div className="flex items-center justify-center pt-10">
@@ -187,6 +189,7 @@ const ShipperViewPage = () => {
 
                     <div className="mt-5 text-center">
                         <button
+                            onClick={handleAccept}
                             type="button"
                             className="px-4 py-2 bg-green-500 text-white rounded mr-2"
                             // onClick={handleDecision("accepted")}
@@ -194,7 +197,7 @@ const ShipperViewPage = () => {
                             Chấp nhận
                         </button>
                         <Modal opened={opened} onClose={close} withCloseButton={false} centered>
-                            <form>
+                            <form onSubmit={handleSubmit(onSubmitReject)}>
                                 <label className="block mb-4">
                                     <p className="flex text-xl font-semibold mb-2">
                                         Nhập lý do từ chối <p className="text-red-500 ml-2">*</p>
@@ -237,7 +240,7 @@ const ShipperViewPage = () => {
                             type="button"
                             // className="px-4 py-2 bg-red-500 text-white rounded mr-2"
                             className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
-                            onClick={open}
+                            onClick={handleReject}
                         >
                             Từ chối
                         </button>

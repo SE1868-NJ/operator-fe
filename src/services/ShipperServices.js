@@ -39,9 +39,11 @@ const ShipperServices = {
         return shippers;
     },
 
-    async getSumShippingFeeAllShippers(offset, limit) {
+    async getSumShippingFeeAllShippers(offset, limit, search, filterStatus, filterDate) {
         const sumShippingFee = await instance
-            .get("/shippers/sumShippingFee", { params: { offset, limit } })
+            .get("/shippers/sumShippingFee", {
+                params: { offset, limit, search, filterStatus, filterDate },
+            })
             .then(({ data }) => {
                 return data?.data;
             });
@@ -58,6 +60,13 @@ const ShipperServices = {
     async getTopShippers() {
         const topShippers = await instance
             .get("/shippers/topShippers")
+            .then(({ data }) => data?.data);
+        return topShippers;
+    },
+
+    async getTop10Shippers() {
+        const topShippers = await instance
+            .get("/shippers/top10Shippers")
             .then(({ data }) => data?.data);
         return topShippers;
     },

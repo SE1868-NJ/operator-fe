@@ -51,6 +51,8 @@ const ReportCategoriesPage = () => {
         search,
     });
 
+    console.log(data);
+
     useEffect(() => {
         if (isFetching) {
             nprogress.start();
@@ -152,7 +154,7 @@ const ReportCategoriesPage = () => {
     };
 
     return (
-        <Container size="xl" py="xl">
+        <Container fluid py="xl">
             <Modal opened={opened} onClose={close} title="Tạo mới danh mục" centered>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <input hidden {...register("type")} defaultValue={"create"} />
@@ -235,7 +237,7 @@ const ReportCategoriesPage = () => {
                         <Table.Tr>
                             <Table.Th>ID</Table.Th>
                             <Table.Th>Tên</Table.Th>
-                            <Table.Th>Mô tả</Table.Th>
+                            <Table.Th>Số khiếu nại</Table.Th>
                             <Table.Th>Thời gian tạo</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
@@ -252,7 +254,7 @@ const ReportCategoriesPage = () => {
                                     <Text lineClamp={2}>{category.name}</Text>
                                 </Table.Td>
                                 <Table.Td w={"40%"}>
-                                    <Text lineClamp={2}>{category.description}</Text>
+                                    <Text lineClamp={2}>{category.count}</Text>
                                 </Table.Td>
                                 <Table.Td>
                                     <Text size="sm">{formatDate(category.createdAt)}</Text>

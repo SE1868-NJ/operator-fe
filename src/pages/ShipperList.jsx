@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShippers, useTotalShippingFeeAllShippers } from "../hooks/useShippers.js";
+import ShipperDashboardChart from "./ShipperDashboardChart.jsx";
 import TopShippersTable from "./TopShippersTable.jsx";
 
 function formatDate(dateString) {
@@ -13,7 +14,7 @@ function translateStatus(status) {
     const statusMap = {
         active: "Đang hoạt động",
         pending: "Đang duyệt",
-        deactive: "Dừng hoạt động",
+        inactive: "Dừng hoạt động",
     };
     return statusMap[status] || status;
 }
@@ -32,7 +33,10 @@ export default function ShipperList() {
     const { data, isLoading } = useShippers(offset, itemsPerPage, search, filterStatus);
     const { data: allShipperFee, isLoading: isLoadingShippingFee } = useTotalShippingFeeAllShippers(
         0,
-        0,
+        10,
+        search,
+        filterStatus,
+        filterDate,
     );
     console.log("totalShippingFee", allShipperFee);
 
@@ -54,6 +58,7 @@ export default function ShipperList() {
     return (
         <div className="p-6 mx-auto bg-white">
             <TopShippersTable />
+            <ShipperDashboardChart />
 
             <h1 className="pt-4 mb-4 text-2xl font-bold">Danh sách tất cả người giao hàng</h1>
 
@@ -72,9 +77,9 @@ export default function ShipperList() {
                     onChange={handleStatusChange}
                 >
                     <option value="">Tất cả trạng thái</option>
-                    <option value="pending">Đang hoạt động</option>
-                    <option value="deactive">Dừng hoạt động</option>
-                    <option value="active">Đang duyệt</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="inactive">Dừng hoạt động</option>
+                    <option value="pending">Đang duyệt</option>
                 </select>
                 <input
                     type="date"
@@ -121,7 +126,7 @@ export default function ShipperList() {
                                         className={
                                             shipper.Shipper.status === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.status === "pending"
+                                                : shipper.Shipper.status === "pending"
                                                   ? "text-yellow-700 bg-yellow-100 p-1 rounded"
                                                   : "text-red-700 bg-red-100 p-1 rounded"
                                         }

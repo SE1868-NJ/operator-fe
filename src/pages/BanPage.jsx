@@ -96,14 +96,13 @@ const BanAccountForm = () => {
             ...formData,
             banEnd: finalBanEnd,
         };
-        console.log(payload);
 
         try {
             // Gọi service để thực hiện hành động ban tài khoản
-            //console.log(payload)
+
             const response = await BanService.banUser(payload);
             if (response?.success) {
-                alert("Đình chỉ thành công!");
+                //alert("Đình chỉ thành công!");
                 if (userType === "shipper") {
                     queryClient.invalidateQueries(["shipper", userId]);
                     Navigate(`/main/shipperslist/${userId}`);

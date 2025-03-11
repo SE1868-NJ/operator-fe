@@ -35,7 +35,7 @@ const ChangePassword = () => {
                 });
                 setTimeout(() => navigate("/", { replace: true }), 2000);
             } else {
-                console.log("err: ", err);
+                console.log("err: ", data);
                 notifications.show({
                     title: "Mật khẩu nhập không đúng!",
                     message: "Vui lòng thử lại!",

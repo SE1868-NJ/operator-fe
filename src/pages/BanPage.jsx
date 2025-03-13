@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -44,6 +45,7 @@ const BanAccountForm = () => {
         ],
     };
 
+    console.log(operatorId); // 4
     const [formData, setFormData] = useState({
         userId,
         operatorId,
@@ -52,6 +54,7 @@ const BanAccountForm = () => {
         banEnd: "",
     });
 
+    console.log(formData);
     const [customReason, setCustomReason] = useState("");
 
     const [banDuration, setBanDuration] = useState("7"); // Default 7 ngày
@@ -96,24 +99,34 @@ const BanAccountForm = () => {
 
         try {
             // Gọi service để thực hiện hành động ban tài khoản
+
             const response = await BanService.banUser(payload);
-            if (response?.success && userType === "customer") {
-                alert("Đình chỉ thành công!");
+            if (response?.success) {
+                //alert("Đình chỉ thành công!");
                 if (userType === "shipper") {
                     queryClient.invalidateQueries(["shipper", userId]);
                     Navigate(`/main/shipperslist/${userId}`);
                 } else if (userType === "shop") {
+                    queryClient.invalidateQueries(["shop", userId]);
                     Navigate(`/main/shop/${userId}`);
                 } else if (userType === "customer") {
                     queryClient.invalidateQueries(["user", userId]);
                     Navigate(`/main/user_detail/${userId}`);
                 }
             } else {
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
+                notifications.show({
+                    title: "Lỗi!",
+                    message: "Có lỗi xảy ra, vui lòng thử lại!",
+                    color: "red",
+                });
             }
         } catch (error) {
             console.error("Lỗi:", error);
-            alert("Lỗi kết nối đến server!");
+            notifications.show({
+                title: "Lỗi!",
+                message: "Lỗi kết nối đến máy chủ",
+                color: "red",
+            });
         }
     };
 

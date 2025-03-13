@@ -118,7 +118,9 @@ const ShopProfileDetail = () => {
             const token = localStorage.getItem("token");
             const operatorData = jwtDecode(token);
             console.log(operatorData);
-            navigate(`/main/ban_account?userId=${shop.shopID}&operatorId=1&accountType=shop`);
+            navigate(
+                `/main/ban_account?userId=${shop.shopID}&userName=${shop.shopName}&operatorId=1&accountType=shop`,
+            );
         } else {
             const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
             if (confirmUnban) {
@@ -480,7 +482,7 @@ const ShopProfileDetail = () => {
                                                     type="button"
                                                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
                                                     onClick={() =>
-                                                        alert(`Xem chi tiết đơn hàng: ${order.id}`)
+                                                        navigate(`/main/orderdetail/${order.id}`)
                                                     }
                                                 >
                                                     Xem

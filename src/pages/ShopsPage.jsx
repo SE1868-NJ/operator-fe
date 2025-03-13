@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -100,7 +101,7 @@ export default function ShopsPage() {
     }
 
     return (
-        <div className="flex h-screen w-3/4">
+        <div className="flex h-screen">
             {/* <Sidebar className="fixed top-0 left-0 h-full" /> */}
             <div className="flex-1 mx-auto bg-white p-6">
                 <div className="flex items-center justify-between mb-2">
@@ -234,15 +235,8 @@ export default function ShopsPage() {
                                 }`}
                             >
                                 <td className="p-4">{shop.shopID}</td>
-                                <td className="p-4">
-                                    <div className="font-medium text-gray-800 flex items-center mx-auto justify-center gap-2">
-                                        <img
-                                            src={shop.shopAvatar || "/placeholder.jpg"}
-                                            alt="Shop Logo"
-                                            className="w-10 h-10 rounded-full border"
-                                        />
-                                        {shop.shopName}
-                                    </div>
+                                <td className="p-4 font-medium text-gray-800 flex items-center justify-center gap-2">
+                                    {shop.shopName}
                                 </td>
                                 <td className="p-4">{shop.Owner.fullName}</td>
                                 <td className="p-4 text-blue-500 max-w-[150px] truncate">
@@ -261,7 +255,7 @@ export default function ShopsPage() {
                                 </td>
                                 <td className="p-4">
                                     <span
-                                        className="flex items-center justify-center px-3 py-1 rounded-full text-white text-sm font-semibold w-24"
+                                        className="flex items-center justify-center px-3 py-1 rounded-full text-white text-sm font-semibold w-24 whitespace-nowrap"
                                         style={{
                                             backgroundColor:
                                                 shop.shopStatus === "active"
@@ -272,20 +266,27 @@ export default function ShopsPage() {
                                         }}
                                     >
                                         {shop.shopStatus === "active"
-                                            ? "🟢 Hoạt động"
+                                            ? "Hoạt động"
                                             : shop.shopStatus === "inactive"
-                                              ? "🔴 Không hoạt động"
-                                              : "🟡 Đình chỉ"}
+                                              ? "Không hoạt động"
+                                              : "Đình chỉ"}
                                     </span>
                                 </td>
                                 <td className="p-4">
-                                    <button
-                                        type="button"
-                                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+                                    <Button
+                                        color="blue"
+                                        size="sm"
+                                        radius="md"
+                                        variant="filled"
                                         onClick={() => navigate(`/main/shop/${shop.shopID}`)}
+                                        styles={{
+                                            root: {
+                                                transition: "all 0.2s ease",
+                                            },
+                                        }}
                                     >
                                         Xem chi tiết
-                                    </button>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

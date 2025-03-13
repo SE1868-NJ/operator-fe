@@ -142,3 +142,10 @@ export const useOneShopInfor = (id) => {
         queryFn: () => ShopService.getOneShopInfor(id),
     });
 };
+
+export const useGetDraftShop = (id) => {
+    return useQuery({
+        queryKey: ["getDraftShop", id],
+        queryFn: () => ShopService.getPendingShopdraft(id),
+    });
+};

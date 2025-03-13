@@ -250,6 +250,27 @@ const ShopService = {
         const shop = await instance.get(`/shops/getinfor/${id}`).then(({ data }) => data?.shop);
         return shop;
     },
+
+    async getPendingShopdraft(id) {
+        const draftInfor = await instance
+            .get(`/shops/shopdraft/${id}`)
+            .then(({ data }) => data?.shopInfor);
+        return draftInfor;
+    },
+
+    async updatePendingShopDraft(id, data) {
+        const updatedShopDraft = await instance
+            .patch(`/shops/shopdraft/${id}`, data, {
+                headers: {
+                    "Content-Type": "application/json", // đảm bảo đúng format
+                },
+            })
+            .then(({ data }) => data)
+            .catch((err) => {
+                console.error(err);
+            });
+        return updatedShopDraft;
+    },
 };
 
 export default ShopService;

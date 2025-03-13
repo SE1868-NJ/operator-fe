@@ -1,375 +1,394 @@
-import { Button, Modal, Textarea } from "@mantine/core";
+import { Button, Modal, Popover, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconAlertCircle } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOnePendingShop } from "../hooks/useShop";
 import ShopService from "../services/ShopService";
-import ErrorPage from "./ErrorPage";
 
 const PendingShopDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const [draftData, setDraftData] = useState([]);
+    const [isLoadData, setIsLoadData] = useState(true);
+    const [changedValue, setChangedValue] = useState(
+        Array(21).fill({
+            status: "n",
+            reason: "thông tin chưa kiểm tra",
+        }),
+    ); // Initialize with default values
+
+    useEffect(() => {
+        const fetchData = async (id) => {
+            try {
+                const resData = await ShopService.getPendingShopdraft(id);
+                setDraftData(resData);
+            } catch (error) {
+                console.error("Lỗi khi lấy data:", error);
+                notifications.show({
+                    color: "red",
+                    title: "Error fetching data",
+                    message: "Failed to load shop details.",
+                });
+            } finally {
+                setIsLoadData(false);
+            }
+        };
+        fetchData(id);
+    }, [id]);
+
+    useEffect(() => {
+        if (!isLoadData && draftData.length > 0) {
+            try {
+                const parsedData = JSON.parse(JSON.parse(draftData[0]?.reason)); // cần parse 2 lần mới đc
+                if (Array.isArray(parsedData) && parsedData.length === 21) {
+                    // Data is valid, use it
+                    setChangedValue(parsedData);
+                } else {
+                    // Data is missing or invalid, use the default array
+                    setChangedValue(
+                        Array(21).fill({
+                            status: "n",
+                            reason: "thông tin chưa kiểm tra",
+                        }),
+                    );
+                }
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+                setChangedValue(
+                    Array(21).fill({
+                        status: "n",
+                        reason: "thông tin chưa kiểm tra",
+                    }),
+                );
+                notifications.show({
+                    color: "red",
+                    title: "Error parsing data",
+                    message: "Failed to parse shop details, using default values.",
+                });
+            }
+        }
+    }, [isLoadData, draftData]);
+
     const {
-        register,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        mode: "onSubmit", // Xác thực khi submit form
+        mode: "onSubmit",
     });
+
     const queryClient = useQueryClient();
     const [opened, { open, close }] = useDisclosure(false);
+    const [newStatus, setNewStatus] = useState("n");
+    const [reason, setReason] = useState("");
+    const [openInput, setOpenInput] = useState(false);
+    const [selectIndex, setSelectIndex] = useState(null);
+    const [approvedStatus, setApprovedStatus] = useState("savedraft");
+    const { data: shopData } = useOnePendingShop(id);
+    const shop = shopData?.data;
 
-    const { data: response, isLoading, isError } = useOnePendingShop(id);
-    const shop = response?.data;
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <p className="text-lg">Loading...</p>
-            </div>
-        );
+    if (isLoadData) {
+        return <div>Đang tải dữ liệu...</div>;
     }
 
-    if (isError) {
-        return <ErrorPage />;
+    if (!shop) {
+        return <div>Không tìm thấy thông tin cửa hàng.</div>;
     }
 
-    const handleAccept = async () => {
+    const handleSaveDraft = async () => {
         try {
-            await ShopService.updatePendingShop({ id: id, status: "accepted" });
+            await ShopService.updatePendingShopDraft(id, {
+                status: "savedraft",
+                reason: JSON.stringify(changedValue),
+            });
             notifications.show({
                 color: "green",
-                title: "Shop Accepted",
-                message: "The shop has been successfully accepted.",
+                title: "Lưu bản nháp thành công",
+                message: "Bản nháp của bạn đã được lưu lại.",
             });
             queryClient.invalidateQueries({ queryKey: ["pendingShops"] });
             queryClient.invalidateQueries({ queryKey: ["approvedShops"] });
             navigate("/main/pendingshops");
         } catch (error) {
-            console.error("Error accepting shop:", error);
+            console.error("Lưu bản nháp lỗi:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to accept shop. Please try again.",
+                title: "Lỗi khi lưu bản nháp",
+                message: "Bản nháp của bạn chưa được lưu thành công. Hãy thử lại.",
             });
         }
     };
 
-    const handleReject = () => {
-        open();
+    const handleApproved = (status) => {
+        const count = changedValue.filter((item) => item.status === "n").length;
+        if (count > 1) {
+            alert(`Có ${count} thông tin chưa kiểm tra. Vui lòng kiểm tra toàn bộ thông tin.`);
+        } else {
+            setApprovedStatus(status);
+            open();
+        }
     };
 
-    const onSubmitReject = async (data) => {
+    const onApprovedShop = async () => {
         try {
-            await ShopService.updatePendingShop({
-                id: id,
-                status: "rejected",
-                description: data.description, // Sử dụng dữ liệu từ form
+            await ShopService.updatePendingShopDraft(id, {
+                status: approvedStatus,
+                reason: JSON.stringify(changedValue),
             });
             notifications.show({
                 color: "green",
-                title: "Shop Rejected",
-                message: "The shop has been successfully rejected.",
+                title: `${approvedStatus === "accepted" ? "Chấp nhận" : "Từ chối"} cửa hàng`,
+                message: `Cửa hàng này đã ${
+                    approvedStatus === "accepted" ? "được chấp nhận" : "bị từ chối"
+                }!`,
             });
             queryClient.invalidateQueries({ queryKey: ["pendingShops"] });
             queryClient.invalidateQueries({ queryKey: ["approvedShops"] });
             navigate("/main/pendingshops");
         } catch (error) {
-            console.error("Error rejecting shop:", error);
+            console.error("Lỗi khi cập nhật cửa hàng:", error);
             notifications.show({
                 color: "red",
-                title: "Error",
-                message: "Failed to reject shop. Please try again.",
+                title: "Có lỗi xảy ra",
+                message: "Đã xảy ra lỗi khi cập nhật trạng thái cửa hàng. Hãy thử lại.",
             });
         } finally {
             close();
         }
     };
 
+    const handleSelectChange = (e, index) => {
+        const value = e.target.value;
+        setSelectIndex(index);
+
+        if (value !== "n") {
+            setNewStatus(value);
+            setOpenInput(true);
+        } else {
+            const updatedChangedValue = [...changedValue];
+            updatedChangedValue[index] = {
+                ...updatedChangedValue[index],
+                status: "n",
+                reason: "",
+            };
+            setChangedValue(updatedChangedValue);
+            setOpenInput(false);
+            setSelectIndex(null);
+            setNewStatus("n"); // Reset newStatus when "n" is selected
+        }
+    };
+
+    const handleInputReason = (e) => {
+        setReason(e.target.value);
+    };
+
+    const handleSave = async (index) => {
+        const updatedChangedValue = [...changedValue];
+        updatedChangedValue[index] = {
+            ...updatedChangedValue[index],
+            status: newStatus,
+            reason: reason,
+        };
+
+        setChangedValue(updatedChangedValue);
+        setOpenInput(false);
+        setSelectIndex(null);
+        setReason("");
+    };
+
+    const getColor = (changed) => {
+        if (changed === "n") return "";
+        if (changed === "v") return "bg-green-300";
+        if (changed === "x") return "bg-red-300";
+    };
+
+    const getFieldNameForIndex = (index) => {
+        return [
+            "",
+            "Chủ cửa hàng:",
+            "Ảnh chủ cửa hàng:",
+            "Email:",
+            "Số điện thoại:",
+            "Ngày sinh:",
+            "Giới tính:",
+            "Địa chỉ thường trú:",
+            "Trạng thái:",
+            "Mã số thuế:",
+            "Mã số CCCD:",
+            "Tên cửa hàng:",
+            "Ảnh avatar cửa hàng:",
+            "Địa chỉ kinh doanh:",
+            "Ngày gửi:",
+            "Ảnh chụp cửa hàng:",
+            "Số giấy phép kinh doanh:",
+            "Loại hình kinh doanh:",
+            "Số tài khoản ngân hàng:",
+            "Tên ngân hàng:",
+            "Thời gian mở cửa:",
+        ][index];
+    };
+
+    const getValueForIndex = (index) => {
+        // Helper to get dynamic values
+        switch (index) {
+            case 1:
+                return shop?.Owner?.fullName;
+            case 2:
+                return (
+                    <img
+                        className="w-24 h-24 rounded-full object-cover"
+                        src="https://nexus.edu.vn/wp-content/uploads/2024/11/hinh-nen-may-tinh-4k-thien-nhien-bien-ca-672553.webp"
+                        alt="Shop Logo"
+                    />
+                );
+            case 3:
+                return shop?.Owner?.userEmail;
+            case 4:
+                return shop?.Owner?.userPhone;
+            case 5:
+                return shop?.Owner?.dateOfBirth;
+            case 6:
+                return shop?.Owner?.gender;
+            case 7:
+                return shop?.Owner?.userAddress;
+            case 8:
+                return shop?.shopStatus;
+            case 9:
+                return shop?.taxCode;
+            case 10:
+                return shop?.Owner?.identificationNumber;
+            case 11:
+                return shop?.shopName;
+            case 12:
+                return (
+                    <img
+                        className="w-24 h-24 rounded-full object-cover"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Shop avatar"
+                    />
+                );
+            case 13:
+                return shop?.shopPickUpAddress;
+            case 14:
+                return shop?.shopJoinedDate;
+            case 15:
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Ảnh của cửa hàng"
+                    />
+                );
+            case 16:
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Ảnh giấy phép kinh doanh"
+                    />
+                );
+            case 17:
+                return shop?.businessType;
+            case 18:
+                return shop?.shopBankAccountNumber;
+            case 19:
+                return shop?.shopBankName;
+            case 20:
+                return shop?.shopOperationHours;
+            default:
+                return null;
+        }
+    };
+
     return (
-        <div className="w-5/6 mx-auto py-8">
+        <div className="w-5/6 mx-auto pb-8">
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-                Cửa hàng: {shop.shopName}
+                Cửa hàng: {shop?.shopName}
             </h1>
-            <div className="bg-gray-200 shadow rounded-lg p-4 md:p-10">
+            <div className="rounded-lg p-4 md:p-10">
                 <table className="table-auto bg-white w-full border-collapse">
                     <tbody>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Chủ cửa hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.fullName}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Ảnh chủ cửa hàng:{" "}
-                                {/* hiện chưa có trường thông tin này, sau cần sẽ thêm sau */}
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                <img
-                                    className="w-24 h-24 rounded-full object-cover"
-                                    src="https://nexus.edu.vn/wp-content/uploads/2024/11/hinh-nen-may-tinh-4k-thien-nhien-bien-ca-672553.webp"
-                                    alt="Shop Logo"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Email:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.userEmail}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Số điện thoại:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.userPhone}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Ngày sinh:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.dateOfBirth}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Giới tính:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.gender}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Địa chỉ thường trú:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.userAddress}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Trạng thái:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopStatus}
-                            </td>
-                        </tr>
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Hợp đồng:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <a
-                                    href={shop.contractFile}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {shop.contractFile}
-                                </a>
-                            </td>
-                        </tr> */}
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Mã số thuế:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.taxCode}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Mã số CCCD:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.Owner.identificationNumber}
-                            </td>
-                        </tr>
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Ảnh chụp mặt trước CCCD:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <img
-                                    className="w-96 h-auto object-cover"
-                                    src={shop.Owner.idCardFrontImage}
-                                    alt="ảnh chụp mặt trước CCCD"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Ảnh chụp mặt sau CCCD:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <img
-                                    className="w-96 h-auto object-cover"
-                                    src={shop.Owner.idCardBackImage}
-                                    alt="ảnh chụp mặt sau CCCD"
-                                />
-                            </td>
-                        </tr> */}
-                        <tr>
-                            <th
-                                className="border border-gray-400 px-4 py-3 text-center text-2xl font-semibold text-gray-700"
-                                colSpan={2}
+                        {[
+                            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                        ].map((index) => (
+                            <tr
+                                key={index}
+                                className={`border-gray-200 border-x-0 border-t-0 border-[2px] items-center ${getColor(
+                                    changedValue[index]?.status,
+                                )} hover:bg-blue-200`}
                             >
-                                <p className="my-2">Thông tin cửa hàng</p>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Tên cửa hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopName}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Ảnh avatar cửa hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                <img
-                                    className="w-24 h-24 rounded-full object-cover"
-                                    // src={shop.shopAvatar}
-                                    src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
-                                    alt="Shop avatar"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Địa chỉ kinh doanh:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopPickUpAddress}
-                            </td>
-                        </tr>
-                        {/* hiện chưa cần danh mục sản phẩm */}
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Danh mục sản phẩm:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                {shop.shopCategory}
-                            </td>
-                        </tr> */}
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Ngày gửi:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopJoinedDate}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Ảnh chụp cửa hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                <img
-                                    className="w-48 h-32 object-cover rounded-md"
-                                    src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
-                                    alt="Ảnh của cửa hàng"
-                                />
-                            </td>
-                        </tr>
-                        {/* Hiện chưa có trường thông tin này */}
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Số giấy phép kinh doanh:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                <img
-                                    className="w-48 h-32 object-cover rounded-md"
-                                    src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
-                                    alt="Ảnh giấy phép kinh doanh"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Loại hình kinh doanh:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.businessType}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Số tài khoản ngân hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopBankAccountNumber}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Tên ngân hàng:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopBankName}
-                            </td>
-                        </tr>
-                        {/* Hien chua co truong thong tin nay */}
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Đăng ký thuế GTGT:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                {shop.vatRegistration}
-                            </td>
-                        </tr> */}
-                        <tr>
-                            <th className="border w-2/5 border-gray-400 px-4 py-2 text-left font-medium text-gray-700">
-                                Thời gian mở cửa:
-                            </th>
-                            <td className="border border-gray-400 px-4 py-2 text-gray-900">
-                                {shop.shopOperationHours}
-                            </td>
-                        </tr>
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Chính sách đổi trả:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                {shop.returnPolicy}
-                            </td>
-                        </tr> */}
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Liên hệ hỗ trợ:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                {shop.supportContact}
-                            </td>
-                        </tr> */}
-                        {/* <tr>
-                            <th className="border w-2/5 border-gray-300 px-4 py-2 text-left">
-                                Hồ sơ giấy phép kinh doanh:
-                            </th>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <a
-                                    href={shop.contractFile}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {shop.businessLicenseFile}
-                                </a>
-                            </td>
-                        </tr> */}
+                                <th className="px-4 py-2 text-left font-bold text-gray-800">
+                                    {
+                                        [
+                                            "",
+                                            "Chủ cửa hàng:",
+                                            "Ảnh chủ cửa hàng:",
+                                            "Email:",
+                                            "Số điện thoại:",
+                                            "Ngày sinh:",
+                                            "Giới tính:",
+                                            "Địa chỉ thường trú:",
+                                            "Trạng thái:",
+                                            "Mã số thuế:",
+                                            "Mã số CCCD:",
+                                            "Tên cửa hàng:",
+                                            "Ảnh avatar cửa hàng:",
+                                            "Địa chỉ kinh doanh:",
+                                            "Ngày gửi:",
+                                            "Ảnh chụp cửa hàng:",
+                                            "Số giấy phép kinh doanh:",
+                                            "Loại hình kinh doanh:",
+                                            "Số tài khoản ngân hàng:",
+                                            "Tên ngân hàng:",
+                                            "Thời gian mở cửa:",
+                                        ][index]
+                                    }
+                                </th>
+                                <td className="py-2 text-gray-900">{getValueForIndex(index)}</td>
+                                <td>
+                                    <Popover
+                                        width={300}
+                                        opened={openInput && selectIndex === index}
+                                        onChange={setOpenInput}
+                                    >
+                                        <Popover.Target>
+                                            <select
+                                                className="border border-black rounded-md w-16 h-8 my-2 float-end mr-6"
+                                                onChange={(e) => handleSelectChange(e, index)}
+                                                value={changedValue[index]?.status}
+                                            >
+                                                <option className="bg-white" value="n">
+                                                    ⏳
+                                                </option>
+                                                <option className="bg-green-400" value="v">
+                                                    ✅
+                                                </option>
+                                                <option className="bg-red-400" value="x">
+                                                    ❌
+                                                </option>
+                                            </select>
+                                        </Popover.Target>
+
+                                        <Popover.Dropdown>
+                                            <Textarea
+                                                placeholder="reason..."
+                                                onChange={handleInputReason}
+                                                value={reason}
+                                            />
+                                            <Button
+                                                disabled={!reason || reason.trim() === ""}
+                                                onClick={() => handleSave(index)}
+                                            >
+                                                Lưu
+                                            </Button>
+                                        </Popover.Dropdown>
+                                    </Popover>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -384,32 +403,68 @@ const PendingShopDetail = () => {
                     Trở lại
                 </Button>
                 <div className="flex gap-4">
-                    <Button color="green" onClick={handleAccept}>
+                    <Button color="#999999" onClick={() => handleSaveDraft()}>
+                        Lưu bản nháp
+                    </Button>
+                    <Button color="green" onClick={() => handleApproved("accepted")}>
                         Chấp nhận
                     </Button>
-                    <Button color="red" onClick={handleReject}>
+                    <Button color="red" onClick={() => handleApproved("rejected")}>
                         Từ chối
                     </Button>
                 </div>
             </div>
 
             {/* Rejection Modal */}
-            <Modal opened={opened} onClose={close} withCloseButton={false} centered>
-                <form onSubmit={handleSubmit(onSubmitReject)}>
+            <Modal
+                opened={opened}
+                size="xl"
+                padding="xl"
+                onClose={close}
+                withCloseButton={false}
+                centered
+            >
+                <form onSubmit={handleSubmit(onApprovedShop)}>
                     <div className="mb-4">
-                        <p className="flex items-center text-lg font-semibold mb-2 text-gray-700">
-                            <IconAlertCircle className="mr-2 text-red-500" size={20} />
-                            Nhập lý do từ chối <span className="text-red-500 ml-1">*</span>
-                        </p>
-                        <Textarea
-                            {...register("description", {
-                                required: "Hãy nhập lý do từ chối.",
-                            })}
-                            placeholder="Nhập lý do từ chối..."
-                            className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            autosize
-                            minRows={3}
-                        />
+                        <h1 className="text-3xl font-bold text-black mb-6 text-center">
+                            Xác nhận thông tin kiểm duyệt
+                        </h1>
+                        <div className="space-y-4">
+                            {changedValue?.map((item, index) =>
+                                index === 0 ? null : (
+                                    <div
+                                        key={index}
+                                        className="flex justify-between items-center p-4 border rounded-lg shadow-sm"
+                                    >
+                                        <div
+                                            className={`flex flex-col p-2 rounded-lg ${getColor(item.status)}`}
+                                        >
+                                            <strong className="text-lg">
+                                                {getFieldNameForIndex(index)}{" "}
+                                                {getValueForIndex(index)}
+                                            </strong>
+                                            <p className="text-md mt-1">
+                                                Lý do: agfuafd helo helo hasd afsas asda gẻ ergv
+                                                jkdbcs akjfbk agfuafd helo helo hasd afsas asda gẻ
+                                                ergv jkdbcs akjfbk {item?.reason}
+                                            </p>
+                                        </div>
+                                        <div className="min-w-[100px] ml-2 flex justify-center">
+                                            <span
+                                                className={`px-3 font-semibold py-1 rounded-full text-sm ${
+                                                    item?.status === "v"
+                                                        ? "bg-green-200 text-green-800"
+                                                        : "bg-red-200 text-red-800"
+                                                }`}
+                                            >
+                                                {item?.status === "v" ? "Chấp nhận" : "Từ chối"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ),
+                            )}
+                        </div>
+
                         {errors.description && (
                             <p className="text-red-500 text-sm mt-1">
                                 {errors.description.message}
@@ -417,11 +472,21 @@ const PendingShopDetail = () => {
                         )}
                     </div>
 
-                    <div className="flex justify-end gap-3">
-                        <Button variant="outline" color="gray" onClick={close}>
+                    <div className="flex justify-end gap-4 mt-6">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            color="gray"
+                            onClick={close}
+                            className="px-6 py-3 font-medium text-gray-700 border border-gray-300 rounded-lg transition duration-200 bg-gray-200"
+                        >
                             Trở lại
                         </Button>
-                        <Button type="submit" color="red">
+                        <Button
+                            type="submit"
+                            color={approvedStatus === "accepted" ? "green" : "red"}
+                            className="px-6 py-3 font-medium text-white bg-red-600 rounded-lg transition duration-200"
+                        >
                             Xác nhận
                         </Button>
                     </div>

@@ -54,3 +54,10 @@ export const useGetTopShippers = () => {
         queryFn: () => ShipperServices.getTopShippers(),
     });
 };
+
+export const useGetDraftShipper = (id) => {
+    return useQuery({
+        queryKey: ["getDraftShipper", id],
+        queryFn: () => ShipperServices.getPendingShipperDraft(id),
+    });
+};

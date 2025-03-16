@@ -47,6 +47,11 @@ const OrderServices = {
 
         return data;
     },
+
+    async cancelOrder(id) {
+        const data = await instance.patch(`/orders/${id}`).then(({ data }) => data);
+        return data;
+    },
 };
 
 export default OrderServices;

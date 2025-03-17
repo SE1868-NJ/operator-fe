@@ -42,6 +42,7 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 
 import OrderDetailPage from "./pages/OrderDetailPage.jsx";
+import ShopDetailStatistic from "./pages/ShopDetailStatistic.jsx";
 import ShopRevenueDetail from "./pages/ShopRevenueDetail.jsx";
 import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/shop/:id",
                 element: <ShopProfileDetail />,
+            },
+            {
+                path: "/main/shop/:id/statistic",
+                element: <ShopDetailStatistic />,
             },
             {
                 path: "/main/shop/:id/product/:pid",

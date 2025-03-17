@@ -1,6 +1,17 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
+    async getProductById(id, pid) {
+        const product = await instance
+            .get(`/shops/${id}/products/${pid}`, {
+                params: {
+                    id,
+                    pid,
+                },
+            })
+            .then(({ data }) => data);
+        return product;
+    },
     async getProductsByShopId(id, offset, limit, filterData) {
         const products = await instance
             .get(`/shops/${id}/products`, {

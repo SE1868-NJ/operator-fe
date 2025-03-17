@@ -28,6 +28,7 @@ import OrderDetail from "./pages/OrderDetail.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import ReportCategoriesPage from "./pages/ReportCategories.jsx";
 import ReportDetailPage from "./pages/ReportDetailPage.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
@@ -41,7 +42,6 @@ import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
-
 const theme = createTheme({
     /** Put your mantine theme override here */
 });
@@ -87,6 +87,10 @@ const router = createBrowserRouter([
             {
                 path: "/main/shop/:id",
                 element: <ShopProfileDetail />,
+            },
+            {
+                path: "/main/shop/:id/product/:pid",
+                element: <ProductDetailPage />,
             },
             {
                 path: "/main/users",

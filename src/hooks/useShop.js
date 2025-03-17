@@ -50,6 +50,13 @@ export const useShopProducts = (id, offset, limit, filterData) => {
     });
 };
 
+export const useProduct = (id, pid) => {
+    return useQuery({
+        queryKey: ["product", id, pid],
+        queryFn: () => ShopService.getProductById(id, pid),
+    });
+};
+
 export const useExportShopProducts = (id, offset, limit, filterData) => {
     return useQuery({
         queryKey: ["shopProducts", id, offset, limit, filterData],

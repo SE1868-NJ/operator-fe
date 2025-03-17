@@ -632,8 +632,8 @@ const ShopProfileDetail = () => {
                                                     type="button"
                                                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
                                                     onClick={() =>
-                                                        alert(
-                                                            `Xem chi tiết sản phẩm: ${product.product_name}`,
+                                                        navigate(
+                                                            `/main/shop/${id}/product/${product.product_id}`,
                                                         )
                                                     }
                                                 >

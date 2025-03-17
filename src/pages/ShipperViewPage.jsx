@@ -1,6 +1,8 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button, Modal, Popover, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications, showNotification } from "@mantine/notifications";
+import { IconRobot } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -15,6 +17,8 @@ const ShipperViewPage = () => {
 
     const [draftData, setDraftData] = useState([]);
     const [isLoadData, setIsLoadData] = useState(true);
+    const [sendMailReason, setSendMailReason] = useState("");
+    const [sendMailContent, setSendMailContent] = useState("");
     const [changedValue, setChangedValue] = useState(
         Array(21).fill({
             status: "n",
@@ -84,6 +88,7 @@ const ShipperViewPage = () => {
 
     const queryClient = useQueryClient();
     const [opened, { open, close }] = useDisclosure(false);
+    const [onOpened, { open: onOpen, close: onClose }] = useDisclosure(false);
     const [newStatus, setNewStatus] = useState("n");
     const [reason, setReason] = useState("");
     const [openInput, setOpenInput] = useState(false);
@@ -91,6 +96,7 @@ const ShipperViewPage = () => {
     const [approvedStatus, setApprovedStatus] = useState("savedraft");
     const { data: responseData } = usePendingShipper(id);
     const shipper = responseData?.data || {};
+    const [AILoading, setAILoading] = useState(false);
 
     if (isLoadData) {
         return <div>Đang tải dữ liệu...</div>;
@@ -157,6 +163,59 @@ const ShipperViewPage = () => {
         open();
     };
 
+    const handleSendMail = () => {
+        onOpen();
+    };
+
+    const writeByAI = async () => {
+        const genAI = new GoogleGenerativeAI("AIzaSyBT9W5ncWV1wD_6IpUYR6hsrnot1N-P3yo");
+        setAILoading(true);
+        try {
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const subject = await model.generateContent(`
+            Viết duy nhất một dòng subject email bằng tiếng Việt với giọng điệu lịch sự, rõ ràng, 
+            để yêu cầu người dùng cập nhật thông tin không chính xác đã sử dụng khi 
+            đăng ký tài khoản cửa hàng mới. Từ thông tin: ${sendMailReason}
+            `);
+            const response = await subject.response;
+            const text = await response.text();
+            setSendMailReason(text);
+
+            const content = await model.generateContent(`
+            Please rewrite the following email without the subject in Vietnamese, requesting the user to update the incorrect information used to sign up for the new shop account. Include a polite tone and clear instructions for them to make the necessary corrections.
+    From this information: ${sendMailReason}
+            `);
+            const responseContent = await content.response;
+            const contentText = await responseContent.text();
+            setSendMailContent(contentText);
+        } catch (error) {
+            console.log("Something Went Wrong!", error);
+        }
+        setAILoading(false);
+    };
+
+    const doSendMail = () => {
+        try {
+            EmailService.sendEmail(id, sendMailReason, sendMailContent);
+            notifications.show({
+                color: "green",
+                title: "Thành công",
+                message: "Email đã được gửi thành công",
+            });
+        } catch (error) {
+            console.log("Something Went Wrong!", error);
+            notifications.show({
+                color: "red",
+                title: "Lỗi",
+                message: "Lỗi khi gửi email",
+            });
+        }
+        onClose();
+    };
+
+    //    Hàm để kiểm tra trạng thái và vô hiệu hóa nút
+    const isAcceptDisabled = changedValue.some((item) => item.status === "x");
+    const isRejectDisabled = changedValue.some((item) => item.status === "v");
     const onApprovedShipper = async () => {
         try {
             console.log("xác nhận: ", approvedStatus);
@@ -1108,6 +1167,7 @@ const ShipperViewPage = () => {
                             onClick={() => handleApproved("accepted")}
                             type="button"
                             className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+                            disabled={isAcceptDisabled} // Disabled nếu có trường nào bị từ chối (❌)
                         >
                             Chấp nhận
                         </button>
@@ -1184,12 +1244,114 @@ const ShipperViewPage = () => {
                                 </div>
                             </form>
                         </Modal>
+                        <Modal
+                            opened={onOpened}
+                            onClose={() => onClose()} // Đóng modal khi nhấn ngoài modal
+                            withCloseButton={false}
+                            centered
+                            size={"xl"}
+                            classNames={{
+                                modal: "max-w-lg w-full p-6 rounded-lg shadow-xl bg-white", // Thêm padding, bo góc, và bóng cho modal
+                                title: "text-2xl font-semibold text-gray-800 mb-4", // Tiêu đề to và rõ ràng
+                            }}
+                        >
+                            <p className="font-bold text-xl text-gray-800 mb-6">
+                                Nhập nội dung mail
+                            </p>
+                            <div className="space-y-4">
+                                {changedValue?.map(
+                                    (item, index) =>
+                                        item.status === "x" && (
+                                            <div
+                                                key={index}
+                                                className="flex justify-between items-center p-4 border rounded-lg shadow-sm"
+                                            >
+                                                <div className="flex flex-col">
+                                                    <strong
+                                                        className={`${getColor(item.status)} text-lg`}
+                                                    >
+                                                        {getFieldNameForIndex(index)}
+                                                    </strong>
+                                                    <p className="text-md mt-1">
+                                                        Lý do: {item?.reason}
+                                                    </p>
+                                                </div>
+                                                <div className="min-w-[100px]">
+                                                    <span
+                                                        className={`px-3 py-1 rounded-full text-sm ${
+                                                            item?.status === "v"
+                                                                ? "bg-green-200 text-green-800"
+                                                                : "bg-red-200 text-red-800"
+                                                        }`}
+                                                    >
+                                                        {item?.status === "v"
+                                                            ? "Chấp nhận"
+                                                            : "Từ chối"}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ),
+                                )}
+                            </div>
+                            <div>
+                                <p className="font-bold text-lg text-gray-800 my-2">
+                                    Lý do gửi mail:
+                                </p>
+                            </div>
+                            <input
+                                type="text"
+                                value={sendMailReason}
+                                onChange={(e) => setSendMailReason(e.target.value)}
+                                placeholder="Nhập lý do gửi mail..."
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                            />
+                            <Textarea
+                                value={sendMailContent}
+                                rows={10}
+                                cols={100}
+                                className="mt-4"
+                                onChange={(e) => sendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
+                            />
+                            <div className="flex justify-end mt-4">
+                                <Button
+                                    color="green"
+                                    loading={AILoading}
+                                    rightSection={<IconRobot />}
+                                    onClick={writeByAI} // Đóng modal khi nhấn Quay lại
+                                    className="bg-gray-300 mr-5 text-gray-800 py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
+                                >
+                                    Viết bằng AI
+                                </Button>
+                                <Button
+                                    variant="light"
+                                    onClick={() => onClose()} // Đóng modal khi nhấn Quay lại
+                                    className="bg-gray-300 text-gray-800 py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
+                                >
+                                    Quay lại
+                                </Button>
+                                <Button
+                                    color="red"
+                                    onClick={() => doSendMail()} // gửi mail
+                                    className="ml-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
+                                >
+                                    Gửi
+                                </Button>
+                            </div>
+                        </Modal>
                         <button
                             type="button"
                             className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
                             onClick={() => handleApproved("rejected")}
+                            disabled={isRejectDisabled} // Disabled nếu có trường nào đã được chấp nhận (✅)
                         >
                             Từ chối
+                        </button>
+                        <button
+                            type="button"
+                            className="px-4 py-2 mr-2 text-white bg-red-500 rounded"
+                            onClick={() => handleSendMail()}
+                        >
+                            Send mail
                         </button>
                         <button
                             type="button"

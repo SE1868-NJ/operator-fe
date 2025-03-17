@@ -49,7 +49,12 @@ const OrderServices = {
     },
 
     async cancelOrder(id) {
-        const data = await instance.patch(`/orders/${id}`).then(({ data }) => data);
+        const data = await instance.patch(`/orders/cancelorder/${id}`).then(({ data }) => data);
+        return data;
+    },
+
+    async reopenOrder(id) {
+        const data = await instance.patch(`/orders/reopenorder/${id}`).then(({ data }) => data);
         return data;
     },
 };

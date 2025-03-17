@@ -43,7 +43,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 space-y-4 h-screen flex flex-col justify-center">
+        <div className="flex flex-col justify-center h-screen max-w-md p-6 mx-auto space-y-4">
             <Text size="xl" ta={"center"} fw={600} c={"blue"}>
                 Admin Dashboard
             </Text>

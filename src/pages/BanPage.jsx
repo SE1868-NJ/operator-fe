@@ -102,7 +102,7 @@ const BanAccountForm = () => {
 
             const response = await BanService.banUser(payload);
             if (response?.success) {
-                //alert("Đình chỉ thành công!");
+
                 if (userType === "shipper") {
                     queryClient.invalidateQueries(["shipper", userId]);
                     Navigate(`/main/shipperslist/${userId}`);
@@ -131,8 +131,8 @@ const BanAccountForm = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-5">
-            <h2 className="text-2xl font-semibold mb-4 text-red-600">Đình Chỉ Người Dùng</h2>
+        <div className="max-w-lg p-6 mx-auto mt-5 bg-white rounded-lg shadow-md">
+            <h2 className="mb-4 text-2xl font-semibold text-red-600">Đình Chỉ Người Dùng</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Các trường thông tin như trước */}
                 <div>

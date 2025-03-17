@@ -1,117 +1,24 @@
 import { Avatar, Badge, Button, Card, Grid, Image, Table } from "@mantine/core";
-import { Group, NumberInput, TextInput } from "@mantine/core";
-import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
-import { IconRobot } from "@tabler/icons-react";
-import { IconCurrencyDollar, IconSearch } from "@tabler/icons-react";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackChat from "../components/FeedbackChat";
-import FeedbackList from "../components/ShopFeedback";
-import OrderChart from "../components/ShopOrderChart";
-import {
-    useExportShopOrders,
-    useExportShopProducts,
-    useShop,
-    useShopOrders,
-    useShopProducts,
-} from "../hooks/useShop";
+import EmailModal from "../components/ShopEmail";
+import { useShop } from "../hooks/useShop";
 import BanService from "../services/BanService";
-import ExportExcelButton from "./ExportExcelButton";
 
 const ShopProfileDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    //AI nhan xet
-    const [showReview, setShowReview] = useState(false);
-
-    // Pagination for product
-    const [page, setPage] = useState(1);
-    const limit = 5; // Số lượng sản phẩm mỗi trang
-    const offset = (page - 1) * limit;
-
-    //pagination for orders
-    const [page2, setPage2] = useState(1);
-    const limit2 = 5;
-    const offset2 = (page2 - 1) * limit2;
-
-    //filter for products
-    const timeOut = 500;
-
-    //Filter cho product
-    const [searchProductName, setSearchProductName] = useDebouncedState("", timeOut);
-    const [searchMinPrice, setSearchMinPrice] = useDebouncedState("", timeOut);
-    const [searchMaxPrice, setSearchMaxPrice] = useDebouncedState("", timeOut);
-
-    const filterData = useMemo(
-        () => ({
-            productName: searchProductName,
-            minPrice: searchMinPrice,
-            maxPrice: searchMaxPrice,
-        }),
-        [searchProductName, searchMinPrice, searchMaxPrice],
-    );
-
-    //Lay thong tin shop, feedback
+    //Lay thong tin shop
     const { data, isLoading, error } = useShop(id);
     const shop = data?.shop;
-    const feedbacks = data?.feedbacks || [];
-
-    //Lay thong tin order
-    const { data: dataOrders, isLoading2, error2 } = useShopOrders(id, offset2, limit2);
-    const orders = dataOrders?.orders || [];
-    const totalPages2 = dataOrders?.totalPages || 1;
-
-    //Lay thong tin order export
-    const { data: dataExportOrders } = useExportShopOrders(id, offset2, 99999);
-    const excelData = (dataExportOrders?.orders || []).map((order) => ({
-        id: order.id,
-        shop_id: order.shop_id,
-        customer_id: order.customer_id,
-        shipper_id: order.shipper_id,
-        address_id: order.address_id,
-        productFee: order.productFee,
-        shippingFee: order.shippingFee,
-        status: order.status,
-        total: order.total,
-        note: order.note,
-        payment_status: order.payment_status,
-        shipping_status: order.shipping_status,
-        payment_method: order.payment_method,
-        created_at: order.created_at,
-        // Thông tin của Customer
-        customerFullName: order.Customer?.fullName || "",
-        customerDateOfBirth: order.Customer?.dateOfBirth || "",
-        customerGender: order.Customer?.gender || "",
-        customerEmail: order.Customer?.userEmail || "",
-        customerPhone: order.Customer?.userPhone || "",
-        customerCitizenID: order.Customer?.userCitizenID || "",
-        customerAddress: order.Customer?.userAddress || "",
-        customerIdentificationNumber: order.Customer?.identificationNumber || "",
-        customerIdCardFrontFile: order.Customer?.idCardFrontFile || "",
-        customerIdCardBackFile: order.Customer?.idCardBackFile || "",
-        customerAvatar: order.Customer?.avatar || "",
-    }));
-
-    //lay thong tin product
-    const {
-        data: dataProducts,
-        isLoading3,
-        error3,
-    } = useShopProducts(id, offset, limit, filterData);
-    const { data: dataExportProducts } = useExportShopProducts(id, offset, 99999, filterData);
-    const excelDataProduct = dataExportProducts?.products || [];
-    const products = dataProducts?.products || [];
-    const totalPages = dataProducts?.totalPages || 1;
 
     const [selectedImage, setSelectedImage] = useState(null);
 
-    // Hàm xử lý scroll xuống phần feedback
-    const scrollToFeedback = () => {
-        document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
-    };
+    const [modalOpened, setModalOpened] = useState(false);
 
     //Hàm xử lý ban
     const handleStatusChange = async () => {
@@ -362,7 +269,8 @@ const ShopProfileDetail = () => {
                             </Badge>
                         </div>
                         <div className="flex justify-end mt-6 w-full gap-4">
-                            <button
+                            <Button
+                                color="red"
                                 type="button"
                                 onClick={() => handleStatusChange()}
                                 className={`${
@@ -380,15 +288,23 @@ const ShopProfileDetail = () => {
                                           ? "Gỡ đình cửa hàng"
                                           : "Kích hoạt cửa hàng" // Nếu là "Không hoạt động"
                                 }
-                            </button>
+                            </Button>
 
-                            <button
+                            <Button
+                                color="blue"
                                 type="button"
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
                                 onClick={() => navigate("/main/shops")}
                             >
                                 Back to List
-                            </button>
+                            </Button>
+                            <Button color="cyan" onClick={() => setModalOpened(true)}>
+                                📩 Gửi Email
+                            </Button>
+                            <EmailModal
+                                opened={modalOpened}
+                                onClose={() => setModalOpened(false)}
+                                shopId={id}
+                            />
                         </div>
                     </Card>
 

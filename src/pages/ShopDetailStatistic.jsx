@@ -106,8 +106,6 @@ const ShopDetailStatistic = () => {
     const products = dataProducts?.products || [];
     const totalPages = dataProducts?.totalPages || 1;
 
-    const [selectedImage, setSelectedImage] = useState(null);
-
     // Hàm xử lý scroll xuống phần feedback
     const scrollToFeedback = () => {
         document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });

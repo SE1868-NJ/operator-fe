@@ -1,7 +1,7 @@
 import { Box, Button, Card, Drawer, ScrollArea, Stack, Textarea, Tooltip } from "@mantine/core";
 import { Text as MantineText } from "@mantine/core"; // Đổi tên tránh conflict
 import { IconMessageCircle, IconSend } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useLayoutEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm"; // Hỗ trợ markdown nâng cao

@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAccountProfile } from "../hooks/useAccountProfile.js";
 import { useIndexReasonItem, useOnePendingShop } from "../hooks/useShop";
+import EmailService from "../services/Email.js";
 import ShopService from "../services/ShopService";
 
 const PendingShopDetail = () => {
@@ -100,6 +101,8 @@ const PendingShopDetail = () => {
     const { data: listDetail } = useIndexReasonItem(id, detailIndex);
     const [fieldName, setFieldName] = useState("");
     const [sendMailReason, setSendMailReason] = useState("");
+    const [sendMailContent, setSendMailContent] = useState("");
+    const [AILoading, setAILoading] = useState(false);
     const { data: operator } = useAccountProfile();
 
     const handleOpenReasonTable = (index) => {
@@ -330,21 +333,49 @@ const PendingShopDetail = () => {
 
     const writeByAI = async () => {
         const genAI = new GoogleGenerativeAI("AIzaSyBT9W5ncWV1wD_6IpUYR6hsrnot1N-P3yo");
+        setAILoading(true);
         try {
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            const result = await model.generateContent(`
-        Please rewrite the following email in Vietnamese, requesting the user to update the incorrect information used to sign up for the new shop account. Include a polite tone and clear instructions for them to make the necessary corrections.
-From this information: ${sendMailReason}
-        `);
-            const response = await result.response;
+            const subject = await model.generateContent(`
+                Viết duy nhất một dòng subject email bằng tiếng Việt với giọng điệu lịch sự, rõ ràng, 
+                để yêu cầu người dùng cập nhật thông tin không chính xác đã sử dụng khi 
+                đăng ký tài khoản cửa hàng mới. Từ thông tin: ${sendMailReason}
+                `);
+            const response = await subject.response;
             const text = await response.text();
             setSendMailReason(text);
+
+            const content = await model.generateContent(`
+                Please rewrite the following email without the subject in Vietnamese, requesting the user to update the incorrect information used to sign up for the new shop account. Include a polite tone and clear instructions for them to make the necessary corrections.
+        From this information: ${sendMailReason}
+                `);
+            const responseContent = await content.response;
+            const contentText = await responseContent.text();
+            setSendMailContent(contentText);
         } catch (error) {
             console.log("Something Went Wrong!", error);
         }
+        setAILoading(false);
     };
 
-    const doSendMail = () => {};
+    const doSendMail = () => {
+        try {
+            EmailService.sendEmail(id, sendMailReason, sendMailContent);
+            notifications.show({
+                color: "green",
+                title: "Thành công",
+                message: "Email đã được gửi thành công",
+            });
+        } catch (error) {
+            console.log("Something Went Wrong!", error);
+            notifications.show({
+                color: "red",
+                title: "Lỗi",
+                message: "Lỗi khi gửi email",
+            });
+        }
+        onClose();
+    };
 
     return (
         <div className="w-5/6 mx-auto pb-8">
@@ -662,16 +693,27 @@ From this information: ${sendMailReason}
                             ),
                     )}
                 </div>
-                <Textarea
+                <div>
+                    <p className="font-bold text-lg text-gray-800 my-2">Lý do gửi mail:</p>
+                </div>
+                <input
+                    type="text"
                     value={sendMailReason}
+                    onChange={(e) => setSendMailReason(e.target.value)}
+                    placeholder="Nhập lý do gửi mail..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                />
+                <Textarea
+                    value={sendMailContent}
                     rows={10}
                     cols={100}
                     className="mt-4"
-                    onChange={(e) => setSendMailReason(e.target.value)} // Cập nhật lý do khi người dùng nhập
+                    onChange={(e) => sendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
                 />
                 <div className="flex justify-end mt-4">
                     <Button
                         color="green"
+                        loading={AILoading}
                         rightSection={<IconRobot />}
                         onClick={writeByAI} // Đóng modal khi nhấn Quay lại
                         className="bg-gray-300 mr-5 text-gray-800 py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"

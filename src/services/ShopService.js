@@ -1,6 +1,29 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
+    async generateAIReview(shopId, prompt) {
+        try {
+            const { data } = await instance.post("/shops/process-prompt", {
+                id: shopId,
+                prompt,
+            });
+            return data.aiReview; // Trả về nhận xét từ AI
+        } catch (error) {
+            console.error("Lỗi khi tạo nhận xét từ AI:", error);
+            return "Đã có lỗi xảy ra, vui lòng thử lại.";
+        }
+    },
+    async getProductById(id, pid) {
+        const product = await instance
+            .get(`/shops/${id}/products/${pid}`, {
+                params: {
+                    id,
+                    pid,
+                },
+            })
+            .then(({ data }) => data);
+        return product;
+    },
     async getProductsByShopId(id, offset, limit, filterData) {
         const products = await instance
             .get(`/shops/${id}/products`, {

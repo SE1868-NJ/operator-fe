@@ -4,6 +4,7 @@ import { useDebouncedState, useDisclosure } from "@mantine/hooks"; // keep useDe
 import { IconEye } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccountProfile } from "../hooks/useAccountProfile";
 import { useApprovedShops, usePendingShops } from "../hooks/useShop";
 
 const PendingShopListPage = () => {
@@ -18,6 +19,7 @@ const PendingShopListPage = () => {
     const [searchPhone, setSearchPhone] = useDebouncedState("", timeOut);
 
     const [activeButton, setActiveButton] = useState("pending");
+    const { data: operator } = useAccountProfile();
 
     const [opened, { open, close }] = useDisclosure(false);
     const [changedValue, setChangedValue] = useState([]);
@@ -45,7 +47,7 @@ const PendingShopListPage = () => {
         data: approvedShopsData,
         isLoading: approvedShopsLoading,
         error: approvedShopsError,
-    } = useApprovedShops(limit, page, filterData);
+    } = useApprovedShops(operator?.operatorId, limit, page, filterData);
 
     // pending
     const pendingShops = responseData?.pendingShops || [];

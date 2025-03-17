@@ -72,10 +72,10 @@ export const useOnePendingShop = (id) => {
     });
 };
 
-export const useApprovedShops = (limit = 10, page = 1, filterData = {}) => {
+export const useApprovedShops = (operatorID, limit = 10, page = 1, filterData = {}) => {
     return useQuery({
-        queryKey: ["approvedShops", limit, page, filterData],
-        queryFn: () => ShopService.getApprovedShops(limit, page, filterData),
+        queryKey: ["approvedShops", operatorID, limit, page, filterData],
+        queryFn: () => ShopService.getApprovedShops(operatorID, limit, page, filterData),
     });
 };
 
@@ -147,5 +147,12 @@ export const useGetDraftShop = (id) => {
     return useQuery({
         queryKey: ["getDraftShop", id],
         queryFn: () => ShopService.getPendingShopdraft(id),
+    });
+};
+
+export const useIndexReasonItem = (id, index) => {
+    return useQuery({
+        queryKey: ["indexReasonItem", id, index],
+        queryFn: () => ShopService.getIndexReasonItem(id, index),
     });
 };

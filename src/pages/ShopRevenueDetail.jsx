@@ -31,7 +31,6 @@ const ShopsRevenuePage = () => {
     );
 
     const { data: shop } = useOneShopInfor(id);
-    console.log("shop to show: ", shop);
 
     const {
         data: responseData,
@@ -57,7 +56,6 @@ const ShopsRevenuePage = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">
                     Thống kê tổng doanh thu của cửa hàng: {shop?.shopName}
                     <p className="text-xl">(Chủ cửa hàng: {shop?.Owner.fullName})</p>
-                    <p className="text-xl">→ Gửi email cho cửa hàng</p>
                 </h2>
                 <div className="flex gap-4 mb-4">
                     {/* Thông tin thống kê trong ngày */}
@@ -300,7 +298,7 @@ const ShopsRevenuePage = () => {
                                                         className="text-blue-600 hover:text-blue-800 font-semibold"
                                                         onClick={() =>
                                                             navigate(
-                                                                `/main/shops-revenue/${id}/${order?.id}`,
+                                                                `/main/orderdetail/${order?.id}`,
                                                             )
                                                         }
                                                     >

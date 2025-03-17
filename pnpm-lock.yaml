@@ -17,6 +17,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.0
         version: 11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
+      '@google/generative-ai':
+        specifier: ^0.24.0
+        version: 0.24.0
       '@mantine/charts':
         specifier: ^7.17.1
         version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@18.3.1))(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.17.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(recharts@2.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))

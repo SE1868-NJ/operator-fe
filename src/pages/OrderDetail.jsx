@@ -1,5 +1,6 @@
 import { Button, Modal, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,25 +16,49 @@ export default function OrderDetail() {
     const [opened, { open, close }] = useDisclosure(false);
     const [cancellationReason, setCancellationReason] = useState(""); // Lý do hủy đơn hàng
 
-    const handleCancelOrder = () => {
+    const handleCancelOrder = async () => {
         if (!cancellationReason.trim()) {
             alert("Vui lòng nhập lý do hủy đơn hàng!");
             return;
         }
 
-        OrderServices.cancelOrder(id, cancellationReason)
-            .then(() => {
-                queryclient.invalidateQueries({ queryKey: ["order"] });
-                queryclient.invalidateQueries({ queryKey: ["orders"] });
-                navigate("/main/ordermanagement");
-            })
-            .catch((err) => {
-                alert(`Có lỗi xảy ra khi hủy đơn hàng: ${err.message}`);
+        try {
+            // Gọi dịch vụ hủy đơn hàng, truyền lý do hủy
+            if (order.status === "cancelled") {
+                await OrderServices.reopenOrder(id, cancellationReason);
+            } else {
+                await OrderServices.cancelOrder(id, cancellationReason);
+            }
+
+            // Invalidating queries để cập nhật dữ liệu
+            queryclient.invalidateQueries({ queryKey: ["order"] });
+            queryclient.invalidateQueries({ queryKey: ["orders"] });
+
+            // Điều hướng về trang quản lý đơn hàng sau khi hủy thành công
+            navigate("/main/ordermanagement");
+
+            // Hiển thị thông báo thành công
+            notifications.show({
+                color: "green",
+                title: "Đơn hàng đã được hủy",
+                message: "Đơn hàng của bạn đã được hủy thành công.",
             });
+        } catch (error) {
+            // Xử lý lỗi nếu có
+            console.error("Lỗi khi hủy đơn hàng:", error);
+            alert(`Có lỗi xảy ra khi hủy đơn hàng: ${error.message}`);
+
+            // Hiển thị thông báo lỗi
+            notifications.show({
+                color: "red",
+                title: "Lỗi khi hủy đơn hàng",
+                message: "Đơn hàng của bạn chưa được hủy thành công. Hãy thử lại.",
+            });
+        }
     };
 
     const handleOpenModal = () => {
-        open(); // Mở modal
+        open(); // Mở modal khi nhấn hủy đơn hàng
     };
 
     const handleCloseModal = () => {
@@ -208,11 +233,11 @@ export default function OrderDetail() {
                     Quay lại
                 </Button>
                 <Button
-                    color="red"
+                    color={order.status === "cancelled" ? "green" : "red"}
                     onClick={handleOpenModal} // Mở modal khi nhấn Hủy đơn hàng
                     className="px-6 py-3 font-medium text-white bg-red-600 rounded-lg transition duration-200 hover:bg-red-500 w-full sm:w-auto"
                 >
-                    Hủy đơn hàng
+                    {order.status === "cancelled" ? "Mở đơn hàng" : "Hủy đơn hàng"}
                 </Button>
             </div>
 
@@ -223,27 +248,29 @@ export default function OrderDetail() {
                 withCloseButton={false}
                 centered
                 classNames={{
-                    modal: "max-w-lg w-full p-6 rounded-lg shadow-xl bg-white", // Thêm padding, bo góc, và bóng cho modal
-                    title: "text-2xl font-semibold text-gray-800 mb-4", // Tiêu đề to và rõ ràng
+                    modal: "max-w-lg w-full p-6 rounded-lg shadow-xl bg-white",
+                    title: "text-2xl font-semibold text-gray-800 mb-4",
                 }}
             >
-                <p className="font-semibold text-xl text-gray-800 mb-6">Lý do hủy đơn hàng</p>
+                <p className="font-semibold text-xl text-gray-800 mb-6">
+                    {order.status === "cancelled" ? "Lý do mở đơn hàng" : "Lý do hủy đơn hàng"}
+                </p>
                 <Textarea
                     className="w-full border border-gray-300 rounded-lg p-4 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
                     value={cancellationReason}
-                    onChange={(e) => setCancellationReason(e.target.value)} // Cập nhật lý do khi người dùng nhập
+                    onChange={(e) => setCancellationReason(e.target.value)}
                     minRows={4}
                 />
                 <div className="flex justify-end mt-4">
                     <Button
                         variant="light"
-                        onClick={handleCloseModal} // Đóng modal khi nhấn Quay lại
+                        onClick={handleCloseModal}
                         className="bg-gray-300 text-gray-800 py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
                     >
                         Quay lại
                     </Button>
                     <Button
-                        color="red"
+                        color={order.status === "cancelled" ? "green" : "red"}
                         onClick={handleCancelOrder} // Thực hiện hủy đơn hàng
                         className="ml-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
                     >

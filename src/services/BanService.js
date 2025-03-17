@@ -2,14 +2,15 @@ import moment from "moment-timezone";
 import { instance } from "../lib/axios";
 
 const BanService = {
-    async banUser({ userId, operatorId, userType, reason, banEnd }) {
-        console.log(userId, operatorId, userType, reason, banEnd);
+    async banUser({ userId, operatorId, userType, reason, banStart, banEnd }) {
+        console.log(userId, operatorId, userType, reason, banStart, banEnd);
         const banData = await instance
             .post("/ban/", {
                 userId,
                 operatorId,
                 userType,
                 reason,
+                banStart,
                 banEnd,
             })
             .then(({ data }) => {
@@ -22,16 +23,29 @@ const BanService = {
         return banData;
     },
 
-    async unbanAccountManually(userId) {
+    async unbanAccountManually(userId, userType) {
         const unbanData = await instance
             .post("/ban/unban", {
                 userId,
+                userType,
             })
             .then(({ data }) => data.data)
             .catch((err) => {
                 console.error(err);
             });
         return unbanData;
+    },
+    async cancelBanScheduled(userId, userType) {
+        const cancelBanScheduledData = await instance
+            .post("/ban/unban-scheduled", {
+                userId,
+                userType,
+            })
+            .then(({ data }) => data.data)
+            .catch((err) => {
+                console.error(err);
+            });
+        return cancelBanScheduledData;
     },
     async getBanAccount(userId, userType) {
         const banAccount = await instance

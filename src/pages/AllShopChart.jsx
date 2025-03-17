@@ -625,10 +625,21 @@ const DashboardChart = () => {
 
     return (
         <div className="bg-white shadow-md rounded-lg p-6 w-full">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Thống kê bán hàng</h2>
+            <h2 className="text-2xl text-center font-bold text-gray-800 mb-4">
+                Thống kê bán hàng 💰
+            </h2>
+
+            {/* Biểu đồ */}
+            <div className="w-full h-[400px] flex justify-center items-center">
+                {selectedChart === "line" && (
+                    <Line data={currentLineData} options={currentOptions} />
+                )}
+                {selectedChart === "bar" && <Bar data={currentBarData} options={currentOptions} />}
+                {selectedChart === "pie" && <Pie data={currentPieData} options={currentOptions} />}
+            </div>
 
             {/* Dropdown chọn biểu đồ */}
-            <div className="mb-4 flex justify-around">
+            <div className="mb-4 flex justify-center items-center space-x-4 my-6">
                 <select
                     onChange={(e) => setTimeOfCount(e.target.value)}
                     value={timeOfCount}
@@ -648,15 +659,6 @@ const DashboardChart = () => {
                     <option value="bar">📊 Top 10 sản phẩm bán chạy</option>
                     <option value="pie">🥧 Doanh thu theo danh mục</option>
                 </select>
-            </div>
-
-            {/* Biểu đồ */}
-            <div className="w-full h-[400px] flex justify-center items-center">
-                {selectedChart === "line" && (
-                    <Line data={currentLineData} options={currentOptions} />
-                )}
-                {selectedChart === "bar" && <Bar data={currentBarData} options={currentOptions} />}
-                {selectedChart === "pie" && <Pie data={currentPieData} options={currentOptions} />}
             </div>
         </div>
     );

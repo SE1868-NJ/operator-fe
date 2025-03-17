@@ -17,7 +17,6 @@ import {
     useShopOrders,
     useShopProducts,
 } from "../hooks/useShop";
-import BanService from "../services/BanService";
 import ExportExcelButton from "./ExportExcelButton";
 
 const ShopDetailStatistic = () => {
@@ -111,45 +110,6 @@ const ShopDetailStatistic = () => {
         document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
     };
 
-    //Hàm xử lý ban
-    const handleStatusChange = async () => {
-        if (shop.shopStatus === "active") {
-            const token = localStorage.getItem("token");
-            const operatorData = jwtDecode(token);
-            console.log(operatorData);
-            navigate(
-                `/main/ban_account?userId=${shop.shopID}&userName=${shop.shopName}&operatorId=1&accountType=shop`,
-            );
-        } else {
-            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
-            if (confirmUnban) {
-                await BanService.unbanAccountManually(shop.shopID);
-                window.location.reload();
-            }
-        }
-    };
-    const [banInfo, setBanInfo] = useState(null);
-
-    // Ensure hooks are always called in the same order
-    useEffect(() => {
-        if (!shop?.shopID) return;
-
-        const fetchBanInfo = async () => {
-            try {
-                const isUserBan = await BanService.getBanAccount(shop.shopID, "shop");
-                console.log("Ban info:", isUserBan);
-                if (isUserBan) {
-                    setBanInfo(isUserBan);
-                }
-                console.log("Ban info:", isUserBan);
-            } catch (error) {
-                console.error("Lỗi khi lấy thông tin ban:", error);
-            }
-        };
-
-        fetchBanInfo();
-    }, [shop?.shopID]);
-
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
@@ -209,115 +169,113 @@ const ShopDetailStatistic = () => {
 
                 {/* Biểu đồ */}
                 <div className="border border-gray-200 mt-8 pt-1 rounded-lg">
-                    <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
-                        <div className="w-full lg:w-1/2">
-                            <div className="rounded-2xl p-6 w-full">
-                                <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-4 mb-11 ">
-                                    📊 Thống kê số đơn hàng
-                                </h2>
-                                <div>
-                                    <OrderChart id={id} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full lg:w-1/2">
-                            <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider my-10">
-                                📦 Danh sách đơn hàng gần nhất
+                    {/* <div className="w-full flex flex-col lg:flex-row gap-6 px-4"> */}
+                    <div className="w-full">
+                        <div className="rounded-2xl p-6 w-full">
+                            <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider mb-8 ">
+                                📊 Thống kê số đơn hàng
                             </h2>
-                            <table className="w-full border-collapse border border-gray-200">
-                                <thead>
-                                    <tr className="bg-gray-100">
-                                        <th className="p-3 border">🆔 Mã đơn</th>
-                                        <th className="p-3 border">👤 Khách hàng</th>
-                                        <th className="p-3 border">📞 SĐT</th>
-                                        <th className="p-3 border">💰 Tổng tiền (VND)</th>
-                                        <th className="p-3 border">📦 Trạng thái</th>
-                                        <th className="p-3 border">📝 Ghi chú</th>
-                                        <th className="p-3 border text-center">🔍 Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders?.map((order) => (
-                                        <tr key={order.id} className="border hover:bg-gray-50">
-                                            <td className="p-3 border text-center">{order.id}</td>
-                                            <td className="p-3 border font-semibold">
-                                                {order.Customer.fullName}
-                                            </td>
-                                            <td className="p-3 border text-gray-600">
-                                                {order.Customer.userPhone}
-                                            </td>
-                                            <td className="p-3 border text-center font-semibold">
-                                                {Number(order.total).toLocaleString()} VND
-                                            </td>
-                                            <td className="p-3 border text-center font-semibold">
-                                                {order.status === "completed" && (
-                                                    <Badge color="green" variant="light">
-                                                        ✅ Hoàn thành
-                                                    </Badge>
-                                                )}
-                                                {order.status === "cancelled" && (
-                                                    <Badge color="red" variant="light">
-                                                        ❌ Đã hủy
-                                                    </Badge>
-                                                )}
-                                                {order.status === "processing" && (
-                                                    <Badge color="blue" variant="light">
-                                                        🔄 Đang xử lý
-                                                    </Badge>
-                                                )}
-                                                {order.status === "pending" && (
-                                                    <Badge color="yellow" variant="light">
-                                                        ⏳ Chờ xử lý
-                                                    </Badge>
-                                                )}
-                                            </td>{" "}
-                                            <td className="p-3 border text-gray-500">
-                                                {order.note || "Không có ghi chú"}
-                                            </td>
-                                            <td className="p-3 border text-center">
-                                                <button
-                                                    type="button"
-                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-                                                    onClick={() =>
-                                                        navigate(`/main/orderdetail/${order.id}`)
-                                                    }
-                                                >
-                                                    Xem
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-
-                            {/* Phân trang */}
-                            <div className="flex justify-center mt-6 gap-4">
-                                <button
-                                    type="button"
-                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
-                                    disabled={page2 === 1}
-                                    onClick={() => setPage2((prev) => Math.max(prev - 1, 1))}
-                                >
-                                    ⬅ Trang trước
-                                </button>
-                                <span className="text-lg font-semibold">
-                                    Trang {page2} / {totalPages2}
-                                </span>
-                                <button
-                                    type="button"
-                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
-                                    disabled={page2 >= totalPages2}
-                                    onClick={() =>
-                                        setPage2((prev) => Math.min(prev + 1, totalPages2))
-                                    }
-                                >
-                                    Trang sau ➡
-                                </button>
-                            </div>
-                            <div className="flex justify-end mt-6 gap-4">
-                                <ExportExcelButton data={excelData} fileName="OrderList" />
+                            <div>
+                                <OrderChart id={id} />
                             </div>
                         </div>
+                    </div>
+                    <div className="w-full">
+                        <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider mb-10">
+                            📦 Danh sách đơn hàng gần nhất
+                        </h2>
+                        <table className="w-full border-collapse border border-gray-200">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="p-3 border">🆔 Mã đơn</th>
+                                    <th className="p-3 border">👤 Khách hàng</th>
+                                    <th className="p-3 border">📞 SĐT</th>
+                                    <th className="p-3 border">💰 Tổng tiền (VND)</th>
+                                    <th className="p-3 border">📦 Trạng thái</th>
+                                    <th className="p-3 border">📝 Ghi chú</th>
+                                    <th className="p-3 border text-center">🔍 Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders?.map((order) => (
+                                    <tr key={order.id} className="border hover:bg-gray-50">
+                                        <td className="p-3 border text-center">{order.id}</td>
+                                        <td className="p-3 border font-semibold">
+                                            {order.Customer.fullName}
+                                        </td>
+                                        <td className="p-3 border text-gray-600">
+                                            {order.Customer.userPhone}
+                                        </td>
+                                        <td className="p-3 border text-center font-semibold">
+                                            {Number(order.total).toLocaleString()} VND
+                                        </td>
+                                        <td className="p-3 border text-center font-semibold">
+                                            {order.status === "completed" && (
+                                                <Badge color="green" variant="light">
+                                                    ✅ Hoàn thành
+                                                </Badge>
+                                            )}
+                                            {order.status === "cancelled" && (
+                                                <Badge color="red" variant="light">
+                                                    ❌ Đã hủy
+                                                </Badge>
+                                            )}
+                                            {order.status === "processing" && (
+                                                <Badge color="blue" variant="light">
+                                                    🔄 Đang xử lý
+                                                </Badge>
+                                            )}
+                                            {order.status === "pending" && (
+                                                <Badge color="yellow" variant="light">
+                                                    ⏳ Chờ xử lý
+                                                </Badge>
+                                            )}
+                                        </td>{" "}
+                                        <td className="p-3 border text-gray-500">
+                                            {order.note || "Không có ghi chú"}
+                                        </td>
+                                        <td className="p-3 border text-center">
+                                            <button
+                                                type="button"
+                                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                                                onClick={() =>
+                                                    navigate(`/main/orderdetail/${order.id}`)
+                                                }
+                                            >
+                                                Xem
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {/* Phân trang */}
+                        <div className="flex justify-center mt-6 gap-4">
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                disabled={page2 === 1}
+                                onClick={() => setPage2((prev) => Math.max(prev - 1, 1))}
+                            >
+                                ⬅ Trang trước
+                            </button>
+                            <span className="text-lg font-semibold">
+                                Trang {page2} / {totalPages2}
+                            </span>
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50"
+                                disabled={page2 >= totalPages2}
+                                onClick={() => setPage2((prev) => Math.min(prev + 1, totalPages2))}
+                            >
+                                Trang sau ➡
+                            </button>
+                        </div>
+                        <div className="flex justify-end mt-6 gap-4">
+                            <ExportExcelButton data={excelData} fileName="OrderList" />
+                        </div>
+                        {/* </div> */}
                     </div>
                     {/* Nút Xem feedback */}
                     <div className="flex justify-center mb-6">

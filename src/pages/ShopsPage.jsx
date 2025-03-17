@@ -1,7 +1,9 @@
-import { Button } from "@mantine/core";
+import { Button, Group } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
+import { IconMail } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SendBulkEmailModal from "../components/AllShopEmail.jsx";
 import { useExportShops, useShops } from "../hooks/useShop.js";
 import DashboardChart from "./AllShopChart.jsx";
 import ExportExcelButton from "./ExportExcelButton.jsx";
@@ -92,6 +94,8 @@ export default function ShopsPage() {
 
     const totalPages = Number.parseInt(data?.totalShops / limit) + 1;
 
+    const [emailModalOpened, setEmailModalOpened] = useState(false);
+
     if (isLoading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
@@ -106,7 +110,18 @@ export default function ShopsPage() {
             <div className="flex-1 mx-auto bg-white p-6">
                 <div className="flex items-center justify-between mb-2">
                     <h2 className="text-2xl font-bold">Danh sách các shop</h2>
-                    <ExportExcelButton data={excelData} fileName="ShopList" />
+                    <Group position="right" spacing="md" mt="md">
+                        <ExportExcelButton data={excelData} fileName="ShopList" />
+
+                        <Button leftIcon={<IconMail />} onClick={() => setEmailModalOpened(true)}>
+                            📩 Gửi Email Tất Cả Shop
+                        </Button>
+
+                        <SendBulkEmailModal
+                            opened={emailModalOpened}
+                            onClose={() => setEmailModalOpened(false)}
+                        />
+                    </Group>
                 </div>
 
                 {/* Statistics */}
@@ -135,7 +150,7 @@ export default function ShopsPage() {
                 </div>
                 {/* <ShopStatistics /> */}
                 <div>
-                    <h1 className="text-2xl font-bold mb-4">Tìm kiếm</h1>
+                    <h1 className="text-2xl font-bold mb-4">Tìm kiếm 🔍</h1>
                 </div>
 
                 {/* Tìm kiếm và lọc */}
@@ -148,7 +163,7 @@ export default function ShopsPage() {
                                 htmlFor="searchShopName"
                                 className="block text-gray-700 text-sm font-bold mb-2"
                             >
-                                Tìm tên cửa hàng:
+                                Tìm tên cửa hàng 🆔:
                             </label>
                             <input
                                 type="text"
@@ -164,7 +179,7 @@ export default function ShopsPage() {
                                 htmlFor="searchOwnerName"
                                 className="block text-gray-700 text-sm font-bold mb-2"
                             >
-                                Tìm chủ cửa hàng:
+                                Tìm chủ cửa hàng 📝:
                             </label>
                             <input
                                 type="text"
@@ -180,7 +195,7 @@ export default function ShopsPage() {
                                 htmlFor="searchShopEmail"
                                 className="block text-gray-700 text-sm font-bold mb-2"
                             >
-                                Tìm email cửa hàng:
+                                Tìm email cửa hàng 📦:
                             </label>
                             <input
                                 type="text"
@@ -196,7 +211,7 @@ export default function ShopsPage() {
                                 htmlFor="searchShopPhone"
                                 className="block text-gray-700 text-sm font-bold mb-2"
                             >
-                                Tìm SĐT cửa hàng:
+                                Tìm SĐT cửa hàng 📞:
                             </label>
                             <input
                                 type="text"

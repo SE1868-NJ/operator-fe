@@ -2,6 +2,7 @@ import {
     Alert,
     Avatar,
     Badge,
+    Button,
     Card,
     Container,
     Divider,
@@ -12,17 +13,59 @@ import {
     Table,
     Text,
 } from "@mantine/core";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import EmailModal from "../components/ShopEmail";
 import { useProduct } from "../hooks/useShop";
-
+import BanService from "../services/BanService";
 const ProductDetail = () => {
     const { id, pid } = useParams();
     const { data, isLoading, error } = useProduct(id, pid);
+    const product = data?.data;
+    const [modalOpened, setModalOpened] = useState(false);
+
+    //Hàm xử lý ban
+    const handleStatusChange = async () => {
+        if (product?.product_id === "active") {
+            const token = localStorage.getItem("token");
+            const operatorData = jwtDecode(token);
+            console.log(operatorData);
+            navigate(
+                `/main/ban_account?userId=${product?.product_id}&userName=${product?.product_name}&operatorId=1&accountType=product`,
+            );
+        } else {
+            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
+            if (confirmUnban) {
+                await BanService.unbanAccountManually(product.product_id);
+                window.location.reload();
+            }
+        }
+    };
+    const [banInfo, setBanInfo] = useState(null);
+
+    // Ensure hooks are always called in the same order
+    useEffect(() => {
+        if (!product?.product_id) return;
+
+        const fetchBanInfo = async () => {
+            try {
+                const isUserBan = await BanService.getBanAccount(product.product_id, "shop");
+                console.log("Ban info:", isUserBan);
+                if (isUserBan) {
+                    setBanInfo(isUserBan);
+                }
+                console.log("Ban info:", isUserBan);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin ban:", error);
+            }
+        };
+
+        fetchBanInfo();
+    }, [product?.product_id]);
 
     if (isLoading) return <Loader size="xl" />;
     if (error) return <Alert color="red">Error: {error.message}</Alert>;
-
-    const product = data?.data;
 
     return (
         <Container size="lg" px="md">
@@ -91,6 +134,17 @@ const ProductDetail = () => {
                             {product?.quantity > 0 ? "Còn hàng" : "Hết hàng"}
                         </Badge>
                     </Stack>
+                    {product.status === "suspended" && (
+                        <div className="mt-4 p-4 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md flex items-center gap-3">
+                            <IconAlertCircle size={24} className="text-red-600" />
+                            <p className="text-sm text-red-800 font-medium">
+                                Tài khoản bị đình chỉ đến:{" "}
+                                <span className="font-semibold text-red-900">
+                                    {new Date(banInfo?.banEnd).toLocaleString("vi-VN")}
+                                </span>
+                            </p>
+                        </div>
+                    )}
                 </Group>
             </Card>
 
@@ -183,10 +237,38 @@ const ProductDetail = () => {
                     </Card>
                 ))
             ) : (
-                <Text color="gray" mt="sm">
-                    Chưa có feedback nào.
-                </Text>
+                <Text mt="sm">Chưa có feedback nào.</Text>
             )}
+            <div className="flex justify-end mt-6 w-full gap-4">
+                <Button
+                    color="red"
+                    type="button"
+                    onClick={() => handleStatusChange()}
+                    className={`${
+                        product.status === "active"
+                            ? "bg-red-500 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                            : product.status === "suspended"
+                              ? "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                              : "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md" // Nếu là "Không hoạt động"
+                    } px-4 py-2 rounded`}
+                >
+                    {
+                        product.status === "active"
+                            ? "Đình chỉ sản phẩm"
+                            : product.status === "suspended"
+                              ? "Gỡ đình sản phẩm"
+                              : "Kích hoạt sản phẩm" // Nếu là "Không hoạt động"
+                    }
+                </Button>
+                <Button color="cyan" onClick={() => setModalOpened(true)}>
+                    📩 Gửi Email
+                </Button>
+                <EmailModal
+                    opened={modalOpened}
+                    onClose={() => setModalOpened(false)}
+                    shopId={id}
+                />
+            </div>
         </Container>
     );
 };

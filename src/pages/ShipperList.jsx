@@ -38,6 +38,11 @@ export default function ShipperList() {
         filterStatus,
         filterDate,
     );
+
+    if (isLoading || isLoadingShippingFee) {
+        return <p>Loading...</p>;
+    }
+
     console.log("totalShippingFee", allShipperFee);
 
     const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);

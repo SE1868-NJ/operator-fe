@@ -45,7 +45,7 @@ const UserDetail = () => {
             console.log(operatorData);
             // Điều hướng đến trang đình chỉ, truyền userId & operatorId qua URL
             Navigate(
-                `/main/ban_account?userId=${user.userID}&userName=${user.fullName}&operatorID=1&accountType=customer`,
+                `/main/ban_account?userId=${user.userID}&userName=${user.fullName}&operatorId=1&accountType=customer`,
             ); // sau này chỉnh lại thành operatorID
         } else {
             const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");

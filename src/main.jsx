@@ -40,6 +40,10 @@ import ShippingMethodDetail from "./pages/ShippingMethodDetail.jsx";
 import ShippingMethods from "./pages/ShippingMethods.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
+
+import OrderDetailPage from "./pages/OrderDetailPage.jsx";
+import ShopRevenueDetail from "./pages/ShopRevenueDetail.jsx";
+import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 const theme = createTheme({
@@ -75,6 +79,18 @@ const router = createBrowserRouter([
             {
                 path: "/main/shops",
                 element: <ShopsPage />,
+            },
+            {
+                path: "/main/shops-revenue",
+                element: <ShopsRevenuePage />,
+            },
+            {
+                path: "/main/shops-revenue/:id",
+                element: <ShopRevenueDetail />,
+            },
+            {
+                path: "/main/shops-revenue/:id/:id",
+                element: <OrderDetailPage />,
             },
             {
                 path: "/main/shipperslist",

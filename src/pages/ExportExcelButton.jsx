@@ -1,6 +1,4 @@
-import { saveAs } from "file-saver";
 import { FaFileExcel } from "react-icons/fa";
-import * as XLSX from "xlsx-js-style";
 import { ExportDataToExcel } from "../services/ExportToExcel.js";
 
 const ExportExcelButton = ({ data, fileName = "ExportedData" }) => {

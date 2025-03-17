@@ -1,7 +1,7 @@
 import { BarChart } from "@mantine/charts";
 import { Card, Loader, Select, Text, Title } from "@mantine/core";
 import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGetTop10Shippers } from "../hooks/useShippers";
 
 export default function ShipperDashboardChart() {
@@ -51,7 +51,9 @@ export default function ShipperDashboardChart() {
             });
     }, [formatMonth]); // Add formatMonth to the dependency array
 
-    const { data: chartData } = useGetTop10Shippers();
+    const { data: chartData, isLoading } = useGetTop10Shippers();
+
+    if (isLoading || !chartData) return <div>Loading...</div>;
 
     const filteredData = data.filter((item) => item.order_month === selectedMonth);
 

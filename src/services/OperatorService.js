@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { jwtDecode } from "jwt-decode";
 import { authInstance, instance } from "../lib/axios";
 
@@ -15,16 +16,25 @@ const OperatorService = {
         return data.data;
     },
 
-    async updateAccountProfile(dataUpdate) {
+    async updateAccountProfile(formData) {
         const data = await instance
-            .post("/operator/profile/update", {
-                dataUpdate,
+            .post("/operator/profile/update", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
             })
             .then(({ data }) => data)
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.error(err);
+                notifications.show({
+                    title: "Lỗi!",
+                    message: err.message,
+                    color: "red",
+                });
+                return null;
+            });
 
         return data;
     },
+
     decodeToken() {
         try {
             const token = localStorage.getItem("token");

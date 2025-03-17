@@ -1,7 +1,9 @@
+import { Button, Group, Modal, Text } from "@mantine/core";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useQueryClient } from "@tanstack/react-query";
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAccountProfile } from "../../hooks/useAccountProfile.js";
 import { useUserById } from "../../hooks/useUser";
 import BanService from "../../services/BanService";
 import CustomerDashboardChart from "./CustomerDashboardChart.jsx";
@@ -12,9 +14,12 @@ const UserDetail = () => {
     const { id } = useParams();
     const queryClient = useQueryClient();
     const [selectedImage, setSelectedImage] = useState(null);
+    const [unbantModalOpen, setUnbanModalOpen] = useState(false);
 
     // Fetch user data
     const { data: user, isLoading, error } = useUserById(id);
+    const { data: operatorData, isLoadingOperator, errorOperator } = useAccountProfile();
+
     //   console.log(user)
 
     const [banInfo, setBanInfo] = useState(null);
@@ -35,27 +40,37 @@ const UserDetail = () => {
         fetchBanInfo();
     }, [user?.userID]);
 
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error loading user data</p>;
+    console.log(banInfo);
+
+    if (isLoading || isLoadingOperator) return <p>Loading...</p>;
+    if (error || errorOperator) return <p>Error loading user data</p>;
 
     const handleStatusChange = async () => {
-        if (user.status === "active") {
-            const token = localStorage.getItem("token");
-            const operatorData = jwtDecode(token);
-            console.log(operatorData);
+        if (user?.status === "active" && !banInfo) {
             // Điều hướng đến trang đình chỉ, truyền userId & operatorId qua URL
             Navigate(
-                `/main/ban_account?userId=${user.userID}&userName=${user.fullName}&operatorId=1&accountType=customer`,
+                `/main/ban_account?userId=${user.userID}&userName=${user.fullName}&operatorId=${operatorData.operatorID}&accountType=customer`,
             ); // sau này chỉnh lại thành operatorID
         } else {
-            const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
+            if (banInfo?.status === "banned") {
+                //nprogress.start();
+                await BanService.unbanAccountManually(user.userID, "customer");
 
-            if (confirmUnban) {
-                // Nếu người dùng nhấn "OK", tiến hành gỡ ban
-                await BanService.unbanAccountManually(user.userID);
-                window.location.reload();
+                //setUnbanModalOpen(false);
+                //nprogress.complete();
+
+                // if (confirmUnban) {
+                //     // Nếu người dùng nhấn "OK", tiến hành gỡ ban
+                //     await BanService.unbanAccountManually(user.userID);
+                //     window.location.reload();
+                // }
+            } else if (banInfo?.status === "scheduled") {
+                await BanService.cancelBanScheduled(user.userID, "customer");
             }
+            window.location.reload();
         }
+        queryClient.invalidateQueries(["users"]); // Invalidate cache danh sách users
+        queryClient.invalidateQueries(["exportUsers"]); // Invalidate cache danh sách users cho việc export excel
     };
 
     return (
@@ -77,18 +92,50 @@ const UserDetail = () => {
                             {/* <h5 className="text-lg font-semibold">Trạng thái</h5> */}
                             <div
                                 className={`inline-block mt-2 px-4 py-1 text-sm font-semibold rounded-full ${
-                                    user.status === "active"
+                                    user?.status === "active"
                                         ? "bg-green-100 text-green-700 border-green-500"
-                                        : user.status === "suspended"
+                                        : user?.status === "suspended"
                                           ? "bg-yellow-100 text-yellow-700 border-yellow-500"
                                           : "bg-red-100 text-red-700 border-red-500"
                                 }`}
                             >
-                                {user.status === "active" ? "Hoạt động" : "Đình chỉ"}
+                                {user?.status === "active" ? "Hoạt động" : "Đình chỉ"}
                             </div>
 
+                            {/* Nếu status là "Hoạt động", hiển thị thêm thời gian đặt lịch ban */}
+                            {user?.status === "active" && banInfo && (
+                                <div className="mt-3 p-3 bg-yellow-100 border-l-4 border-yellow-500 rounded-md shadow-md">
+                                    <div className="text-sm text-yellow-800 font-medium">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-yellow-600 font-bold">
+                                                &#x26A0;
+                                            </span>
+                                            <span>Tài khoản của bạn sẽ bị đình chỉ từ:</span>
+                                            <span className="font-semibold text-yellow-900">
+                                                {new Date(banInfo.banStart).toLocaleString("vi-VN")}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-yellow-600 font-bold">
+                                                &#x26A0;
+                                            </span>
+                                            <span>Tài khoản của bạn sẽ bị đình chỉ đến:</span>
+                                            <span className="font-semibold text-yellow-900">
+                                                {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-2 p-2 bg-yellow-50 border border-yellow-300 rounded-md">
+                                        <p className="text-sm text-yellow-700">
+                                            <span className="font-semibold">⚠ Lý do: </span>{" "}
+                                            {banInfo.reason}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}
-                            {user.status === "suspended" && banInfo && (
+                            {user?.status === "suspended" && banInfo && (
                                 <div className="mt-3 p-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
                                     <p className="text-sm text-red-800 font-medium flex items-center gap-2">
                                         <span className="text-red-600 font-bold">&#x21;</span>
@@ -212,28 +259,35 @@ const UserDetail = () => {
                         <div className="flex items-center justify-center mt-6 space-x-4">
                             <button
                                 type="button"
-                                onClick={() => handleStatusChange()}
+                                onClick={() => {
+                                    if (user?.status === "active" && !banInfo) {
+                                        handleStatusChange();
+                                    } else if (
+                                        banInfo?.status === "banned" ||
+                                        banInfo?.status === "scheduled"
+                                    ) {
+                                        setUnbanModalOpen(true);
+                                    }
+                                }}
                                 className={`${
-                                    user.status === "active"
+                                    user?.status === "active" && !banInfo
                                         ? "bg-yellow-500 hover:bg-yellow-700 text-white"
-                                        : user.status === "suspended"
+                                        : banInfo?.status === "banned"
                                           ? "bg-green-500 hover:bg-green-700 text-white"
                                           : "bg-blue-500 hover:bg-blue-700 text-white" // Nếu là "Không hoạt động"
                                 } px-4 py-2 rounded`}
                             >
                                 {
-                                    user.status === "active"
+                                    user?.status === "active" && !banInfo
                                         ? "Đình chỉ người dùng"
-                                        : user.status === "suspended"
+                                        : banInfo?.status === "banned"
                                           ? "Gỡ đình chỉ người dùng"
-                                          : "Kích hoạt người dùng" // Nếu là "Không hoạt động"
+                                          : "Hủy lịch đình chỉ người dùng" // Nếu là "Không hoạt động"
                                 }
                             </button>
                             <button
                                 type="button"
                                 onClick={() => {
-                                    queryClient.invalidateQueries(["users"]); // Invalidate cache danh sách users
-                                    queryClient.invalidateQueries(["exportUsers"]); // Invalidate cache danh sách users cho việc export excel
                                     Navigate("/main/users");
                                 }}
                                 className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
@@ -252,6 +306,22 @@ const UserDetail = () => {
                     </div>
                 </div>
             </div>
+            {/* Modal xác nhận gỡ ban người dùng */}
+            <Modal
+                opened={unbantModalOpen}
+                onClose={() => setUnbanModalOpen(false)}
+                title="Xác nhận"
+            >
+                <Text>Bạn có chắc chắn muốn gỡ đình chỉ người dùng này?</Text>
+                <Group position="right" mt="md">
+                    <Button variant="default" onClick={() => setUnbanModalOpen(false)}>
+                        Hủy
+                    </Button>
+                    <Button color="green" onClick={handleStatusChange}>
+                        Xác nhận
+                    </Button>
+                </Group>
+            </Modal>
         </div>
     );
 };

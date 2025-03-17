@@ -1,156 +1,106 @@
-import {
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    Title,
-    Tooltip,
-} from "chart.js";
-import { useEffect, useRef, useState } from "react";
-import { Bar } from "react-chartjs-2";
+import { BarChart } from "@mantine/charts";
+import { Card, Loader, Select, Text, Title } from "@mantine/core";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import { useGetTop10Shippers } from "../hooks/useShippers";
 
-// Đăng ký các thành phần cần thiết của Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+export default function ShipperDashboardChart() {
+    const [data, setData] = useState([]);
+    const [months, setMonths] = useState([]);
+    const [selectedMonth, setSelectedMonth] = useState("");
+    const [loading, setLoading] = useState(true);
 
-const ShipperDashboardChart = () => {
-    const [selectedChart, setSelectedChart] = useState("bar");
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
-    const [timeOfCount, setTimeOfCount] = useState("day"); // Tùy chọn cho ngày, tuần, tháng
+    const TARGET_FEE = 250000;
 
-    const labels = {
-        day: ["Shipper A", "Shipper B", "Shipper C", "Shipper D", "Shipper E"],
-        week: ["Shipper A", "Shipper B", "Shipper C", "Shipper D", "Shipper E"],
-        month: ["Shipper A", "Shipper B", "Shipper C", "Shipper D", "Shipper E"],
-        quarter: ["Shipper A", "Shipper B", "Shipper C", "Shipper D", "Shipper E"],
-    };
-
-    const barData = {
-        day: {
-            labels: labels.day,
-            datasets: [
-                {
-                    label: "Số lượng đơn giao (cái)",
-                    data: [120, 95, 150, 110, 130], // Số lượng đơn hàng trong ngày của mỗi shipper
-                    backgroundColor: "#4BC0C0",
-                },
-            ],
-        },
-        week: {
-            labels: labels.week,
-            datasets: [
-                {
-                    label: "Số lượng đơn giao (cái)",
-                    data: [210, 170, 220, 180, 250], // Số lượng đơn hàng trong tuần
-                    backgroundColor: "#4BC0C0",
-                },
-            ],
-        },
-        month: {
-            labels: labels.month,
-            datasets: [
-                {
-                    label: "Số lượng đơn giao (cái)",
-                    data: [900, 850, 980, 880, 950], // Số lượng đơn hàng trong tháng
-                    backgroundColor: "#4BC0C0",
-                },
-            ],
-        },
-        quarter: {
-            labels: labels.quarter,
-            datasets: [
-                {
-                    label: "Số lượng đơn giao (cái)",
-                    data: [2500, 2300, 2700, 2200, 2600], // Số lượng đơn hàng trong quý
-                    backgroundColor: "#4BC0C0",
-                },
-            ],
-        },
-    };
-
-    const getBarData = (dataType) => {
-        return barData[dataType] || barData.day; // Mặc định là data của ngày nếu không tìm thấy
-    };
-    const currentBarData = getBarData(timeOfCount);
-
-    const options = {
-        bar: {
-            responsive: true,
-            plugins: {
-                legend: { position: "top" },
-                title: { display: true, text: "Thống kê số lượng đơn giao của shipper" },
-            },
-        },
-    };
-    const getOptions = (dataType) => {
-        return options[dataType] || options.bar;
-    };
-    const currentOptions = getOptions(selectedChart);
+    // Wrap formatMonth in useCallback to avoid unnecessary re-renders
+    const formatMonth = useCallback((dateString) => {
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return dateString; // Kiểm tra nếu không phải ngày hợp lệ
+        return `${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
+    }, []);
 
     useEffect(() => {
-        const chartCanvas = chartRef.current?.getContext("2d"); // Optional chaining
+        axios
+            .get("http://localhost:3050/shippers/top10Shippers")
+            .then((response) => {
+                console.log("🚀 Data fetched:", response.data.data);
+                const fetchedData = response.data.data;
 
-        if (!chartCanvas) {
-            return;
-        }
+                if (!fetchedData || fetchedData.length === 0) {
+                    console.warn("⚠ API trả về mảng rỗng!");
+                }
 
-        if (chartInstance.current) {
-            chartInstance.current.destroy();
-        }
+                // Chuyển đổi định dạng tháng
+                const uniqueMonths = [
+                    ...new Set(fetchedData.map((item) => formatMonth(item.order_month))),
+                ];
 
-        let chartConfig;
-        switch (selectedChart) {
-            case "bar":
-                chartConfig = {
-                    type: "bar",
-                    data: currentBarData,
-                    options: currentOptions,
-                };
-                break;
-            default:
-                chartConfig = {
-                    type: "bar",
-                    data: currentBarData,
-                    options: currentOptions,
-                };
-        }
+                setMonths(uniqueMonths);
+                setSelectedMonth(uniqueMonths[0] || "");
+                setData(
+                    fetchedData.map((item) => ({
+                        ...item,
+                        order_month: formatMonth(item.order_month),
+                    })),
+                );
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("❌ Error fetching shippers:", error);
+                setLoading(false);
+            });
+    }, [formatMonth]); // Add formatMonth to the dependency array
 
-        chartInstance.current = new ChartJS(chartCanvas, chartConfig);
+    const { data: chartData, isLoading } = useGetTop10Shippers();
 
-        return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
-            }
-        };
-    }, [selectedChart, currentBarData, currentOptions]);
+    if (isLoading || !chartData) return <div>Loading...</div>;
+
+    const filteredData = data.filter((item) => item.order_month === selectedMonth);
 
     return (
-        <div className="w-full p-6 bg-white rounded-lg shadow-md">
-            <h2 className="mb-4 text-2xl font-bold text-gray-800">
-                Thống kê giao hàng của Shipper
-            </h2>
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={3} align="center" mb="md">
+                Top 10 Người giao hàng có doanh thu cao nhất ({selectedMonth || "Chưa có dữ liệu"})
+            </Title>
 
-            {/* Dropdown chọn thời gian */}
-            <div className="flex justify-around mb-4">
-                <select
-                    onChange={(e) => setTimeOfCount(e.target.value)}
-                    value={timeOfCount}
-                    className="p-2 transition border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="day">📅 Số lượng giao trong ngày</option>
-                    <option value="week">📅 Số lượng giao trong tuần</option>
-                    <option value="month">📅 Số lượng giao trong tháng</option>
-                    <option value="quarter">📅 Số lượng giao trong quý</option>
-                </select>
-            </div>
+            {months.length > 0 ? (
+                <Select
+                    label="Chọn tháng"
+                    data={months.map((month) => ({ value: month, label: month }))}
+                    value={selectedMonth}
+                    onChange={setSelectedMonth}
+                    mb="md"
+                />
+            ) : (
+                <Text align="center" color="red">
+                    Không có dữ liệu
+                </Text>
+            )}
 
-            {/* Biểu đồ */}
-            <div className="w-full h-[400px] flex justify-center items-center">
-                {selectedChart === "bar" && <Bar data={currentBarData} options={currentOptions} />}
-            </div>
-        </div>
+            {loading ? (
+                <Loader size="md" mt="md" />
+            ) : filteredData.length > 0 ? (
+                <BarChart
+                    h={300}
+                    data={chartData}
+                    dataKey="shipper_name"
+                    series={[{ name: "total_shipping_fee", color: "#FFB8E0" }]}
+                    tickLine="y"
+                    cursorFill="#F6F0F0"
+                    referenceLines={[
+                        {
+                            y: TARGET_FEE,
+                            label: "Target 250,000",
+                            color: "red",
+                            strokeDasharray: "5 5",
+                        },
+                    ]}
+                />
+            ) : (
+                <Text align="center" color="gray">
+                    Không có dữ liệu cho tháng này
+                </Text>
+            )}
+        </Card>
     );
-};
-
-export default ShipperDashboardChart;
+}

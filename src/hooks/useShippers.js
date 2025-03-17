@@ -34,10 +34,17 @@ export const usePendingShipper = (id) => {
     });
 };
 
-export const useTotalShippingFeeAllShippers = (offset, limit) => {
+export const useTotalShippingFeeAllShippers = (offset, limit, search, filterStatus, filterDate) => {
     return useQuery({
-        queryKey: ["totalShippingFee", offset, limit],
-        queryFn: () => ShipperServices.getSumShippingFeeAllShippers(offset, limit),
+        queryKey: ["totalShippingFee", offset, limit, search, filterStatus, filterDate],
+        queryFn: () =>
+            ShipperServices.getSumShippingFeeAllShippers(
+                offset,
+                limit,
+                search,
+                filterStatus,
+                filterDate,
+            ),
     });
 };
 
@@ -52,6 +59,13 @@ export const useGetTopShippers = () => {
     return useQuery({
         queryKey: ["topShippers"],
         queryFn: () => ShipperServices.getTopShippers(),
+    });
+};
+
+export const useGetTop10Shippers = () => {
+    return useQuery({
+        queryKey: ["top10Shippers"],
+        queryFn: () => ShipperServices.getTop10Shippers(),
     });
 };
 

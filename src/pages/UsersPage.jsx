@@ -45,19 +45,19 @@ const UserList = () => {
     };
 
     return (
-        <div className="max-w-full mx-auto mt-10 p-4 bg-white shadow-md rounded-lg">
+        <div className="max-w-full p-4 mx-auto mt-10 bg-white rounded-lg shadow-md">
             {/* Hiển thị Top 3 Khách Hàng */}
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-4xl font-bold text-green-600 flex items-center gap-4">
+            <div className="flex items-center justify-between mb-4">
+                {/* <h3 className="flex items-center gap-4 text-4xl font-bold text-green-600">
                     🏆 Top 3 khách hàng thân thiết nhất
                     <ArrowRight size={80} className="text-green-600" />
-                </h3>
+                </h3> */}
                 {/* Hiển thị Top 3 Khách Hàng */}
                 <Top3Customer />
             </div>
 
             {/* Search và Filter */}
-            <div className="flex justify-between mb-4 gap-2">
+            <div className="flex justify-between gap-2 mb-4">
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên..."

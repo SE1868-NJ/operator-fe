@@ -1,6 +1,29 @@
 import { instance } from "../lib/axios";
 
 const ShopService = {
+    async generateAIReview(shopId, prompt) {
+        try {
+            const { data } = await instance.post("/shops/process-prompt", {
+                id: shopId,
+                prompt,
+            });
+            return data.aiReview; // Trả về nhận xét từ AI
+        } catch (error) {
+            console.error("Lỗi khi tạo nhận xét từ AI:", error);
+            return "Đã có lỗi xảy ra, vui lòng thử lại.";
+        }
+    },
+    async getProductById(id, pid) {
+        const product = await instance
+            .get(`/shops/${id}/products/${pid}`, {
+                params: {
+                    id,
+                    pid,
+                },
+            })
+            .then(({ data }) => data);
+        return product;
+    },
     async getProductsByShopId(id, offset, limit, filterData) {
         const products = await instance
             .get(`/shops/${id}/products`, {
@@ -139,6 +162,116 @@ const ShopService = {
             console.error("Error fetching order statistics:", error);
             return null; // Hoặc throw error nếu muốn xử lý bên ngoài
         }
+    },
+
+    async getAllShopsRevenues(day, month, year = 2025, limit = 10, page = 1, filterData = {}) {
+        const offset = (page - 1) * limit;
+        const { shopName, ownerName, shopEmail, shopPhone } = filterData;
+        const data = {
+            params: {
+                year,
+                month,
+                day,
+                offset,
+                limit,
+                shopName,
+                ownerName,
+                shopEmail,
+                shopPhone,
+            },
+        };
+        const approvedShops = await instance.get("/shops/revenues", data).then(({ data }) => {
+            return data?.data;
+        });
+        return approvedShops;
+    },
+
+    async getOneShopRevenue(id, day, month, year = 2025, limit = 10, page = 1, filterData = {}) {
+        const offset = (page - 1) * limit;
+        const { shipperName, customerName } = filterData;
+        const data = {
+            params: {
+                id,
+                year,
+                month,
+                day,
+                offset,
+                limit,
+                shipperName,
+                customerName,
+            },
+        };
+        const shopOrders = await instance.get(`/shops/revenues/:${id}`, data).then(({ data }) => {
+            return data?.revenue;
+        });
+        return shopOrders;
+    },
+
+    async getRevenuesAllShopLastTime(distanceTime = "day") {
+        const data = {
+            params: {
+                distanceTime,
+            },
+        };
+        const revenues = await instance
+            .get("/shops/totalrevenues", data)
+            .then(({ data }) => {
+                return data?.totalRevenues;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return revenues;
+    },
+
+    async getRevenuesOneShopLastTime(id, distanceTime = "day") {
+        const data = {
+            params: {
+                id,
+                distanceTime,
+            },
+        };
+        const revenues = await instance
+            .get(`/shops/totalrevenues/${id}`, data)
+            .then(({ data }) => {
+                return data?.totalRevenues;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return revenues;
+    },
+
+    async getOneOrder(id) {
+        const order = await instance
+            .get(`/shops/orders/${id}`)
+            .then(({ data }) => {
+                return data?.order;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        return order;
+    },
+
+    async getAllShopsChartData(rangeTime = "DAY") {
+        const data = {
+            params: { distanceTime: rangeTime },
+        };
+        const dataForChart = await instance
+            .get("/shops/shopstatistic", data)
+            .then(({ data }) => {
+                return data?.revenues?.revenues;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        return dataForChart;
+    },
+
+    async getOneShopInfor(id) {
+        const shop = await instance.get(`/shops/getinfor/${id}`).then(({ data }) => data?.shop);
+        return shop;
     },
 };
 

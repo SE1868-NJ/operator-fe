@@ -1,4 +1,5 @@
 import { notifications } from "@mantine/notifications";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ const AccountProfile = () => {
     const queryClient = useQueryClient();
 
     const { data, isLoading, error } = useAccountProfile();
+    const [avatarPreview, setAvatarPreview] = useState("");
     const [editableUser, setEditableUser] = useState({
         operatorID: "",
         firstName: "",
@@ -49,23 +51,57 @@ const AccountProfile = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setEditableUser((prev) => ({ ...prev, avatar: imageUrl }));
+            setEditableUser((prev) => ({ ...prev, avatar: file }));
+            setAvatarPreview(URL.createObjectURL(file)); // Tạo URL tạm thời để preview
         }
     };
 
-    const handleSave = () => {
-        //alert("Cập nhật thông tin thành công!");
-        OperatorService.updateAccountProfile(editableUser);
-        window.location.reload();
-        queryClient.invalidateQueries(["accountProfile"]);
-        notifications.show({
-            title: "Đổi thông tin người dùng thành công",
-            message: "Thông tin tài khoản của bạn đã được cập nhật",
-            color: "green",
-        });
+    const handleSave = async () => {
+        nprogress.start();
+        // Kiểm tra dữ liệu có bị trống không
+        for (const key in editableUser) {
+            if (!editableUser[key]) {
+                notifications.show({
+                    title: "Lỗi",
+                    message: `Trường "${key}" không được để trống!`,
+                    color: "red",
+                });
+                return;
+            }
+        }
 
-        setIsEditing(false);
+        // Tạo FormData để gửi dữ liệu đúng định dạng
+        const formData = new FormData();
+        formData.append("operatorID", editableUser.operatorID);
+        formData.append("firstName", editableUser.firstName);
+        formData.append("lastName", editableUser.lastName);
+        formData.append("gender", editableUser.gender);
+        formData.append("email", editableUser.email);
+        formData.append("phoneNumber", editableUser.phoneNumber);
+        formData.append("dateOfBirth", editableUser.dateOfBirth);
+        formData.append("status", editableUser.status);
+
+        // Nếu có ảnh mới, thêm vào FormData
+        if (editableUser.avatar instanceof File) {
+            formData.append("image", editableUser.avatar);
+        }
+
+        // Gửi dữ liệu lên backend
+        const response = await OperatorService.updateAccountProfile(formData);
+        nprogress.complete();
+
+        if (response) {
+            notifications.show({
+                title: "Cập nhật thành công",
+                message: response.message || "Thông tin tài khoản đã được cập nhật!",
+                color: "green",
+            });
+
+            queryClient.invalidateQueries(["accountProfile"]);
+            setIsEditing(false);
+        } else {
+            console.error("Cập nhật thất bại!");
+        }
     };
 
     return (
@@ -75,8 +111,8 @@ const AccountProfile = () => {
                     {/* Avatar */}
                     <div className="relative inline-block">
                         <img
-                            className="w-40 h-40 mx-auto rounded-full border border-gray-300"
-                            src={editableUser.avatar}
+                            className="w-40 h-40 mx-auto rounded-full border border-gray-300 object-cover"
+                            src={avatarPreview || editableUser.avatar}
                             alt="Ảnh đại diện"
                         />
                         {isEditing && (

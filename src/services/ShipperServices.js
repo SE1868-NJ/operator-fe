@@ -1,4 +1,3 @@
-//.services/ShipperService.js
 import { instance } from "../lib/axios";
 
 const ShipperServices = {
@@ -39,9 +38,11 @@ const ShipperServices = {
         return shippers;
     },
 
-    async getSumShippingFeeAllShippers(offset, limit) {
+    async getSumShippingFeeAllShippers(offset, limit, search, filterStatus, filterDate) {
         const sumShippingFee = await instance
-            .get("/shippers/sumShippingFee", { params: { offset, limit } })
+            .get("/shippers/sumShippingFee", {
+                params: { offset, limit, search, filterStatus, filterDate },
+            })
             .then(({ data }) => {
                 return data?.data;
             });
@@ -72,6 +73,12 @@ const ShipperServices = {
                 console.error(err);
             });
         return shipper;
+    },
+    async getTop10Shippers() {
+        const topShippers = await instance
+            .get("/shippers/top10Shippers")
+            .then(({ data }) => data?.data);
+        return topShippers;
     },
 
     async getPendingShipperDraft(id) {

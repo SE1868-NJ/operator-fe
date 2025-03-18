@@ -49,18 +49,35 @@ const ShipperServices = {
         return sumShippingFee;
     },
 
-    async getOrdersOfShipper(id) {
-        const orders = await instance.get(`/shippers/ordersOfShipper/${id}`).then(({ data }) => {
-            return data?.data;
-        });
-        return orders;
-    },
 
     async getTopShippers() {
         const topShippers = await instance
             .get("/shippers/topShippers")
             .then(({ data }) => data?.data);
         return topShippers;
+    },
+    async getOrdersOfShipper(id, filters = {}) {
+        const queryParams = new URLSearchParams(filters).toString();
+        const url = `/shippers/ordersOfShipper/${id}?${queryParams}`;
+
+
+
+        const orders = await instance.get(url).then(({ data }) => data?.data);
+        return orders;
+    },
+
+    async getActiveShipperCount() {
+        const count = await instance
+            .get("/shippers/countActive")
+            .then(({ data }) => data?.totalActiveShippers);
+        return count;
+    },
+
+    async getShippersJoinedToday() {
+        const count = await instance
+            .get("/shippers/countJoinedToday")
+            .then(({ data }) => data?.totalShippersJoinedToday);
+        return count;
     },
 
     async updatePendingShipper(data) {

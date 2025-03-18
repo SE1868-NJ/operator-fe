@@ -68,3 +68,10 @@ export const useGetTop10Shippers = () => {
         queryFn: () => ShipperServices.getTop10Shippers(),
     });
 };
+
+export const useGetDraftShipper = (id) => {
+    return useQuery({
+        queryKey: ["getDraftShipper", id],
+        queryFn: () => ShipperServices.getPendingShipperDraft(id),
+    });
+};

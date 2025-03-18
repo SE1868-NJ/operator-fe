@@ -49,14 +49,12 @@ const ShipperServices = {
         return sumShippingFee;
     },
 
-    async getOrdersOfShipper(id, filters = {}) {
-        const queryParams = new URLSearchParams(filters).toString();
-        const url = `/shippers/ordersOfShipper/${id}?${queryParams}`;
-
-        const orders = await instance.get(url).then(({ data }) => data?.data);
+    async getOrdersOfShipper(id) {
+        const orders = await instance.get(`/shippers/ordersOfShipper/${id}`).then(({ data }) => {
+            return data?.data;
+        });
         return orders;
     },
-
 
     async getTopShippers() {
         const topShippers = await instance
@@ -76,26 +74,13 @@ const ShipperServices = {
             });
         return shipper;
     },
+<<<<<<< HEAD
     async getTop10Shippers() {
         const topShippers = await instance
             .get("/shippers/top10Shippers")
             .then(({ data }) => data?.data);
         return topShippers;
-    },
-
-    async getActiveShipperCount() {
-        const count = await instance
-            .get("/shippers/countActive")
-            .then(({ data }) => data?.totalActiveShippers);
-        return count;
-    },
-
-    async getShippersJoinedToday() {
-        const count = await instance
-            .get("/shippers/countJoinedToday")
-            .then(({ data }) => data?.totalShippersJoinedToday);
-        return count;
-    },
+=======
 
     async getPendingShipperDraft(id) {
         const draftInfor = await instance
@@ -116,6 +101,7 @@ const ShipperServices = {
                 console.error(err);
             });
         return updateShipperDraft;
+>>>>>>> 3683d84 (feat: auto savedraft information and check fe)
     },
 };
 

@@ -4,6 +4,7 @@ import { useDebouncedState, useDisclosure } from "@mantine/hooks"; // keep useDe
 import { IconEye } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccountProfile } from "../hooks/useAccountProfile";
 import { useApprovedShops, usePendingShops } from "../hooks/useShop";
 
 const PendingShopListPage = () => {
@@ -11,7 +12,6 @@ const PendingShopListPage = () => {
     const limit = 10;
     const timeOut = 200;
     const [page, setPage] = useState(1);
-    const [reason, setReason] = useState("");
 
     const [searchShopName, setSearchShopName] = useDebouncedState("", timeOut);
     const [searchOwnerName, setSearchOwnerName] = useDebouncedState("", timeOut);
@@ -19,14 +19,19 @@ const PendingShopListPage = () => {
     const [searchPhone, setSearchPhone] = useDebouncedState("", timeOut);
 
     const [activeButton, setActiveButton] = useState("pending");
+    const { data: operator } = useAccountProfile();
 
     const [opened, { open, close }] = useDisclosure(false);
+    const [changedValue, setChangedValue] = useState([]);
+    const [shopModal, setShopModal] = useState();
+    const [resultChange, setResultChange] = useState();
 
     const filterData = useMemo(
         () => ({
             shopName: searchShopName,
             ownerName: searchOwnerName,
             shopEmail: searchEmail,
+
             shopPhone: searchPhone,
         }),
         [searchShopName, searchOwnerName, searchEmail, searchPhone],
@@ -42,7 +47,7 @@ const PendingShopListPage = () => {
         data: approvedShopsData,
         isLoading: approvedShopsLoading,
         error: approvedShopsError,
-    } = useApprovedShops(limit, page, filterData);
+    } = useApprovedShops(operator?.operatorId, limit, page, filterData);
 
     // pending
     const pendingShops = responseData?.pendingShops || [];
@@ -56,8 +61,10 @@ const PendingShopListPage = () => {
         setActiveButton(buttonName);
     };
 
-    const handleOpenModal = (reason) => {
-        setReason(reason);
+    const handleOpenModal = (reason, result, shop) => {
+        setShopModal(shop?.shop);
+        setResultChange(result);
+        setChangedValue(JSON.parse(JSON.parse(reason)));
         open();
     };
 
@@ -70,6 +77,105 @@ const PendingShopListPage = () => {
     const error = activeButton === "pending" ? pendingShopsError : approvedShopsError;
     const total = activeButton === "pending" ? totalPending : totalApproved;
     const totalPages = Math.ceil(total / limit);
+
+    const getFieldNameForIndex = (index) => {
+        return [
+            "",
+            "Chủ cửa hàng:",
+            "Ảnh chủ cửa hàng:",
+            "Email:",
+            "Số điện thoại:",
+            "Ngày sinh:",
+            "Giới tính:",
+            "Địa chỉ thường trú:",
+            "Trạng thái:",
+            "Mã số thuế:",
+            "Mã số CCCD:",
+            "Tên cửa hàng:",
+            "Ảnh avatar cửa hàng:",
+            "Địa chỉ kinh doanh:",
+            "Ngày gửi:",
+            "Ảnh chụp cửa hàng:",
+            "Số giấy phép kinh doanh:",
+            "Loại hình kinh doanh:",
+            "Số tài khoản ngân hàng:",
+            "Tên ngân hàng:",
+            "Thời gian mở cửa:",
+        ][index];
+    };
+
+    const getValueForIndex = (index) => {
+        const shop = shopModal;
+        // Helper to get dynamic values
+        switch (index) {
+            case 1:
+                return shop?.Owner?.fullName;
+            case 2:
+                return (
+                    <img
+                        className="w-24 h-24 rounded-full object-cover"
+                        src="https://nexus.edu.vn/wp-content/uploads/2024/11/hinh-nen-may-tinh-4k-thien-nhien-bien-ca-672553.webp"
+                        alt="Shop Logo"
+                    />
+                );
+            case 3:
+                return shop?.Owner?.userEmail;
+            case 4:
+                return shop?.Owner?.userPhone;
+            case 5:
+                return shop?.Owner?.dateOfBirth;
+            case 6:
+                return shop?.Owner?.gender;
+            case 7:
+                return shop?.Owner?.userAddress;
+            case 8:
+                return shop?.shopStatus;
+            case 9:
+                return shop?.taxCode;
+            case 10:
+                return shop?.Owner?.identificationNumber;
+            case 11:
+                return shop?.shopName;
+            case 12:
+                return (
+                    <img
+                        className="w-24 h-24 rounded-full object-cover"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Shop avatar"
+                    />
+                );
+            case 13:
+                return shop?.shopPickUpAddress;
+            case 14:
+                return shop?.shopJoinedDate;
+            case 15:
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Ảnh của cửa hàng"
+                    />
+                );
+            case 16:
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        alt="Ảnh giấy phép kinh doanh"
+                    />
+                );
+            case 17:
+                return shop?.businessType;
+            case 18:
+                return shop?.shopBankAccountNumber;
+            case 19:
+                return shop?.shopBankName;
+            case 20:
+                return shop?.shopOperationHours;
+            default:
+                return null;
+        }
+    };
 
     return (
         <div className="container mx-auto p-5">
@@ -328,7 +434,13 @@ const PendingShopListPage = () => {
                                                 ) : (
                                                     <ActionIcon
                                                         variant="default"
-                                                        onClick={() => handleOpenModal(shop.reason)}
+                                                        onClick={() =>
+                                                            handleOpenModal(
+                                                                shop.reason,
+                                                                shop.changedStatus,
+                                                                shop,
+                                                            )
+                                                        }
                                                     >
                                                         <IconEye />
                                                     </ActionIcon>
@@ -342,20 +454,58 @@ const PendingShopListPage = () => {
                                     opened={opened}
                                     onClose={close}
                                     withCloseButton={false}
+                                    size={"xl"}
+                                    padding={"xl"}
                                     centered
                                     classNames={{
                                         modal: "max-w-lg w-full p-6 rounded-lg shadow-xl bg-white", // Adding padding, rounded corners, and shadow for the modal
                                         title: "text-2xl font-semibold text-gray-800 mb-4", // Larger, more prominent title with better color contrast
                                     }}
                                 >
-                                    <p className="font-semibold text-xl text-gray-800 mb-6">
-                                        Lý do từ chối
-                                    </p>
-                                    <textarea
-                                        className="w-full border border-gray-300 rounded-lg p-4 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
-                                        disabled
-                                        value={reason}
-                                    />
+                                    <div className="mb-4">
+                                        <h1 className="text-3xl font-bold text-black mb-6 text-center">
+                                            Xem lý do{" "}
+                                            {resultChange === "accepted" ? "chấp nhận" : "từ chối"}
+                                        </h1>
+                                        <div className="space-y-4">
+                                            {changedValue?.map((item, index) =>
+                                                index === 0 ? null : (
+                                                    <div
+                                                        key={index}
+                                                        className="flex justify-between items-center p-4 border rounded-lg shadow-sm"
+                                                    >
+                                                        <div
+                                                            className={`flex flex-col p-2 rounded-lg ${item.status === "v" ? "bg-green-300" : "bg-red-300"}`}
+                                                        >
+                                                            <strong className="text-lg">
+                                                                {getFieldNameForIndex(index)}{" "}
+                                                                {getValueForIndex(index)}
+                                                            </strong>
+                                                            <p className="text-md mt-1">
+                                                                Lý do: agfuafd helo helo hasd afsas
+                                                                asda gẻ ergv jkdbcs akjfbk agfuafd
+                                                                helo helo hasd afsas asda gẻ ergv
+                                                                jkdbcs akjfbk {item?.reason}
+                                                            </p>
+                                                        </div>
+                                                        <div className="min-w-[100px] ml-2 flex justify-center">
+                                                            <span
+                                                                className={`px-3 font-semibold py-1 rounded-full text-sm ${
+                                                                    item?.status === "v"
+                                                                        ? "bg-green-200 text-green-800"
+                                                                        : "bg-red-200 text-red-800"
+                                                                }`}
+                                                            >
+                                                                {item?.status === "v"
+                                                                    ? "Chấp nhận"
+                                                                    : "Từ chối"}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    </div>
                                     <div className="flex justify-end mt-4">
                                         <button
                                             type="button"

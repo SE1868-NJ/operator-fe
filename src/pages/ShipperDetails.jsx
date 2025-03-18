@@ -1,18 +1,20 @@
 import { Button, Modal, Select, Textarea } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
 import BanService from "../services/BanService";
 // import ShipperDashboardChart from "./ShipperDashboardChart";
 import ShipperOrdersList from "./ShipperOrdersList";
+import { Suspense } from "react";
 
 function translateStatus(status) {
     const statusMap = {
         active: "Đang hoạt động",
         pending: "Đang duyệt",
         inactive: "Dừng hoạt động",
+        suspended: "Đình chỉ",
     };
     return statusMap[status] || status;
 }
@@ -37,12 +39,36 @@ export default function ShipperDetails() {
     const [opened, setOpened] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const { data: shipper, error } = useShipper(id);
-
+    
     const queryClient = useQueryClient();
+    const [banInfo, setBanInfo] = useState(null);
+
+
+    useEffect(() => {
+        const fetchBanInfo = async () => {
+            if (!shipper?.id) return;
+
+            try {
+                const isUserBan = await BanService.getBanAccount(shipper.id, "shipper");
+                if (isUserBan) {
+                    setBanInfo(isUserBan);
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin ban:", error);
+            }
+        };
+
+        fetchBanInfo();
+    }, [shipper?.id]);
+
+
+    
 
     if (!shipper) {
         return <div className="text-center text-red-500">Không tìm thấy shipper</div>;
     }
+
+
 
     const handleChangeStatus = async (status) => {
         if (status === "inactive") {
@@ -102,16 +128,36 @@ export default function ShipperDetails() {
                         <h6 className="text-sm text-gray-500">{shipper.email}</h6>
                         <div className="mt-6">
                             <div
-                                className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${
-                                    shipper.status === "active"
+                                className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${shipper.status === "active"
                                         ? "text-green-700 bg-green-100 border-green-500"
                                         : shipper.status === "pending"
-                                          ? "text-yellow-700 bg-yellow-100 border-yellow-500"
-                                          : "text-red-700 bg-red-100 border-red-500"
-                                }`}
+                                            ? "text-yellow-700 bg-yellow-100 border-yellow-500"
+                                        : shipper.status === "suspended"
+                                            ? "text-orange-700 bg-orange-100 border-orange-500"
+                                             : "text-red-700 bg-red-100 border-red-500"
+                                    }`}
                             >
                                 {translateStatus(shipper.status)}
                             </div>
+
+                            {/* Nếu shipper bị đình chỉ, hiển thị thông tin đình chỉ trong một khối riêng biệt */}
+                            {shipper.status === "suspended" && banInfo && (
+                                <div className="p-3 mt-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
+                                    <p className="flex items-center gap-2 text-sm font-medium text-red-800">
+                                        <span className="font-bold text-red-600">&#x21;</span>
+                                        <span>Tài khoản bị đình chỉ đến:</span>
+                                        <span className="font-semibold text-red-900">
+                                            {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                                        </span>
+                                    </p>
+                                    <div className="p-2 mt-2 border border-red-300 rounded-md bg-red-50">
+                                        <p className="text-sm text-red-700">
+                                            <span className="font-semibold">Lý do: </span>{" "}
+                                            {banInfo.reason}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="p-6 bg-white rounded-lg shadow-md md:col-span-2">
@@ -255,16 +301,11 @@ export default function ShipperDetails() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-4 mt-6 md:flex-row">
-                    {/* <div className="w-full md:w-1/2">
-                        <ShipperDashboardChart />
-                    </div> */}
                     <div className="w-full ">
-                        {" "}
-                        {/* md:w-1/2 */}
                         <ShipperOrdersList shipperId={shipper.id} />
                     </div>
                 </div>
             </div>
-        </div>
+        // </div>
     );
 }

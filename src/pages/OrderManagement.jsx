@@ -1,4 +1,5 @@
 import { useDebouncedState } from "@mantine/hooks";
+import { now } from "moment-timezone";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderChart from "../components/OrderChart.jsx";
@@ -30,6 +31,42 @@ export default function OrderManagement() {
     const filteredOrders = filteredOrdersData?.orders || [];
     const totalPages = Math.ceil((filteredOrdersData?.total || 0) / limit);
 
+    const FormatDate = (date) => {
+        const olddate = new Date(date);
+        const formattedDate = olddate.toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+
+        return <div>{formattedDate}</div>;
+    };
+    const TimeDifference = (startTime, endTime) => {
+        // Chuyển đổi startTime thành đối tượng Date
+        const start = new Date(startTime);
+
+        // Nếu endTime là null, sử dụng thời gian hiện tại
+        const end = endTime ? new Date(endTime) : new Date();
+
+        // Tính toán sự khác biệt
+        const diffInMilliseconds = end - start;
+
+        // Tính toán số ngày, giờ, phút, giây
+        const days = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
+        let output = `${days} ngày, ${hours} giờ, ${minutes} phút`;
+        if (days === 0) {
+            output = `${hours} giờ, ${minutes} phút`;
+        }
+        if (endTime === null) {
+            output = "Đang giao hàng";
+        }
+
+        return <p> {output} </p>;
+    };
     return (
         <div className="container mx-auto p-6 space-y-8">
             <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
@@ -101,9 +138,10 @@ export default function OrderManagement() {
                         <tr>
                             {[
                                 "Mã đơn hàng",
-                                "Mã cửa hàng",
-                                "Mã khách hàng",
-                                "Mã người giao hàng",
+                                "Thời gian bắt đầu",
+                                "Thời gian dự kiến",
+                                "Khoảng TG dự kiến",
+                                "Khoảng TG thực tế",
                                 "Trạng thái đơn hàng",
                                 "Tổng cộng",
                                 "Ghi chú",
@@ -153,9 +191,24 @@ export default function OrderManagement() {
                                     <td className="px-6 py-4 font-medium text-gray-800">
                                         {order.id}
                                     </td>
-                                    <td className="px-6 py-4 text-gray-700">{order.shop_id}</td>
-                                    <td className="px-6 py-4 text-gray-700">{order.customer_id}</td>
-                                    <td className="px-6 py-4 text-gray-700">{order.shipper_id}</td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {FormatDate(order.start_time)}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {FormatDate(order.estimated_delivery_time)}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {TimeDifference(
+                                            order.start_time,
+                                            order.estimated_delivery_time,
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {TimeDifference(
+                                            order.start_time,
+                                            order.actual_delivery_time,
+                                        )}
+                                    </td>
                                     <td className="px-6 py-4">
                                         <span className="inline-block px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 font-medium">
                                             {order.status}

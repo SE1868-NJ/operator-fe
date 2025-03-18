@@ -80,6 +80,27 @@ const ShipperServices = {
             .then(({ data }) => data?.data);
         return topShippers;
     },
+
+    async getPendingShipperDraft(id) {
+        const draftInfor = await instance
+            .get(`/shippers/shipperdraft/${id}`)
+            .then(({ data }) => data?.shipperDraft);
+        return draftInfor;
+    },
+
+    async updatePendingShipperDraft(id, data) {
+        const updateShipperDraft = await instance
+            .patch(`/shippers/shipperdraft/${id}`, data, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(({ data }) => data)
+            .catch((err) => {
+                console.error(err);
+            });
+        return updateShipperDraft;
+    },
 };
 
 export default ShipperServices;

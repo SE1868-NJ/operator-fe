@@ -11,11 +11,9 @@ const ShippingMethodDetail = () => {
     const { data: method, isFetching, error } = useShippingMethod(id);
     const queryClient = useQueryClient();
 
-    console.log(method);
-
     if (isFetching) return <Loader />;
-    if (error) return <p className="text-red-500">Error: {error.message}</p>;
-    if (!method) return <p>Shipping method not found.</p>;
+    if (error) return <p className="text-red-500">Lỗi: {error.message}</p>;
+    if (!method) return <p>Không tìm thấy phương thức vận chuyển.</p>;
 
     const options = JSON.parse(method.options || "{}");
 
@@ -23,7 +21,7 @@ const ShippingMethodDetail = () => {
         nprogress.start();
         await ShippingMethodService.delete(id)
             .catch((error) => {
-                console.log(error);
+                console.error("Lỗi khi xóa phương thức vận chuyển:", error);
             })
             .finally(() => {
                 nprogress.complete();
@@ -38,11 +36,11 @@ const ShippingMethodDetail = () => {
                 <div className="max-w-screen-md space-y-4">
                     <Title order={2}>{method.name}</Title>
                     <Badge color={method.status === "enabled" ? "green" : "red"}>
-                        {method.status === "enabled" ? "Bật" : "Tắt"}
+                        {method.status === "enabled" ? "Đang bật" : "Đã tắt"}
                     </Badge>
-                    <Text>Giá mặc định: {method.shippingFee}</Text>
-                    <Text>Ước tính thời gian chuẩn bị: {method.preparationTime} giờ</Text>
-                    <Text>Ước tính thời gian giao: {method.estimatedDeliveryTime} giờ</Text>
+                    <Text>Phí vận chuyển mặc định: {method.shippingFee} VND</Text>
+                    <Text>Thời gian chuẩn bị ước tính: {method.preparationTime / 60} giờ</Text>
+                    <Text>Thời gian giao hàng ước tính: {method.estimatedDeliveryTime / 60} giờ</Text>
 
                     <Title order={4}>Tùy chọn</Title>
                     <Table>
@@ -50,7 +48,7 @@ const ShippingMethodDetail = () => {
                             {Object.entries(options).map(([key, value]) => (
                                 <tr key={key}>
                                     <td className="font-medium capitalize">{key}</td>
-                                    <td>{value ? "Yes" : "No"}</td>
+                                    <td>{value ? "Có" : "Không"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -62,18 +60,18 @@ const ShippingMethodDetail = () => {
                             {Object.entries(method.externalFactors || {}).map(([key, factor]) => (
                                 <tr key={key}>
                                     <td className="font-medium capitalize">{key}</td>
-                                    <td>Enabled: {factor.enabled ? "Yes" : "No"}</td>
-                                    <td>Level: {factor.level}</td>
+                                    <td>Được bật: {factor.enabled ? "Có" : "Không"}</td>
+                                    <td>Mức độ: {factor.level}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
 
                     <Text className="text-gray-500 text-sm">
-                        Last updated: {new Date(method.updatedAt).toLocaleString()}
+                        Cập nhật lần cuối: {new Date(method.updatedAt).toLocaleString()}
                     </Text>
                     <Button variant="light" color="red" onClick={handleDeleteMethod}>
-                        Xóa
+                        Xóa phương thức vận chuyển
                     </Button>
                 </div>
             </Card>

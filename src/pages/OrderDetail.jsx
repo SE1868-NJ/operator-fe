@@ -38,11 +38,19 @@ export default function OrderDetail() {
             navigate("/main/ordermanagement");
 
             // Hiển thị thông báo thành công
-            notifications.show({
-                color: "green",
-                title: "Đơn hàng đã được hủy",
-                message: "Đơn hàng của bạn đã được hủy thành công.",
-            });
+            if (order.status === "cancelled") {
+                notifications.show({
+                    color: "green",
+                    title: "Đơn hàng đã được mở",
+                    message: "Đơn hàng của bạn đã được mở thành công.",
+                });
+            } else {
+                notifications.show({
+                    color: "green",
+                    title: "Đơn hàng đã được hủy",
+                    message: "Đơn hàng của bạn đã được hủy thành công.",
+                });
+            }
         } catch (error) {
             // Xử lý lỗi nếu có
             console.error("Lỗi khi hủy đơn hàng:", error);
@@ -51,8 +59,8 @@ export default function OrderDetail() {
             // Hiển thị thông báo lỗi
             notifications.show({
                 color: "red",
-                title: "Lỗi khi hủy đơn hàng",
-                message: "Đơn hàng của bạn chưa được hủy thành công. Hãy thử lại.",
+                title: "Lỗi khi thay đổi trạng thái đơn hàng",
+                message: "Đã có lỗi xảy ra khi thay đổi trạng thái đơn hàng. Vui lòng thử lại sau.",
             });
         }
     };
@@ -111,11 +119,10 @@ export default function OrderDetail() {
                     <p>
                         <strong>Trạng thái thanh toán:</strong>
                         <span
-                            className={`ml-2 px-2 py-1 rounded ${
-                                order.payment_status === "Chưa thanh toán"
-                                    ? "bg-red-200 text-red-700"
-                                    : "bg-green-200 text-green-700"
-                            }`}
+                            className={`ml-2 px-2 py-1 rounded ${order.payment_status === "Chưa thanh toán"
+                                ? "bg-red-200 text-red-700"
+                                : "bg-green-200 text-green-700"
+                                }`}
                         >
                             {order.payment_status}
                         </span>
@@ -123,11 +130,10 @@ export default function OrderDetail() {
                     <p>
                         <strong>Trạng thái vận chuyển:</strong>
                         <span
-                            className={`ml-2 px-2 py-1 rounded ${
-                                order.shipping_status === "Đang vận chuyển"
-                                    ? "bg-yellow-200 text-yellow-700"
-                                    : "bg-gray-200 text-gray-700"
-                            }`}
+                            className={`ml-2 px-2 py-1 rounded ${order.shipping_status === "Đang vận chuyển"
+                                ? "bg-yellow-200 text-yellow-700"
+                                : "bg-gray-200 text-gray-700"
+                                }`}
                         >
                             {order.shipping_status}
                         </span>
@@ -196,11 +202,10 @@ export default function OrderDetail() {
                     <div className="flex justify-between">
                         <span className="w-2/3 text-left">Tổng giá trị sản phẩm :</span>
                         <span
-                            className={`w-1/3 text-right font-semibold ${
-                                totalOrderItemAmount === order.productFee
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                            }`}
+                            className={`w-1/3 text-right font-semibold ${totalOrderItemAmount === order.productFee
+                                ? "text-green-600"
+                                : "text-red-600"
+                                }`}
                         >
                             {totalOrderItemAmount.toLocaleString()} VND
                         </span>

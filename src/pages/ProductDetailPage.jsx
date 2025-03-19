@@ -15,15 +15,17 @@ import {
 } from "@mantine/core";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EmailModal from "../components/ShopEmail";
 import { useProduct } from "../hooks/useShop";
 import BanService from "../services/BanService";
+import { IconAlertCircle } from "@tabler/icons-react";
 const ProductDetail = () => {
     const { id, pid } = useParams();
     const { data, isLoading, error } = useProduct(id, pid);
     const product = data?.data;
     const [modalOpened, setModalOpened] = useState(false);
+    const navigate = useNavigate();
 
     //Hàm xử lý ban
     const handleStatusChange = async () => {
@@ -64,8 +66,12 @@ const ProductDetail = () => {
         fetchBanInfo();
     }, [product?.product_id]);
 
+    console.log(product)
+
     if (isLoading) return <Loader size="xl" />;
+    if (!product) return
     if (error) return <Alert color="red">Error: {error.message}</Alert>;
+
 
     return (
         <Container size="lg" px="md">
@@ -174,13 +180,13 @@ const ProductDetail = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {product.OrderItems.map((order) => (
+                            {product?.OrderItems?.map((order) => (
                                 <tr key={order.id}>
                                     <td style={{ padding: "12px" }}>
-                                        {order.Order.Customer.fullName}
+                                        {order.Order?.Customer?.fullName}
                                     </td>
                                     <td style={{ padding: "12px" }}>
-                                        {order.Order.Customer.userEmail}
+                                        {order.Order?.Customer?.userEmail}
                                     </td>
                                     <td style={{ padding: "12px" }}>#{order.order_id}</td>
                                     <td style={{ padding: "12px", textAlign: "center" }}>
@@ -192,14 +198,14 @@ const ProductDetail = () => {
                                     <td style={{ padding: "12px", textAlign: "center" }}>
                                         <Badge
                                             color={
-                                                order.Order.status === "completed"
+                                                order?.Order?.status === "completed"
                                                     ? "green"
-                                                    : order.Order.status === "cancelled"
-                                                      ? "red"
-                                                      : "yellow"
+                                                    : order?.Order?.status === "cancelled"
+                                                        ? "red"
+                                                        : "yellow"
                                             }
                                         >
-                                            {order.Order.status}
+                                            {order?.Order?.status}
                                         </Badge>
                                     </td>
                                 </tr>
@@ -244,20 +250,19 @@ const ProductDetail = () => {
                     color="red"
                     type="button"
                     onClick={() => handleStatusChange()}
-                    className={`${
-                        product.status === "active"
-                            ? "bg-red-500 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                            : product.status === "suspended"
-                              ? "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
-                              : "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md" // Nếu là "Không hoạt động"
-                    } px-4 py-2 rounded`}
+                    className={`${product.status === "active"
+                        ? "bg-red-500 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                        : product.status === "suspended"
+                            ? "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md"
+                            : "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-md transition-all duration-300 shadow-md" // Nếu là "Không hoạt động"
+                        } px-4 py-2 rounded`}
                 >
                     {
                         product.status === "active"
                             ? "Đình chỉ sản phẩm"
                             : product.status === "suspended"
-                              ? "Gỡ đình sản phẩm"
-                              : "Kích hoạt sản phẩm" // Nếu là "Không hoạt động"
+                                ? "Gỡ đình sản phẩm"
+                                : "Kích hoạt sản phẩm" // Nếu là "Không hoạt động"
                     }
                 </Button>
                 <Button color="cyan" onClick={() => setModalOpened(true)}>

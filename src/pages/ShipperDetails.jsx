@@ -39,7 +39,7 @@ export default function ShipperDetails() {
     const [opened, setOpened] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const { data: shipper, error } = useShipper(id);
-    
+
     const queryClient = useQueryClient();
     const [banInfo, setBanInfo] = useState(null);
 
@@ -62,7 +62,7 @@ export default function ShipperDetails() {
     }, [shipper?.id]);
 
 
-    
+
 
     if (!shipper) {
         return <div className="text-center text-red-500">Không tìm thấy shipper</div>;
@@ -129,12 +129,12 @@ export default function ShipperDetails() {
                         <div className="mt-6">
                             <div
                                 className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${shipper.status === "active"
-                                        ? "text-green-700 bg-green-100 border-green-500"
-                                        : shipper.status === "pending"
-                                            ? "text-yellow-700 bg-yellow-100 border-yellow-500"
+                                    ? "text-green-700 bg-green-100 border-green-500"
+                                    : shipper.status === "pending"
+                                        ? "text-yellow-700 bg-yellow-100 border-yellow-500"
                                         : shipper.status === "suspended"
                                             ? "text-orange-700 bg-orange-100 border-orange-500"
-                                             : "text-red-700 bg-red-100 border-red-500"
+                                            : "text-red-700 bg-red-100 border-red-500"
                                     }`}
                             >
                                 {translateStatus(shipper.status)}
@@ -204,7 +204,7 @@ export default function ShipperDetails() {
                                     {" "}
                                     {/* Added relative wrapper for positioning */}
                                     <img
-                                        src={shipper.idCardFrontFile}
+                                        src={"https://image.tinnhanhchungkhoan.vn/w660/Uploaded/2025/WpxlCdjwi/2014_03_17/20_RKNL.jpg"}
                                         alt="Mặt trước CCCD"
                                         className="w-32 h-20 border cursor-pointer"
                                         onClick={() => setSelectedImage(shipper.idCardFrontFile)}
@@ -223,7 +223,7 @@ export default function ShipperDetails() {
                                     {" "}
                                     {/* Added relative wrapper for positioning */}
                                     <img
-                                        src={shipper.idCardBackFile}
+                                        src={"https://cafefcdn.com/thumb_w/640/203337114487263232/2022/9/12/photo1662955465034-1662955465094777553497.jpg"}
                                         alt="Mặt sau CCCD"
                                         className="w-32 h-20 border cursor-pointer"
                                         onClick={() => setSelectedImage(shipper.idCardBackFile)}
@@ -306,6 +306,6 @@ export default function ShipperDetails() {
                     </div>
                 </div>
             </div>
-        // </div>
+        </div>
     );
 }

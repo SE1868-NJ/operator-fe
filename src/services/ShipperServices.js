@@ -14,7 +14,7 @@ const ShipperServices = {
     },
 
     async getOneShipper(id) {
-        const shipper = await instance.get(`/shippers/${id}`).then(({ data }) => data);
+        const shipper = await instance.get(`/shippers/${id}`).then(({ data }) => data.shipper);
         return shipper;
     },
 

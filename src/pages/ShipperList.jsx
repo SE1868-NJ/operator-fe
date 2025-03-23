@@ -155,7 +155,7 @@ export default function ShipperList() {
                 ) : (
                     <tbody>
                         {allShipperFee?.sumShippingFee?.map((shipper) => (
-                            <tr key={shipper.id} className="border">
+                            <tr key={shipper.Shipper.id} className="border">
                                 <td className="p-2 text-center border">{shipper?.Shipper.id}</td>
                                 <td className="p-2 text-center border">{shipper?.Shipper.name}</td>
                                 <td className="p-2 text-center border">{shipper?.Shipper.phone}</td>

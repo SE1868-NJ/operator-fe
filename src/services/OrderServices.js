@@ -57,6 +57,10 @@ const OrderServices = {
         const data = await instance.patch(`/orders/reopenorder/${id}`).then(({ data }) => data);
         return data;
     },
+    async completedOrdersComparsion(){
+        const data = await instance.get("/orders/completedOrders").then(({data}) => data.data).catch((err) => console.error(err));
+        return data;
+    }
 };
 
 export default OrderServices;

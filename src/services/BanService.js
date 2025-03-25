@@ -23,7 +23,7 @@ const BanService = {
         return banData;
     },
 
-    async unbanAccountManually(userId, userType) {
+    async unbanAccountManually(userId, userType, reason = "") {
         const unbanData = await instance
             .post("/ban/unban", {
                 userId,
@@ -35,7 +35,7 @@ const BanService = {
             });
         return unbanData;
     },
-    async cancelBanScheduled(userId, userType) {
+    async cancelBanScheduled(userId, userType, reason = "") {
         const cancelBanScheduledData = await instance
             .post("/ban/unban-scheduled", {
                 userId,

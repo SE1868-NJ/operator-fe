@@ -68,6 +68,10 @@ const UserService = {
       .catch((err) => console.error(err));
     return data;
   },
+  async customerChart(timeGroup="year"){
+    const data = await instance.get(`user/newCustomer/${timeGroup}`).then(({data}) => data.data).catch((err) => console.error(err));
+    return data;
+  }
   
 };
 export default UserService;

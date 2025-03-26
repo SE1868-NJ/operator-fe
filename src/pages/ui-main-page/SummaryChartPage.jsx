@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Bar,
     BarChart,
@@ -10,29 +10,50 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-
-const data = [
-    { name: "16/01/2025", order: 7, income: 423000 },
-    { name: "23/01/2025", order: 9, income: 398000 },
-    { name: "30/01/2025", order: 8, income: 410500 },
-    { name: "06/02/2025", order: 4, income: 287400 },
-    { name: "13/02/2025", order: 5, income: 320600 },
-    { name: "20/02/2025", order: 7, income: 470300 },
-    { name: "27/02/2025", order: 9, income: 450900 },
-    { name: "06/03/2025", order: 6, income: 399200 },
-    { name: "13/03/2025", order: 4, income: 280100 },
-    { name: "20/03/2025", order: 5, income: 310800 },
-    { name: "25/03/2025", order: 7, income: 445600 },
-];
-
+import OrderServices from "../../services/OrderServices";
 
 export default function SummaryChart() {
     const [chartType, setChartType] = useState("line");
+    const [timeGroup, setTimeGroup] = useState("month");
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const dataFetch = await OrderServices.getTotalSummaryChart(timeGroup);
+
+                // Format lại dữ liệu để đảm bảo chuẩn xác
+                const formattedData = dataFetch.map(item => ({
+                    date: item.date, 
+                    order: item.order,
+                    income: Number(item.income) // Chuyển về số để đảm bảo tính toán đúng
+                }));
+
+                setData(formattedData);
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu biểu đồ:", error);
+            }
+        };
+
+        fetchData();
+    }, [timeGroup]);
 
     return (
         <div className="p-6 bg-white shadow-md rounded-lg">
             <div className="flex justify-between items-center mb-4">
-                <h3 className="text-gray-700 font-semibold">Tổng quan theo tuần</h3>
+                <div className="mb-4">
+                    <label htmlFor="timeGroup" className="mr-2 font-semibold text-gray-700">Tổng quan theo</label>
+                    <select
+                        id="timeGroup"
+                        value={timeGroup}
+                        onChange={(e) => setTimeGroup(e.target.value)}
+                        className="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-800 cursor-pointer transition"
+                    >
+                        <option value="month">Tháng</option>
+                        <option value="year">Năm</option>
+                    </select>
+                </div>
+
                 <div>
                     <button
                         type="button"
@@ -62,61 +83,39 @@ export default function SummaryChart() {
             <ResponsiveContainer width="100%" height={500}>
                 {chartType === "line" ? (
                     <LineChart data={data}>
-                        <XAxis
-                            dataKey="name"
-                            angle={-45}
-                            textAnchor="end"
-                            height={60} // Tăng chiều cao trục X để tránh chữ bị cắt
-                        />
+                        <XAxis dataKey="date" angle={-45} textAnchor="end" height={60} />
                         <YAxis yAxisId="left" />
                         <YAxis
                             yAxisId="right"
                             orientation="right"
-                            tickFormatter={(value) => value.toLocaleString("vi-VN")}
+                            tickFormatter={(value) => value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+                            tick={{ fontSize: 12 }}
                         />
                         <Tooltip
                             formatter={(value) =>
                                 typeof value === "number"
-                                    ? value.toLocaleString("vi-VN")
+                                    ? value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
                                     : value
                             }
                         />
                         <Legend />
-                        <Line
-                            type="monotone"
-                            dataKey="order"
-                            stroke="#8884d8"
-                            strokeWidth={2}
-                            name="Số đơn hàng"
-                            yAxisId="left"
-                        />
-                        <Line
-                            type="monotone"
-                            dataKey="income"
-                            stroke="#82ca9d"
-                            strokeWidth={2}
-                            name="Doanh thu"
-                            yAxisId="right"
-                        />
+                        <Line type="monotone" dataKey="order" stroke="#8884d8" strokeWidth={2} name="Số đơn hàng" yAxisId="left" />
+                        <Line type="monotone" dataKey="income" stroke="#82ca9d" strokeWidth={2} name="Doanh thu" yAxisId="right" />
                     </LineChart>
                 ) : (
                     <BarChart data={data}>
-                        <XAxis
-                            dataKey="name"
-                            angle={-45}
-                            textAnchor="end"
-                            height={60}
-                        />
+                        <XAxis dataKey="date" angle={-45} textAnchor="end" height={60} />
                         <YAxis yAxisId="left" />
                         <YAxis
                             yAxisId="right"
                             orientation="right"
-                            tickFormatter={(value) => value.toLocaleString("vi-VN")}
+                            tickFormatter={(value) => value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+                            tick={{ fontSize: 12 }}
                         />
                         <Tooltip
                             formatter={(value) =>
                                 typeof value === "number"
-                                    ? value.toLocaleString("vi-VN")
+                                    ? value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
                                     : value
                             }
                         />

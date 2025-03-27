@@ -44,7 +44,6 @@ export default function MostSellingProducts() {
 
     const fetchTopProduct = async () => {
         const data = await ProductService.getTopProductInWeek();
-        console.log(data)
         setProduct(data);
     }
 
@@ -62,17 +61,17 @@ export default function MostSellingProducts() {
                             />
                             <span>{p?.Product.product_name}</span>
                         </div>
-                        
+
                         <div className="flex items-center gap-3">
                             <span className="text-blue-500">{p?.total_sold} lượt bán</span>
                             <button
-                                    type="button"
-                                    className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-md"
-                                    onClick={() =>
-                                        navigate(`/main/shop/1/product/${p?.product_id}`)
-                                    }
-                                >
-                                    Xem
+                                type="button"
+                                className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-md"
+                                onClick={() =>
+                                    navigate(`/main/shop/1/product/${p?.product_id}`)
+                                }
+                            >
+                                Xem
                             </button>
                         </div>
                     </li>

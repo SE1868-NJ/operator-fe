@@ -23,7 +23,6 @@ const Header = () => {
     const unReadMessage = data?.unReadMessage;
     const queryClient = useQueryClient();
 
-    console.log(data);
 
     useEffect(() => {
         socket.on(NEW_NOTIF, () => {

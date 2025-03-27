@@ -10,6 +10,7 @@ const AuthService = {
             })
             .then(({ data }) => {
                 localStorage.setItem("token", data.token);
+                console.log(data)
                 return data;
             });
         return res;
@@ -43,8 +44,8 @@ const AuthService = {
 
         console.log(accontInfo);
     },
-    async resetPassword(email, role){
-        const data = authInstance.post("/auth/reset-password",{
+    async resetPassword(email, role) {
+        const data = authInstance.post("/auth/reset-password", {
             email, role
         }).then(({ data }) => {
             return data;

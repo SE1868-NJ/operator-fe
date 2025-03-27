@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import { instance } from "../lib/axios";
 
 const ShipperServices = {
@@ -93,6 +94,18 @@ const ShipperServices = {
     async getShippersJoinedToday() {
         const count = await instance.get("/shippers/countJoinedToday").then(({ data }) => data?.totalShippersJoinedToday);
         return count;
+    },
+    async top5ShipperInMonth(){
+        const data = await instance.get("/shippers/top5ShipperInMonth").then(({data}) => data.data).catch((err) => console.error(err.message));
+        return data;
+    },
+    async getDeliveryTime(){
+            const data = await instance.get("/shippers/avgDeliveryTime").then(({data}) => data.data).catch((err) => console.error(err));
+            return data;
+    },
+    async getCancelOrderRate(){
+        const data = await instance.get("/shippers/cancellationRate").then(({data}) => data.data).catch((err) => console.error(err));
+        return data;
     }
 };
 

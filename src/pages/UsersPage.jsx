@@ -119,7 +119,7 @@ const UserList = () => {
                         <tr key={user.userID} className="text-center border-b">
                             <td className="p-2 border">
                                 <img
-                                    src="https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg"
+                                    src={user.avatar || "https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg"}
                                     alt={user.fullName}
                                     className="w-10 h-10 mx-auto rounded-full"
                                 />

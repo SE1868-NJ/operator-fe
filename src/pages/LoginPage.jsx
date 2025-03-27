@@ -9,7 +9,7 @@ import AuthService from "../services/Auth";
 
 const LoginPage = () => {
     const { error } = useCurrentUser();
-    const { register, handleSubmit, formState } = useForm();
+    const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -24,12 +24,16 @@ const LoginPage = () => {
         setIsLoading(true);
 
         await AuthService.login(email, password)
-            .then(() => {
+            .then(({ user }) => {
                 notifications.show({
                     title: "Đăng nhập thành công!",
                 });
                 setIsLoading(false);
-                navigate("/main");
+                if (user?.status === "active") {
+                    navigate("/main");
+                } else if (user?.status) {
+                    navigate("/changepassword");
+                }
             })
             .catch((err) => {
                 console.error(err);

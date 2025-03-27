@@ -3,7 +3,7 @@ import { authInstance } from "../lib/axios";
 
 const AuthService = {
     async login(email, password) {
-        const token = await authInstance
+        const res = await authInstance
             .post("/auth/login/operator", {
                 email,
                 password,
@@ -12,7 +12,7 @@ const AuthService = {
                 localStorage.setItem("token", data.token);
                 return data;
             });
-        return token;
+        return res;
     },
     async getSession() {
         const payload = authInstance.get("/auth/session").then(({ data }) => {

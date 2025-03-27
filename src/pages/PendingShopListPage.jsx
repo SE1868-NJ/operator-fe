@@ -184,7 +184,7 @@ const PendingShopListPage = () => {
                     <h1 className="text-2xl font-semibold text-gray-800 text-center">
                         {activeButton === "pending"
                             ? "Các cửa hàng đang chờ duyệt"
-                            : "Các cửa hàng đã duyệt bởi tôi"}
+                            : "Các cửa hàng đã được duyệt"}
                     </h1>
                 </div>
 
@@ -280,7 +280,7 @@ const PendingShopListPage = () => {
                             type="button"
                             onClick={() => handleToggleButton("approved")}
                         >
-                            Đã duyệt bởi tôi
+                            Đã được duyệt
                         </button>
                     </div>
 

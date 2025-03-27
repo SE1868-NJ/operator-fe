@@ -708,7 +708,7 @@ const PendingShopDetail = () => {
                     rows={10}
                     cols={100}
                     className="mt-4"
-                    onChange={(e) => sendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
+                    onChange={(e) => setSendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
                 />
                 <div className="flex justify-end mt-4">
                     <Button

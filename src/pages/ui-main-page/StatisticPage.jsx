@@ -6,10 +6,10 @@ import OrderServices from "../../services/OrderServices";
 export default function Statistics() {
 
     const [statistics, setStatistics] = useState([
-        { title: "Tổng doanh thu tháng này", value: "$245,450", change: "+14.9%" },
-        { title: "Số lượng đơn hàng hoàn thành", value: "3,200 đơn", change: "+7.8%" },       
-        { title: "Tỷ lệ hủy đơn hàng", value: "5.4%", change: "-2.3%" },
-        { title: "Thời gian giao hàng trung bình", value: "2.4 ngày", change: "-1.2 ngày" },
+        { title: "Tổng doanh thu tháng này", value: "1.435.700 vnđ", change: "+0.0%" },
+        { title: "Số lượng đơn hàng hoàn thành", value: "39 đơn", change: "-13.3%" },       
+        { title: "Tỷ lệ hủy đơn hàng", value: "2.9%", change: "+0.0%" },
+        { title: "Thời gian giao hàng trung bình", value: "2.0 ngày", change: "-0.0 ngày" },
     ]);
 
     const [completedOrder, setCompletedOrder] = useState();
@@ -22,7 +22,7 @@ export default function Statistics() {
         const completedOrdersComparsion = OrderServices.completedOrdersComparsion();
         setCompletedOrder(completedOrdersComparsion)
     }
-
+    
     return (
         <div className="grid grid-cols-4 gap-4 mb-6">
             {statistics.map((stat, index) => (

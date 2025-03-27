@@ -62,7 +62,7 @@ const UserDetail = () => {
     } else {
       if (banInfo?.status === "banned") {
         //nprogress.start();
-        await BanService.unbanAccountManually(user.userID, "customer");
+        await BanService.unbanAccountManually(user.userID, "customer", reason);
 
         //setUnbanModalOpen(false);
         //nprogress.complete();
@@ -73,7 +73,7 @@ const UserDetail = () => {
         //     window.location.reload();
         // }
       } else if (banInfo?.status === "scheduled") {
-        await BanService.cancelBanScheduled(user.userID, "customer");
+        await BanService.cancelBanScheduled(user.userID, "customer", reason);
       }
       window.location.reload();
     }

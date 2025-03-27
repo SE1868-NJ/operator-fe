@@ -33,7 +33,7 @@ const ChangePassword = () => {
                     color: "green",
                     autoClose: 2000,
                 });
-                setTimeout(() => navigate("/", { replace: true }), 2000);
+                setTimeout(() => navigate("/"), 2000);
             } else {
                 console.log("err: ", data);
                 notifications.show({
@@ -53,9 +53,9 @@ const ChangePassword = () => {
     };
 
     return (
-        <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
-                <h2 className="text-center text-2xl font-bold text-gray-800">Đổi Mật Khẩu</h2>
+        <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
+            <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold text-center text-gray-800">Đổi Mật Khẩu</h2>
                 <form onSubmit={onSubmit} className="mt-6">
                     <div className="mb-4">
                         <label htmlFor="currentPassword" className="text-gray-700">
@@ -90,16 +90,16 @@ const ChangePassword = () => {
                             onChange={(e) => setPasswordConfirmation(e.target.value)}
                         />
                     </div>
-                    <div className="mt-3 flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 mt-3">
                         <Button
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                            className="w-full py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                         >
                             Đổi Mật Khẩu
                         </Button>
                         <Button
                             variant="outline"
-                            className="w-full border-gray-400 text-gray-700 hover:bg-gray-200 py-2 rounded-lg"
+                            className="w-full py-2 text-gray-700 border-gray-400 rounded-lg hover:bg-gray-200"
                             onClick={() => navigate(-1)}
                         >
                             Quay lại

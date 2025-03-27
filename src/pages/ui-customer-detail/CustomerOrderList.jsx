@@ -84,7 +84,7 @@ const CustomerOrderList = ({ id }) => {
                     <thead>
                         <tr className="bg-gray-100">
                             <th className="p-2 border">Mã đơn hàng</th>
-                            <th className="p-2 border">Phí vận chuyển (VND)</th>
+                            <th className="p-2 border">Tổng giá trị đơn hàng</th>
                             <th className="p-2 border">Trạng thái đơn hàng</th>
                             <th className="p-2 border">Trạng thái giao hàng</th>
                             <th className="p-2 border">Ghi chú</th>
@@ -98,7 +98,7 @@ const CustomerOrderList = ({ id }) => {
                                 <tr key={order.id} className="text-center hover:bg-gray-50">
                                     <td className="p-2 border">{order.id}</td>
                                     <td className="p-2 border">
-                                        {formatCurrency(order.shippingFee)}
+                                        {formatCurrency(order.total)}
                                     </td>
                                     <td className="p-2 border">
                                         <span className={status.className}>{status.text}</span>

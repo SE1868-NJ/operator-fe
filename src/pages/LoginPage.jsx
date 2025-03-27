@@ -72,6 +72,15 @@ const LoginPage = () => {
                     className="mb-6"
                     {...register("password")}
                 />
+                {/* Forgot Password Link */}
+                <div className="text-left mb-4">
+                    <a
+                        href="/forgotpass"
+                        className="text-sm text-blue-600 hover:underline"
+                    >
+                        Forgot Password?
+                    </a>
+                </div>
 
                 <Button
                     mb={10}

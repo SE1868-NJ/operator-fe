@@ -298,7 +298,7 @@ const ShopProfileDetail = () => {
                                 Back to List
                             </Button>
                             <Button color="cyan" onClick={() => setModalOpened(true)}>
-                                📩 Gửi Email
+                                📩 Gửi Email cho shop
                             </Button>
                             <EmailModal
                                 opened={modalOpened}

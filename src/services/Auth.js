@@ -43,6 +43,14 @@ const AuthService = {
 
         console.log(accontInfo);
     },
+    async resetPassword(email, role){
+        const data = authInstance.post("/auth/reset-password",{
+            email, role
+        }).then(({ data }) => {
+            return data;
+        });
+        return data;
+    }
 };
 
 export default AuthService;

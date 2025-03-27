@@ -33,7 +33,7 @@ const ChangePassword = () => {
                     color: "green",
                     autoClose: 2000,
                 });
-                setTimeout(() => navigate("/login"), 2000);
+                setTimeout(() => navigate("/"), 2000);
             } else {
                 console.log("err: ", data);
                 notifications.show({

@@ -72,7 +72,6 @@ const PendingShopListPage = () => {
     const shopsToDisplay = useMemo(() => {
         return activeButton === "pending" ? pendingShops : approvedShops;
     }, [activeButton, pendingShops, approvedShops]);
-    console.log("shopsToDisplay", shopsToDisplay);
 
     const isLoading = activeButton === "pending" ? pendingShopsLoading : approvedShopsLoading;
     const error = activeButton === "pending" ? pendingShopsError : approvedShopsError;

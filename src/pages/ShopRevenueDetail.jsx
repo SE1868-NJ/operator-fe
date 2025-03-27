@@ -13,11 +13,12 @@ const ShopsRevenuePage = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [day, setDay] = useState(new Date().getDate());
+    const [maxDay, setMaxDay] = useState(new Date(year, month, 0).getDate());
     const [totalRevenuesTime, setTotalRevenuesTime] = useState("day");
 
     const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
-    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+    const days = Array.from({ length: maxDay }, (_, i) => i + 1);
 
     const [searchShipperName, setSearchShipperName] = useDebouncedState("", timeOut);
     const [searchCustomerName, setSearchCustomerName] = useDebouncedState("", timeOut);
@@ -181,7 +182,9 @@ const ShopsRevenuePage = () => {
                                         className="rounded border border-black px-2"
                                         name="year"
                                         id=""
-                                        onChange={(e) => setYear(e.target.value)}
+                                        onChange={(e) => {setYear(e.target.value);
+                                            setMaxDay(new Date(e.target.value, month, 0).getDate());
+                                        }}
                                     >
                                         {years.map((y) => (
                                             <option key={y} value={y} selected={year === y}>
@@ -195,6 +198,7 @@ const ShopsRevenuePage = () => {
                                         id=""
                                         onChange={(e) => {
                                             setMonth(e.target.value);
+                                            setMaxDay(new Date(year, e.target.value, 0).getDate());
                                             if (e.target.value === "") {
                                                 setDay("");
                                             }

@@ -47,7 +47,7 @@ const PendingShopListPage = () => {
         data: approvedShopsData,
         isLoading: approvedShopsLoading,
         error: approvedShopsError,
-    } = useApprovedShops(operator?.operatorId, limit, page, filterData);
+    } = useApprovedShops(operator?.operatorID, limit, page, filterData);
 
     // pending
     const pendingShops = responseData?.pendingShops || [];
@@ -72,6 +72,7 @@ const PendingShopListPage = () => {
     const shopsToDisplay = useMemo(() => {
         return activeButton === "pending" ? pendingShops : approvedShops;
     }, [activeButton, pendingShops, approvedShops]);
+    console.log("shopsToDisplay", shopsToDisplay);
 
     const isLoading = activeButton === "pending" ? pendingShopsLoading : approvedShopsLoading;
     const error = activeButton === "pending" ? pendingShopsError : approvedShopsError;
@@ -307,6 +308,11 @@ const PendingShopListPage = () => {
                                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Địa chỉ cửa hàng
                                     </th>
+                                    {activeButton !== "pending" && (
+                                        <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Người duyệt
+                                        </th>
+                                    )}
                                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {activeButton === "pending" ? "Ngày gửi" : "Ngày duyệt"}
                                     </th>
@@ -387,10 +393,15 @@ const PendingShopListPage = () => {
                                                     ? shop.shopPickUpAddress
                                                     : shop.shop.shopPickUpAddress}
                                             </td>
+                                            {activeButton !== "pending" && (
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    {shop.operator.firstName} {shop.operator.lastName}
+                                                </td>
+                                            )}
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 {activeButton === "pending"
                                                     ? shop.shopJoinedDate
-                                                    : shop.createAt}
+                                                    : shop.updatedAt}
                                             </td>
                                             <td
                                                 hidden={activeButton === "pending"}

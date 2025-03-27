@@ -60,7 +60,16 @@ const OrderServices = {
     async completedOrdersComparsion(){
         const data = await instance.get("/orders/completedOrders").then(({data}) => data.data).catch((err) => console.error(err));
         return data;
+    },
+    async getTotalRevenueChange(){
+        const data = await instance.get("/orders/totalRevenueChange").then(({data})=> data.data).catch((err) => console.error(err));
+        return data;
+    },
+    async getTotalSummaryChart(interval = "month"){
+        const data = await instance.get(`/orders/totalChart/${interval}`).then(({data})=> data.data).catch((err) => console.error(err));
+        return data;
     }
+    
 };
 
 export default OrderServices;

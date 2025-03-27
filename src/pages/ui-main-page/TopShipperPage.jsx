@@ -10,7 +10,7 @@ export default function TopShippers() {
         fetchTopShippers();
     }, [])
 
-    const fetchTopShippers = async() => {
+    const fetchTopShippers = async () => {
         let response = await ShipperServices.top5ShipperInMonth();
         console.log(response)
         setShipper(response);
@@ -22,7 +22,7 @@ export default function TopShippers() {
                 Shipper được đánh giá cao trong tháng
             </h3>
             <ul>
-                {shipper.map((s, index) => (
+                {shipper?.map((s, index) => (
                     <li key={index} className="flex items-center justify-between py-2 border-b">
                         <div className="flex items-center gap-3">
                             <img
@@ -46,7 +46,7 @@ export default function TopShippers() {
                         >
                             Xem
                         </button>
-                        
+
                     </li>
                 ))}
             </ul>

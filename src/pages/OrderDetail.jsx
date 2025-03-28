@@ -18,7 +18,7 @@ export default function OrderDetail() {
 
     const handleCancelOrder = async () => {
         if (!cancellationReason.trim()) {
-            alert("Vui lòng nhập lý do hủy đơn hàng!");
+            alert("Vui lòng nhập lý do tạm dừng đơn hàng!");
             return;
         }
 
@@ -40,19 +40,19 @@ export default function OrderDetail() {
             // Hiển thị thông báo thành công
             notifications.show({
                 color: "green",
-                title: "Đơn hàng đã được hủy",
-                message: "Đơn hàng của bạn đã được hủy thành công.",
+                title: "Đơn hàng đã được tạm dừng",
+                message: "Đơn hàng của bạn đã được tạm dừng thành công.",
             });
         } catch (error) {
             // Xử lý lỗi nếu có
-            console.error("Lỗi khi hủy đơn hàng:", error);
-            alert(`Có lỗi xảy ra khi hủy đơn hàng: ${error.message}`);
+            console.error("Lỗi khi tạm dừng đơn hàng:", error);
+            alert(`Có lỗi xảy ra khi tạm dừng đơn hàng: ${error.message}`);
 
             // Hiển thị thông báo lỗi
             notifications.show({
                 color: "red",
-                title: "Lỗi khi hủy đơn hàng",
-                message: "Đơn hàng của bạn chưa được hủy thành công. Hãy thử lại.",
+                title: "Lỗi khi tạm dừng đơn hàng",
+                message: "Đơn hàng của bạn chưa được tạm dừng thành công. Hãy thử lại.",
             });
         }
     };
@@ -253,7 +253,7 @@ export default function OrderDetail() {
                 }}
             >
                 <p className="font-semibold text-xl text-gray-800 mb-6">
-                    {order.status === "cancelled" ? "Lý do mở đơn hàng" : "Lý do hủy đơn hàng"}
+                    {order.status === "cancelled" ? "Lý do mở đơn hàng" : "Lý do tạm dừng đơn hàng"}
                 </p>
                 <Textarea
                     className="w-full border border-gray-300 rounded-lg p-4 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"

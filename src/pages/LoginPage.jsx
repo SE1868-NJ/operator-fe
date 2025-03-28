@@ -9,7 +9,7 @@ import AuthService from "../services/Auth";
 
 const LoginPage = () => {
     const { error } = useCurrentUser();
-    const { register, handleSubmit, formState } = useForm();
+    const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -24,12 +24,16 @@ const LoginPage = () => {
         setIsLoading(true);
 
         await AuthService.login(email, password)
-            .then(() => {
+            .then(({ user }) => {
                 notifications.show({
                     title: "Đăng nhập thành công!",
                 });
                 setIsLoading(false);
-                navigate("/main");
+                if (user?.status === "active") {
+                    navigate("/main");
+                } else if (user?.status) {
+                    navigate("/changepassword");
+                }
             })
             .catch((err) => {
                 console.error(err);
@@ -43,7 +47,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 space-y-4 h-screen flex flex-col justify-center">
+        <div className="flex flex-col justify-center h-screen max-w-md p-6 mx-auto space-y-4">
             <Text size="xl" ta={"center"} fw={600} c={"blue"}>
                 Admin Dashboard
             </Text>
@@ -68,6 +72,15 @@ const LoginPage = () => {
                     className="mb-6"
                     {...register("password")}
                 />
+                {/* Forgot Password Link */}
+                <div className="text-left mb-4">
+                    <a
+                        href="/forgotpass"
+                        className="text-sm text-blue-600 hover:underline"
+                    >
+                        Forgot Password?
+                    </a>
+                </div>
 
                 <Button
                     mb={10}

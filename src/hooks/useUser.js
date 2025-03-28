@@ -43,3 +43,10 @@ export const useGetTop3Customer = () => {
         queryFn: () => UserService.getTop3Customer(),
     });
 };
+
+export const useGetTopCustomerByWeek = () => {
+    return useQuery({
+        queryKey: ["topWeek"],
+        queryFn: () => UserService.getTopCustomerByWeek(),
+    });
+}

@@ -5,7 +5,6 @@ import { authInstance, instance } from "../lib/axios";
 const OperatorService = {
     async getAccountProfile() {
         const email = this.decodeToken();
-        console.log("email in getAccountProfile function ", email);
         const data = await instance
             .get("/operator/profile", {
                 params: { email },

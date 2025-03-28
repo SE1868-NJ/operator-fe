@@ -34,7 +34,8 @@ export const usePendingShipper = (id) => {
     });
 };
 
-export const useTotalShippingFeeAllShippers = (offset, limit, search, filterStatus, filterDate) => {
+export const useTotalShippingFeeAllShippers = (offset, limit, filterData) => {
+    const { search, filterStatus, filterDate } = filterData;
     return useQuery({
         queryKey: ["totalShippingFee", offset, limit, search, filterStatus, filterDate],
         queryFn: () =>
@@ -45,13 +46,15 @@ export const useTotalShippingFeeAllShippers = (offset, limit, search, filterStat
                 filterStatus,
                 filterDate,
             ),
+        keepPreviousData: true,
     });
 };
 
-export const useOrdersOfShipper = (id) => {
+export const useOrdersOfShipper = (id, statusFilter, shippingStatusFilter) => {
     return useQuery({
-        queryKey: ["ordersOfShipper", id],
-        queryFn: () => ShipperServices.getOrdersOfShipper(id),
+        queryKey: ["ordersOfShipper", id, statusFilter, shippingStatusFilter],
+        queryFn: () => ShipperServices.getOrdersOfShipper(id, { status: statusFilter, shipping_status: shippingStatusFilter }),
+        keepPreviousData: true,
     });
 };
 
@@ -73,5 +76,19 @@ export const useGetDraftShipper = (id) => {
     return useQuery({
         queryKey: ["getDraftShipper", id],
         queryFn: () => ShipperServices.getPendingShipperDraft(id),
+    });
+};
+
+export const useGetActiveShipperCount = () => {
+    return useQuery({
+        queryKey: ["countActive"],
+        queryFn: () => ShipperServices.getActiveShipperCount(),
+    });
+};
+
+export const useGetShippersJoinedToday = () => {
+    return useQuery({
+        queryKey: ["countJoinedToday"],
+        queryFn: () => ShipperServices.getShippersJoinedToday(),
     });
 };

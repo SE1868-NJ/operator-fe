@@ -60,7 +60,6 @@ const ShopService = {
                 }, // Sử dụng params để truyền query params
             })
             .then(({ data }) => {
-                console.log(data?.data);
                 return data?.data;
             });
         return shops;
@@ -132,11 +131,12 @@ const ShopService = {
             });
         return shop;
     },
-    async getApprovedShops(limit = 10, page = 1, filterData = {}) {
+    async getApprovedShops(operatorID, limit = 10, page = 1, filterData = {}) {
         const offset = (page - 1) * limit;
         const { shopName, ownerName, shopEmail, shopPhone } = filterData;
         const data = {
             params: {
+                operatorID,
                 offset,
                 limit,
                 shopName,
@@ -160,6 +160,19 @@ const ShopService = {
             return data;
         } catch (error) {
             console.error("Error fetching order statistics:", error);
+            return null; // Hoặc throw error nếu muốn xử lý bên ngoài
+        }
+    },
+    async getShopRevenueStatistic(id, timeRange, interval) {
+        try {
+            const data = await instance
+                .get(`/shops/${id}/chartRevenue`, {
+                    params: { timeRange, interval },
+                })
+                .then(({ data }) => data);
+            return data;
+        } catch (error) {
+            console.error("Error fetching revenue statistics:", error);
             return null; // Hoặc throw error nếu muốn xử lý bên ngoài
         }
     },
@@ -272,6 +285,50 @@ const ShopService = {
     async getOneShopInfor(id) {
         const shop = await instance.get(`/shops/getinfor/${id}`).then(({ data }) => data?.shop);
         return shop;
+    },
+
+    async getPendingShopdraft(id) {
+        const draftInfor = await instance
+            .get(`/shops/shopdraft/${id}`)
+            .then(({ data }) => data?.shopInfor);
+        return draftInfor;
+    },
+
+    async updatePendingShopDraft(id, data) {
+        const updatedShopDraft = await instance
+            .patch(`/shops/shopdraft/${id}`, data, {
+                headers: {
+                    "Content-Type": "application/json", // đảm bảo đúng format
+                },
+            })
+            .then(({ data }) => data)
+            .catch((err) => {
+                console.error(err);
+            });
+        return updatedShopDraft;
+    },
+
+    async getIndexReasonItem(id, index) {
+        const reasonItems = await instance
+            .get(`/shops/reasonitems/${id}`, { params: { index } })
+            .then(({ data }) => data?.listItems || []);
+        return reasonItems;
+    },
+
+    async updateIndexReasonItem(operator_id, id, index, reason, status) {
+        const data = {
+            operator_id,
+            index,
+            reason,
+            status: status === "v" ? "accept" : "reject",
+        };
+        const updatedReasonItems = await instance
+            .post(`/shops/reasonitems/${id}`, data)
+            .then(({ data }) => data)
+            .catch((err) => {
+                console.error(err);
+            });
+        return updatedReasonItems;
     },
 };
 

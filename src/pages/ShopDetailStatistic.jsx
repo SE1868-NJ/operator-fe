@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FeedbackChat from "../components/FeedbackChat";
 import FeedbackList from "../components/ShopFeedback";
 import OrderChart from "../components/ShopOrderChart";
+import RevenueChart from "../components/ShopRevenueChart";
 import {
     useExportShopOrders,
     useExportShopProducts,
@@ -148,19 +149,6 @@ const ShopDetailStatistic = () => {
                                 </p>
                             </div>
                         </div>
-
-                        {/* Nếu shop bị đình chỉ */}
-                        {shop.shopStatus === "suspended" && (
-                            <div className="mt-4 p-4 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md flex items-center gap-3">
-                                <IconAlertCircle size={24} className="text-red-600" />
-                                <p className="text-sm text-red-800 font-medium">
-                                    Tài khoản bị đình chỉ đến:{" "}
-                                    <span className="font-semibold text-red-900">
-                                        {new Date(banInfo?.banEnd).toLocaleString("vi-VN")}
-                                    </span>
-                                </p>
-                            </div>
-                        )}
                     </Card>
                     <div>
                         <FeedbackChat shopId={id} />
@@ -170,13 +158,21 @@ const ShopDetailStatistic = () => {
                 {/* Biểu đồ */}
                 <div className="border border-gray-200 mt-8 pt-1 rounded-lg">
                     {/* <div className="w-full flex flex-col lg:flex-row gap-6 px-4"> */}
-                    <div className="w-full">
-                        <div className="rounded-2xl p-6 w-full">
-                            <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider mb-8 ">
-                                📊 Thống kê số đơn hàng
+                    <div className="w-full flex">
+                        <div className="rounded-2xl p-6 w-1/2">
+                            <h2 className="text-2xl font-bold text-center text-gray-800 uppercase tracking-wider mb-8 ">
+                                📊 Thống kê số đơn hàng thành công
                             </h2>
                             <div>
                                 <OrderChart id={id} />
+                            </div>
+                        </div>
+                        <div className="rounded-2xl p-6 w-1/2">
+                            <h2 className="text-2xl font-bold text-center text-gray-800 uppercase tracking-wider mb-8 ">
+                                💰 Thống kê doanh thu
+                            </h2>
+                            <div>
+                                <RevenueChart id={id} />
                             </div>
                         </div>
                     </div>

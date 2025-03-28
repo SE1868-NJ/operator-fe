@@ -163,6 +163,19 @@ const ShopService = {
             return null; // Hoặc throw error nếu muốn xử lý bên ngoài
         }
     },
+    async getShopRevenueStatistic(id, timeRange, interval) {
+        try {
+            const data = await instance
+                .get(`/shops/${id}/chartRevenue`, {
+                    params: { timeRange, interval },
+                })
+                .then(({ data }) => data);
+            return data;
+        } catch (error) {
+            console.error("Error fetching revenue statistics:", error);
+            return null; // Hoặc throw error nếu muốn xử lý bên ngoài
+        }
+    },
 
     async getAllShopsRevenues(day, month, year = 2025, limit = 10, page = 1, filterData = {}) {
         const offset = (page - 1) * limit;

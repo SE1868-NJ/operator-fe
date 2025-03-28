@@ -20,15 +20,15 @@ const ForgotPassPage = () => {
         // destructuring
         const { email } = data;
 
-        await AuthService.login(email)
-            .then(({ token }) => {
+        await AuthService.resetPassword(email, "operator")
+            .then(({ data }) => {
                 notifications.show({
                     olor: "green",
                     title: "Mật khẩu mới đã được gửi đến gmail của bạn!",
                     message: "Vui lòng mở gmail để nhận mật khẩu!",
                 });
                 navigate("/main");
-                setToken(token);
+                
             })
             .catch((err) => {
                 console.error(err);

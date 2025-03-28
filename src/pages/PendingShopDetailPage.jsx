@@ -12,6 +12,7 @@ import { useAccountProfile } from "../hooks/useAccountProfile.js";
 import { useIndexReasonItem, useOnePendingShop } from "../hooks/useShop";
 import EmailService from "../services/Email.js";
 import ShopService from "../services/ShopService";
+import { useRef } from "react";
 
 const PendingShopDetail = () => {
     const { id } = useParams();
@@ -111,6 +112,16 @@ const PendingShopDetail = () => {
         openDetail();
     };
 
+    const textareaRef = useRef(null);
+
+    useEffect(() => {
+        if (openInput) {
+            setTimeout(() => {
+                textareaRef.current?.focus({ preventScroll: true });
+            }, 100);
+        }
+    }, [openInput]);
+
     if (isLoadData) {
         return <div>Đang tải dữ liệu...</div>;
     }
@@ -195,6 +206,7 @@ const PendingShopDetail = () => {
                 status: "savedraft",
                 reason: JSON.stringify(updatedChangedValue),
             });
+            queryClient.invalidateQueries({ queryKey: ["indexReasonItem"] });
             setChangedValue(updatedChangedValue);
             setOpenInput(false);
             setSelectIndex(null);
@@ -219,7 +231,8 @@ const PendingShopDetail = () => {
             status: "savedraft",
             reason: JSON.stringify(updatedChangedValue),
         });
-        ShopService.updateIndexReasonItem(operator?.operatorID, id, index, reason, newStatus);
+        await ShopService.updateIndexReasonItem(operator?.operatorID, id, index, reason, newStatus);
+        queryClient.invalidateQueries({ queryKey: ["indexReasonItem"] });
 
         setChangedValue(updatedChangedValue);
         setOpenInput(false);
@@ -451,6 +464,7 @@ const PendingShopDetail = () => {
                                                 placeholder="reason..."
                                                 onChange={handleInputReason}
                                                 value={reason}
+                                                ref={textareaRef}
                                             />
                                             <Button
                                                 disabled={!reason || reason.trim() === ""}
@@ -708,7 +722,7 @@ const PendingShopDetail = () => {
                     rows={10}
                     cols={100}
                     className="mt-4"
-                    onChange={(e) => sendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
+                    onChange={(e) => setSendMailContent(e.target.value)} // Cập nhật lý do khi người dùng nhập
                 />
                 <div className="flex justify-end mt-4">
                     <Button

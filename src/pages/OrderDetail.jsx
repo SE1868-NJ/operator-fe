@@ -237,7 +237,7 @@ export default function OrderDetail() {
                     onClick={handleOpenModal} // Mở modal khi nhấn Hủy đơn hàng
                     className="px-6 py-3 font-medium text-white bg-red-600 rounded-lg transition duration-200 hover:bg-red-500 w-full sm:w-auto"
                 >
-                    {order.status === "cancelled" ? "Mở đơn hàng" : "Hủy đơn hàng"}
+                    {order.status === "cancelled" ? "Mở đơn hàng" : "Tạm dừng để xử lý"}
                 </Button>
             </div>
 

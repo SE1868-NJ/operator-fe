@@ -46,7 +46,7 @@ export default function OrderDetail() {
       } else {
         notifications.show({
           color: "green",
-          title: "Đơn hàng đã được hủy",
+          title: "Đơn hàng đã được tạm dừng",
           message: "Đơn hàng của bạn đã được tạm dừng thành công.",
         });
       }

@@ -37,7 +37,6 @@ const Layout = () => {
                 <Button
                     onClick={() => navigate(-1)}
                     variant="outline"
-                    color="blue"
                     mb="md"
                     ml={10}
                     mt={10}

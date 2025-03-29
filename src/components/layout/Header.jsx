@@ -24,6 +24,7 @@ const Header = () => {
     const unReadMessage = data?.unReadMessage;
     const queryClient = useQueryClient();
 
+
     useEffect(() => {
         socket.on(NEW_NOTIF, () => {
             // reload number of notifications
@@ -46,7 +47,7 @@ const Header = () => {
     });
 
     return (
-        <div className="flex justify-between items-center h-full px-4">
+        <div className="flex items-center justify-between h-full px-4">
             <p className="text-2xl font-bold text-primary">eCMarket</p>
 
             {/* Notification Popup */}
@@ -56,7 +57,7 @@ const Header = () => {
                         <ActionIcon
                             size="lg"
                             radius="xl"
-                            className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                            className="transition-colors bg-gray-100 hover:bg-gray-200"
                         >
                             <IconMail className="text-gray-700" size={20} />
                         </ActionIcon>
@@ -83,7 +84,7 @@ const Header = () => {
                                         key={n.id}
                                         p="sm"
                                         onClick={openModal}
-                                        className="hover:bg-slate-300 rounded-md"
+                                        className="rounded-md hover:bg-slate-300"
                                     >
                                         <Group wrap="nowrap" gap="sm">
                                             {n.type === "success" ? (

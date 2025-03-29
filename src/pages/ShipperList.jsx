@@ -1,12 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useShippers, useTotalShippingFeeAllShippers, useShippersExport } from "../hooks/useShippers.js";
 import ShipperDashboardChart from "./ShipperDashboardChart.jsx";
 import TopShippersTable from "./TopShippersTable.jsx";
 import { useDebouncedState } from "@mantine/hooks";
 import { useMemo } from "react";
-import  ExportExcelButton from "./ExportExcelButton.jsx";
+import ExportExcelButton from "./ExportExcelButton.jsx";
 
 function formatDate(dateString) {
     const [year, month, day] = dateString.split("-");
@@ -46,23 +46,23 @@ export default function ShipperList() {
     );
 
     const { data, isLoading } = useShippers(offset, itemsPerPage, filterData);
-    
+
     const shipperList = data?.shippers || [];
-    const {data: dataExport, isLoadingExport} = useShippersExport(offset, 9999, filterData);
-    
+    const { data: dataExport, isLoadingExport } = useShippersExport(offset, 9999, filterData);
+
     const shipperExport = dataExport?.shippers || [];
 
     console.log("shipperListExport", dataExport)
-    
-    
-    
+
+
+
     const { data: allShipperFee, isLoading: isLoadingShippingFee } = useTotalShippingFeeAllShippers(
         0,
         10,
         filterData,
     );
 
-    
+
 
     console.log("totalShippingFee Export", allShipperFee);
 
@@ -92,7 +92,7 @@ export default function ShipperList() {
     // if (isLoading || isLoadingShippingFee) {
     //     return <p>Loading...</p>;
     // }
-    
+
     return (
         <div className="p-6 mx-auto bg-white">
             <TopShippersTable />

@@ -112,12 +112,12 @@ const ShopProfileDetail = () => {
                                 <p className="text-2xl font-bold text-gray-800">Mô tả cửa hàng</p>
                                 <p className="text-gray-700 mt-2 text-lg">{shop.shopDescription}</p>
 
-                                <p className="text-2xl font-bold text-gray-800 mt-4 flex items-center gap-2">
+                                {/* <p className="text-2xl font-bold text-gray-800 mt-4 flex items-center gap-2">
                                     Đánh giá cửa hàng
                                 </p>
                                 <p className="text-yellow-500 mt-2 text-lg font-semibold">
                                     ⭐ {shop.shopRating}/5
-                                </p>
+                                </p> */}
                             </div>
                         </div>
 

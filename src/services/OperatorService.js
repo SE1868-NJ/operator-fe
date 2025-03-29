@@ -5,7 +5,6 @@ import { authInstance, instance } from "../lib/axios";
 const OperatorService = {
     async getAccountProfile() {
         const email = this.decodeToken();
-        console.log("email in getAccountProfile function ", email);
         const data = await instance
             .get("/operator/profile", {
                 params: { email },
@@ -16,10 +15,10 @@ const OperatorService = {
         return data.data;
     },
 
-    async updateAccountProfile(dataUpdate) {
+    async updateAccountProfile(formData) {
         const data = await instance
-            .post("/operator/profile/update", {
-                dataUpdate,
+            .post("/operator/profile/update", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
             })
             .then(({ data }) => data)
             .catch((err) => {
@@ -34,6 +33,7 @@ const OperatorService = {
 
         return data;
     },
+
     decodeToken() {
         try {
             const token = localStorage.getItem("token");

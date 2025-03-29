@@ -1,10 +1,17 @@
 import { Card, Grid, Table, Text, Title } from "@mantine/core";
-import { useGetTopShippers } from "../hooks/useShippers"; // Hook để fetch dữ liệu
+import {
+    useGetActiveShipperCount,
+    useGetTopShippers,
+    useGetShippersJoinedToday
+} from "../hooks/useShippers"; // Hook để fetch dữ liệu
 
 export default function Top() {
     const { data: topShippers, isLoading } = useGetTopShippers();
+    const { data: activeShipperCount, isLoading: isLoadingActive } = useGetActiveShipperCount();
+    const { data: shippersJoinedToday, isLoading: isLoadingJoined } = useGetShippersJoinedToday();
+    console.log("Active Shipper Count:", activeShipperCount);
 
-    if (isLoading) return <p className="text-lg font-semibold text-center">Loading data...</p>;
+    if (isLoading || isLoadingActive || isLoadingJoined) return <p className="text-lg font-semibold text-center">Loading data...</p>;
 
     return (
         <div className="p-6">
@@ -21,7 +28,7 @@ export default function Top() {
                                 </div>
                                 <div className="p-4">
                                     <Text size="xl" className="font-bold text-blue-600">
-                                        <strong>20</strong>
+                                        <strong>{activeShipperCount ?? "Đang tải..."}</strong>
                                     </Text>
                                 </div>
                             </div>
@@ -35,7 +42,7 @@ export default function Top() {
                                 </div>
                                 <div className="p-4">
                                     <Text size="xl" className="font-bold text-green-600 ">
-                                        <strong>10</strong>
+                                        <strong>{shippersJoinedToday ?? "Đang tải..."}</strong>
                                     </Text>
                                 </div>
                             </div>

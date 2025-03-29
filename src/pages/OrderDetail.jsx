@@ -41,13 +41,13 @@ export default function OrderDetail() {
         notifications.show({
           color: "green",
           title: "Đơn hàng đã được mở",
-          message: "Đơn hàng của bạn đã được mở thành công.",
+          message: "Đơn hàng đã được mở thành công.",
         });
       } else {
         notifications.show({
           color: "green",
           title: "Đơn hàng đã được tạm dừng",
-          message: "Đơn hàng của bạn đã được tạm dừng thành công.",
+          message: "Đơn hàng đã được tạm dừng thành công.",
         });
       }
     } catch (error) {
@@ -59,7 +59,7 @@ export default function OrderDetail() {
       notifications.show({
         color: "red",
         title: "Lỗi khi tạm dừng đơn hàng",
-        message: "Đơn hàng của bạn chưa được tạm dừng thành công. Hãy thử lại.",
+        message: "Đơn hàng chưa được tạm dừng thành công. Hãy thử lại.",
       });
     }
   };

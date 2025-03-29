@@ -1,11 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useShippers, useTotalShippingFeeAllShippers } from "../hooks/useShippers.js";
+import { useShippers, useTotalShippingFeeAllShippers, useShippersExport } from "../hooks/useShippers.js";
 import ShipperDashboardChart from "./ShipperDashboardChart.jsx";
 import TopShippersTable from "./TopShippersTable.jsx";
 import { useDebouncedState } from "@mantine/hooks";
 import { useMemo } from "react";
+import  ExportExcelButton from "./ExportExcelButton.jsx";
 
 function formatDate(dateString) {
     const [year, month, day] = dateString.split("-");
@@ -32,8 +33,8 @@ export default function ShipperList() {
     const itemsPerPage = 10;
     const navigate = useNavigate();
 
+    console.log("filterStatus", filterStatus);
     const offset = (currentPage - 1) * itemsPerPage;
-    console.log(offset);
 
     const filterData = useMemo(
         () => ({
@@ -44,16 +45,26 @@ export default function ShipperList() {
         [search, filterStatus, filterDate],
     );
 
-    const { data, isLoading } = useShippers(offset, itemsPerPage, search, filterStatus);
+    const { data, isLoading } = useShippers(offset, itemsPerPage, filterData);
+    
+    const shipperList = data?.shippers || [];
+    const {data: dataExport, isLoadingExport} = useShippersExport(offset, 9999, filterData);
+    
+    const shipperExport = dataExport?.shippers || [];
+
+    console.log("shipperListExport", dataExport)
+    
+    
+    
     const { data: allShipperFee, isLoading: isLoadingShippingFee } = useTotalShippingFeeAllShippers(
         0,
         10,
         filterData,
     );
 
+    
 
-
-    console.log("totalShippingFee", allShipperFee);
+    console.log("totalShippingFee Export", allShipperFee);
 
     const totalPages = Math.ceil((data?.totalCount || 1) / itemsPerPage);
 
@@ -107,7 +118,7 @@ export default function ShipperList() {
                     <select
                         className="w-full p-2 border rounded"
                         defaultValue={filterStatus}
-                        onChange={handleStatusChange}
+                        onChange={(e) => handleStatusChange(e)}
                     >
                         <option value="">Tất cả trạng thái</option>
                         <option value="active">Đang hoạt động</option>
@@ -122,9 +133,11 @@ export default function ShipperList() {
                         type="date"
                         className="w-full p-2 border rounded"
                         defaultValue={filterDate}
-                        onChange={handleDateChange}
+                        onChange={(e) => handleDateChange(e)}
                     />
                 </div>
+
+                <ExportExcelButton data={shipperExport} fileName="DanhSachShipper" />
             </div>
 
             {/* Bảng danh sách shipper */}
@@ -136,13 +149,7 @@ export default function ShipperList() {
                         <th className="p-2 border">SĐT</th>
                         <th className="p-2 border">Email</th>
                         <th className="p-2 border">Trạng thái</th>
-                        <th className="p-2 border">Tống số đơn hàng</th>
-                        {/* <th className="p-2 border">Tống doanh thu</th> */}
                         <th className="p-2 border">Ngày tham gia</th>
-                        {/* <th className="p-2 border">
-                            Tổng doanh thu (VND) <br />
-                            Đã trích xuất
-                        </th> */}
                         <th className="p-2 border">Hoạt động</th>
                     </tr>
                 </thead>
@@ -154,28 +161,28 @@ export default function ShipperList() {
                     </tr>
                 ) : (
                     <tbody>
-                        {allShipperFee?.sumShippingFee?.map((shipper) => (
-                            <tr key={shipper.Shipper.id} className="border">
-                                <td className="p-2 text-center border">{shipper?.Shipper.id}</td>
-                                <td className="p-2 text-center border">{shipper?.Shipper.name}</td>
-                                <td className="p-2 text-center border">{shipper?.Shipper.phone}</td>
-                                <td className="p-2 text-center border">{shipper?.Shipper.email}</td>
+                        {shipperList?.map((shipper) => (
+                            <tr key={shipper?.id} className="border">
+                                <td className="p-2 text-center border">{shipper?.id}</td>
+                                <td className="p-2 text-center border">{shipper?.name}</td>
+                                <td className="p-2 text-center border">{shipper?.phone}</td>
+                                <td className="p-2 text-center border">{shipper?.email}</td>
                                 <td className="p-2 text-center border">
                                     <span
                                         className={
-                                            shipper.Shipper.status === "active"
+                                            shipper.status === "active"
                                                 ? "text-green-700 bg-green-100 p-1 rounded"
-                                                : shipper.Shipper.status === "pending"
+                                                : shipper.status === "pending"
                                                     ? "text-yellow-700 bg-yellow-100 p-1 rounded"
-                                                    : shipper.Shipper.status === "suspended"
+                                                    : shipper.status === "suspended"
                                                         ? "text-orange-700 bg-orange-100 border-orange-500"
                                                         : "text-red-700 bg-red-100 border-red-500"
                                         }
                                     >
-                                        {translateStatus(shipper?.Shipper.status)}
+                                        {translateStatus(shipper?.status)}
                                     </span>
                                 </td>
-                                <td className="p-2 text-center border">{shipper.count_order}</td>
+                                {/* <td className="p-2 text-center border">{shipper.count_order}</td> */}
                                 {/* <td className="p-2 text-center border">
                                     {new Intl.NumberFormat("vi-VN").format(
                                         shipper.sum_shipping_fee,
@@ -187,8 +194,8 @@ export default function ShipperList() {
                                     )}
                                 </td> */}
                                 <td className="p-2 text-center border">
-                                    {shipper?.Shipper.joinedDate
-                                        ? new Date(shipper.Shipper.joinedDate).toLocaleDateString("vi-VN")
+                                    {shipper?.joinedDate
+                                        ? new Date(shipper.joinedDate).toLocaleDateString("vi-VN")
                                         : ""}
                                 </td>
                                 <td className="p-2 text-center border">
@@ -196,7 +203,7 @@ export default function ShipperList() {
                                         type="button"
                                         className="text-blue-500 underline"
                                         onClick={() =>
-                                            navigate(`/main/shipperslist/${shipper.Shipper.id}`)
+                                            navigate(`/main/shipperslist/${shipper.id}`)
                                         }
                                     >
                                         Chi tiết

@@ -3,6 +3,7 @@ import { Card, Loader, Select, Text, Title } from "@mantine/core";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useGetTop10Shippers } from "../hooks/useShippers";
+import { instance } from "../lib/axios";
 
 export default function ShipperDashboardChart() {
     const [data, setData] = useState([]);
@@ -20,8 +21,8 @@ export default function ShipperDashboardChart() {
     }, []);
 
     useEffect(() => {
-        axios
-            .get("http://localhost:3050/shippers/top10Shippers")
+        instance
+            .get("/shippers/top10Shippers")
             .then((response) => {
                 console.log("🚀 Data fetched:", response.data.data);
                 const fetchedData = response.data.data;
@@ -56,6 +57,7 @@ export default function ShipperDashboardChart() {
     if (isLoading || !chartData) return <div>Loading...</div>;
 
     const filteredData = data.filter((item) => item.order_month === selectedMonth);
+    console.log(filteredData);
 
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -102,6 +104,7 @@ export default function ShipperDashboardChart() {
                     Không có dữ liệu cho tháng này
                 </Text>
             )}
+            
         </Card>
     );
 }

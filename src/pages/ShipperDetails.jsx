@@ -1,4 +1,4 @@
-import { Button, Modal, Select, Textarea } from "@mantine/core";
+import { Button, Modal, Select, Textarea, Group, Text } from "@mantine/core";
 import { jwtDecode } from "jwt-decode";
 import { DatePicker } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShipper } from "../hooks/useShippers";
 import BanService from "../services/BanService";
+import { useAccountProfile } from "../hooks/useAccountProfile";
 // import ShipperDashboardChart from "./ShipperDashboardChart";
 import ShipperOrdersList from "./ShipperOrdersList";
 import { Suspense } from "react";
@@ -49,8 +50,13 @@ export default function ShipperDetails() {
   const [opened, setOpened] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const { data: shipper, error } = useShipper(id);
-
-  
+  const {
+    data: operatorData,
+    isLoadingOperator,
+    errorOperator,
+  } = useAccountProfile();
+  const [unbantModalOpen, setUnbanModalOpen] = useState(false);
+  const [reason, setReason] = useState("");
 
   const queryClient = useQueryClient();
   const [banInfo, setBanInfo] = useState(null);
@@ -58,7 +64,6 @@ export default function ShipperDetails() {
   useEffect(() => {
     if (!shipper?.id) return;
     const fetchBanInfo = async () => {
-
       try {
         const isUserBan = await BanService.getBanAccount(shipper.id, "shipper");
         console.log("Ban info:", isUserBan);
@@ -80,32 +85,22 @@ export default function ShipperDetails() {
     );
   }
 
-  const handleChangeStatus = async () => {
-    if (shipper.status === "active") {
-      const token = localStorage.getItem("token");
-      const operatorData = jwtDecode(token);
-  
+const handleStatusChange = async () => {
+    if (shipper.status === "active" && !banInfo) {
       navigate(
-        `/main/ban_account?userId=${shipper.id}&userName=${shipper.name}&operatorId=${operatorData?.id}&accountType=shipper`
+        `/main/ban_account?userId=${shipper.id}&userName=${shipper.name}&operatorId=${operatorData?.operatorID}&accountType=shipper`
       );
     } else {
-      const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
-      if (confirmUnban) {
-        try {
-          const response = await BanService.unbanAccountManually(shipper.id, "shipper");
-          console.log("✅ Gỡ đình chỉ thành công:", response);
-  
-          await queryClient.invalidateQueries(["shipper", id]);
-          await queryClient.invalidateQueries(["shipper"]);
-          window.location.reload();
-        } catch (error) {
-          console.error("❌ Lỗi khi gỡ đình chỉ:", error);
-          alert("Không thể gỡ đình chỉ. Vui lòng thử lại!");
-        }
+      if (banInfo?.status === "banned") {
+        await BanService.unbanAccountManually(shipper.id, "shipper");
+      } else if (banInfo?.status === "scheduled") {
+        await BanService.cancelBanScheduled(shipper.id, "shipper");
       }
+      window.location.reload();
     }
+    await queryClient.invalidateQueries(["shipper", id]);
+    await queryClient.invalidateQueries(["shipper"]);
   };
-  
 
   const handleConfirmDeactivation = () => {
     setIsLoading(true);
@@ -149,7 +144,7 @@ export default function ShipperDetails() {
                 className={`inline-block px-2 py-1 rounded-md text-sm font-semibold ${
                   shipper.status === "active"
                     ? "text-green-700 bg-green-100 border-green-500"
-                    : shipper.status === "pending"
+                    : shipper.status === "scheduled"
                     ? "text-yellow-700 bg-yellow-100 border-yellow-500"
                     : shipper.status === "suspended"
                     ? "text-orange-700 bg-orange-100 border-orange-500"
@@ -160,7 +155,56 @@ export default function ShipperDetails() {
               </div>
 
               {/* Nếu shipper bị đình chỉ, hiển thị thông tin đình chỉ trong một khối riêng biệt */}
-              {shipper.status === "suspended" && banInfo && (
+              {/* {shipper.status === "suspended" && banInfo && (
+                <div className="p-3 mt-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
+                  <p className="flex items-center gap-2 text-sm font-medium text-red-800">
+                    <span className="font-bold text-red-600">&#x21;</span>
+                    <span>Tài khoản bị đình chỉ đến:</span>
+                    <span className="font-semibold text-red-900">
+                      {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                    </span>
+                  </p>
+                  <div className="p-2 mt-2 border border-red-300 rounded-md bg-red-50">
+                    <p className="text-sm text-red-700">
+                      <span className="font-semibold">Lý do: </span>{" "}
+                      {banInfo.reason}
+                    </p>
+                  </div>
+                </div>
+              )} */}
+              {/* Nếu status là "Hoạt động", hiển thị thêm thời gian đặt lịch ban */}
+              {shipper?.status === "active" && banInfo && (
+                <div className="p-3 mt-3 bg-yellow-100 border-l-4 border-yellow-500 rounded-md shadow-md">
+                  <div className="text-sm font-medium text-yellow-800">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-yellow-600">
+                        &#x26A0;
+                      </span>
+                      <span>Tài khoản của bạn sẽ bị đình chỉ từ:</span>
+                      <span className="font-semibold text-yellow-900">
+                        {new Date(banInfo.banStart).toLocaleString("vi-VN")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-yellow-600">
+                        &#x26A0;
+                      </span>
+                      <span>Tài khoản của bạn sẽ bị đình chỉ đến:</span>
+                      <span className="font-semibold text-yellow-900">
+                        {new Date(banInfo.banEnd).toLocaleString("vi-VN")}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-2 mt-2 border border-yellow-300 rounded-md bg-yellow-50">
+                    <p className="text-sm text-yellow-700">
+                      <span className="font-semibold">⚠ Lý do: </span>{" "}
+                      {banInfo.reason}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {/* Nếu status là "Đình chỉ", hiển thị thêm thời gian ban */}
+              {shipper?.status === "suspended" && banInfo && (
                 <div className="p-3 mt-3 bg-red-100 border-l-4 border-red-500 rounded-md shadow-md">
                   <p className="flex items-center gap-2 text-sm font-medium text-red-800">
                     <span className="font-bold text-red-600">&#x21;</span>
@@ -305,7 +349,7 @@ export default function ShipperDetails() {
             </div>
             <div className="flex items-center justify-center mt-6 space-x-4">
               <div className="text-left">
-                <Button
+                {/* <Button
                   color={shipper?.status === "active" ? "red" : "teal"}
                   onClick={() =>
                     handleChangeStatus(
@@ -320,7 +364,35 @@ export default function ShipperDetails() {
                   ) : (
                     "Kích hoạt"
                   )}
-                </Button>
+                </Button> */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (shipper?.status === "active" && !banInfo) {
+                      handleStatusChange();
+                    } else if (
+                      banInfo?.status === "banned" ||
+                      banInfo?.status === "scheduled"
+                    ) {
+                      setUnbanModalOpen(true);
+                    }
+                  }}
+                  className={`${
+                    shipper?.status === "active" && !banInfo
+                      ? "bg-yellow-500 hover:bg-yellow-700 text-white"
+                      : banInfo?.status === "banned"
+                      ? "bg-green-500 hover:bg-green-700 text-white"
+                      : "bg-blue-500 hover:bg-blue-700 text-white" // Nếu là "Không hoạt động"
+                  } px-4 py-2 rounded`}
+                >
+                  {
+                    shipper?.status === "active" && !banInfo
+                      ? "Đình chỉ người dùng"
+                      : banInfo?.status === "banned"
+                      ? "Gỡ đình chỉ người dùng"
+                      : "Hủy lịch đình chỉ người dùng" // Nếu là "Không hoạt động"
+                  }
+                </button>
               </div>
               <div className="text-right">
                 <Button onClick={() => navigate("/main/shipperslist")}>
@@ -336,6 +408,30 @@ export default function ShipperDetails() {
           </div>
         </div>
       </div>
+      {/* Modal xác nhận gỡ ban người dùng */}
+      <Modal
+        opened={unbantModalOpen}
+        onClose={() => setUnbanModalOpen(false)}
+        title="Xác nhận"
+      >
+        <Text>Bạn có chắc chắn muốn gỡ đình chỉ người dùng này?</Text>
+        <Textarea
+          label="Lý do gỡ đình chỉ"
+          placeholder="Nhập lý do..."
+          value={reason}
+          onChange={(event) => setReason(event.target.value)}
+          mt="md"
+          required
+        />
+        <Group position="right" mt="md">
+          <Button variant="default" onClick={() => setUnbanModalOpen(false)}>
+            Hủy
+          </Button>
+          <Button color="green" onClick={handleStatusChange}>
+            Xác nhận
+          </Button>
+        </Group>
+      </Modal>
     </div>
   );
 }

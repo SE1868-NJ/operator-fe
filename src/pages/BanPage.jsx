@@ -159,11 +159,14 @@ const BanAccountForm = () => {
             });
             return; // Dừng lại không tiếp tục gửi form
         }
-
+        console.log(new Date(finalBanStart).getTime())
+        console.log(new Date(finalBanEnd).getTime())
         try {
             // Gọi service để thực hiện hành động ban tài khoản
 
+            console.log(operatorId)
             const response = await BanService.banUser(payload);
+
             if (response?.success) {
 
                 if (userType === "shipper") {
@@ -300,11 +303,10 @@ const BanAccountForm = () => {
                             <button
                                 key={`value ${value}`}
                                 type="button"
-                                className={`px-4 py-2 rounded-lg border transition ${
-                                    banStartDuration === value
+                                className={`px-4 py-2 rounded-lg border transition ${banStartDuration === value
                                         ? "bg-red-600 text-white border-red-600"
                                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                }`}
+                                    }`}
                                 onClick={() => setBanStartDuration(value)}
                             >
                                 {value === "0" && "Hiện tại"}
@@ -373,11 +375,10 @@ const BanAccountForm = () => {
                             <button
                                 key={value}
                                 type="button"
-                                className={`px-4 py-2 rounded-lg border transition ${
-                                    banDuration === value
+                                className={`px-4 py-2 rounded-lg border transition ${banDuration === value
                                         ? "bg-red-600 text-white border-red-600"
                                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                }`}
+                                    }`}
                                 onClick={() => setBanDuration(value)}
                             >
                                 {value === "1" && "1 ngày"}

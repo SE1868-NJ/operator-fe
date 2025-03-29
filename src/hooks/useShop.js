@@ -28,10 +28,10 @@ export const useShop = (id) => {
     });
 };
 
-export const useShopOrders = (id, offset, limit) => {
+export const useShopOrders = (id, offset, limit, status) => {
     return useQuery({
-        queryKey: ["shopOrders", id, offset, limit],
-        queryFn: () => ShopService.getOrderByShopId(id, offset, limit),
+        queryKey: ["shopOrders", id, offset, limit, status],
+        queryFn: () => ShopService.getOrderByShopId(id, offset, limit, status),
         keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };

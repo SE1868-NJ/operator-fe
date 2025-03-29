@@ -89,10 +89,10 @@ const ShopService = {
         return shops;
     },
 
-    async getOrderByShopId(id, offset = 0, limit = 5) {
+    async getOrderByShopId(id, offset = 0, limit = 5, status) {
         const data = await instance
             .get(`/shops/${id}/orders`, {
-                params: { offset, limit },
+                params: { offset, limit, status },
             })
             .then(({ data }) => data);
         return data;

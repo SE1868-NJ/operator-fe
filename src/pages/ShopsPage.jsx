@@ -7,6 +7,7 @@ import SendBulkEmailModal from "../components/AllShopEmail.jsx";
 import { useExportShops, useShops } from "../hooks/useShop.js";
 import DashboardChart from "./AllShopChart.jsx";
 import ExportExcelButton from "./ExportExcelButton.jsx";
+import { Loader } from '@mantine/core';
 
 // import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -98,7 +99,11 @@ export default function ShopsPage() {
     const [emailModalOpened, setEmailModalOpened] = useState(false);
 
     if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader color="blue" size="sm" variant="dots" />
+            </div>
+        );
     }
 
     if (error || !data?.shops) {

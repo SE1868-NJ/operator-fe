@@ -59,7 +59,7 @@ const BanAccountForm = () => {
         userId,
         operatorId,
         userType,
-        reason: "",
+        reason: reasonOptions[userType]?.[0] || "",
         banStart: "",
         banEnd: "",
     });
@@ -175,6 +175,9 @@ const BanAccountForm = () => {
                 } else if (userType === "customer") {
                     queryClient.invalidateQueries(["user", userId]);
                     Navigate(`/main/user_detail/${userId}`);
+                } else if (userType === "product") {
+                    queryClient.invalidateQueries(["product", userId]);
+                    Navigate(`/main/shops`);
                 }
             } else {
                 notifications.show({

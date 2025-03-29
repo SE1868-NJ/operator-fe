@@ -3,9 +3,8 @@ import { Group, NumberInput, TextInput } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks"; // keep useDebouncedState
 import { IconRobot } from "@tabler/icons-react";
 import { IconCurrencyDollar, IconSearch } from "@tabler/icons-react";
-import { IconAlertCircle } from "@tabler/icons-react";
-import { jwtDecode } from "jwt-decode";
-import React, { useState, useMemo, useEffect } from "react";
+import { Loader } from '@mantine/core';
+import React, { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FeedbackChat from "../components/FeedbackChat";
 import FeedbackList from "../components/ShopFeedback";
@@ -60,7 +59,8 @@ const ShopDetailStatistic = () => {
     const feedbacks = data?.feedbacks || [];
 
     //Lay thong tin order
-    const { data: dataOrders, isLoading2, error2 } = useShopOrders(id, offset2, limit2);
+    const [orderStatus, setOrderStatus] = useState("all"); // all, completed, cancelled, processing, pending
+    const { data: dataOrders, isLoading2, error2 } = useShopOrders(id, offset2, limit2, orderStatus);
     const orders = dataOrders?.orders || [];
     const totalPages2 = dataOrders?.totalPages || 1;
 
@@ -96,10 +96,7 @@ const ShopDetailStatistic = () => {
     }));
 
     //lay thong tin product
-    const {
-        data: dataProducts,
-        isLoading3,
-        error3,
+    const {data: dataProducts, isLoading3, error3,
     } = useShopProducts(id, offset, limit, filterData);
     const { data: dataExportProducts } = useExportShopProducts(id, offset, 99999, filterData);
     const excelDataProduct = dataExportProducts?.products || [];
@@ -112,7 +109,16 @@ const ShopDetailStatistic = () => {
     };
 
     if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
+                <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-lg">
+                    <Loader color="blue" size="sm" variant="bars" />
+                    <span className="text-gray-700 font-medium text-lg">
+                        Đang tải dữ liệu, vui lòng chờ...
+                    </span>
+                </div>
+            </div>
+        );
     }
 
     if (error || !shop) {
@@ -180,80 +186,112 @@ const ShopDetailStatistic = () => {
                         <h2 className="text-3xl font-bold text-center text-gray-800 uppercase tracking-wider mb-10">
                             📦 Danh sách đơn hàng gần nhất
                         </h2>
-                        <table className="w-full border-collapse border border-gray-200">
-                            <thead>
-                                <tr className="bg-gray-100">
-                                    <th className="p-3 border">🆔 Mã đơn</th>
-                                    <th className="p-3 border">👤 Khách hàng</th>
-                                    <th className="p-3 border">📞 SĐT</th>
-                                    <th className="p-3 border">💰 Tổng tiền (VND)</th>
-                                    <th className="p-3 border">📦 Trạng thái</th>
-                                    <th className="p-3 border">📝 Ghi chú</th>
-                                    <th className="p-3 border text-center">🔍 Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders?.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="7" className="text-center p-4 text-gray-500">
-                                            Không tìm thấy đơn hàng nào
-                                        </td>
+                        <Group align="center" justify="center" spacing="md" mb="md">
+
+                            <div>
+                                <label
+                                    htmlFor="searchShopStatus"
+                                    className="block text-gray-700 text-sm font-bold mb-2"
+                                >
+                                    Tìm trạng thái đơn hàng 📦:
+                                </label>
+                                <select
+                                    id="searchShopStatus"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    defaultValue={orderStatus}
+                                    onChange={(e) => setOrderStatus(e.currentTarget.value)}
+                                >
+                                    <option value="all">Tất cả</option>
+                                    <option value="completed">Hoàn thành</option>
+                                    <option value="pending">Chờ xử lý</option>
+                                    <option value="cancelled">Đã hủy</option>
+                                    <option value="processing">Đang xử lý</option>
+                                </select>
+                            </div>
+                        </Group>
+                        {isLoading2 ? (
+                            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
+                                <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-2xl shadow-lg">
+                                    <Loader color="blue" size="sm" variant="bars" />
+                                    <span className="text-gray-700 font-medium text-lg">
+                                        Đang tải dữ liệu đơn hàng, vui lòng chờ...
+                                    </span>
+                                </div>
+                            </div>
+                        ) : (
+                            <table className="w-full border-collapse border border-gray-200">
+                                <thead>
+                                    <tr className="bg-gray-100">
+                                        <th className="p-3 border">🆔 Mã đơn</th>
+                                        <th className="p-3 border">👤 Khách hàng</th>
+                                        <th className="p-3 border">📞 SĐT</th>
+                                        <th className="p-3 border">💰 Tổng tiền (VND)</th>
+                                        <th className="p-3 border">📦 Trạng thái</th>
+                                        <th className="p-3 border">📝 Ghi chú</th>
+                                        <th className="p-3 border text-center">🔍 Hành động</th>
                                     </tr>
-                                ) : (
-                                    orders?.map((order) => (
-                                        <tr key={order.id} className="border hover:bg-gray-50">
-                                            <td className="p-3 border text-center">{order.id}</td>
-                                            <td className="p-3 border font-semibold">
-                                                {order.Customer.fullName}
-                                            </td>
-                                            <td className="p-3 border text-gray-600">
-                                                {order.Customer.userPhone}
-                                            </td>
-                                            <td className="p-3 border text-center font-semibold">
-                                                {Number(order.total).toLocaleString()} VND
-                                            </td>
-                                            <td className="p-3 border text-center font-semibold">
-                                                {order.status === "completed" && (
-                                                    <Badge color="green" variant="light">
-                                                        ✅ Hoàn thành
-                                                    </Badge>
-                                                )}
-                                                {order.status === "cancelled" && (
-                                                    <Badge color="red" variant="light">
-                                                        ❌ Đã hủy
-                                                    </Badge>
-                                                )}
-                                                {order.status === "processing" && (
-                                                    <Badge color="blue" variant="light">
-                                                        🔄 Đang xử lý
-                                                    </Badge>
-                                                )}
-                                                {order.status === "pending" && (
-                                                    <Badge color="yellow" variant="light">
-                                                        ⏳ Chờ xử lý
-                                                    </Badge>
-                                                )}
-                                            </td>
-                                            <td className="p-3 border text-gray-500">
-                                                {order.note || "Không có ghi chú"}
-                                            </td>
-                                            <td className="p-3 border text-center">
-                                                <button
-                                                    type="button"
-                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-                                                    onClick={() =>
-                                                        navigate(`/main/orderdetail/${order.id}`)
-                                                    }
-                                                >
-                                                    Xem
-                                                </button>
+                                </thead>
+                                <tbody>
+                                    {orders?.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="7" className="text-center p-4 text-gray-500">
+                                                Không tìm thấy đơn hàng nào
                                             </td>
                                         </tr>
-                                    ))
-                                )}
+                                    ) : (
+                                        orders?.map((order) => (
+                                            <tr key={order.id} className="border hover:bg-gray-50">
+                                                <td className="p-3 border text-center">{order.id}</td>
+                                                <td className="p-3 border font-semibold">
+                                                    {order.Customer.fullName}
+                                                </td>
+                                                <td className="p-3 border text-gray-600">
+                                                    {order.Customer.userPhone}
+                                                </td>
+                                                <td className="p-3 border text-center font-semibold">
+                                                    {Number(order.total).toLocaleString()} VND
+                                                </td>
+                                                <td className="p-3 border text-center font-semibold">
+                                                    {order.status === "completed" && (
+                                                        <Badge color="green" variant="light">
+                                                            ✅ Hoàn thành
+                                                        </Badge>
+                                                    )}
+                                                    {order.status === "cancelled" && (
+                                                        <Badge color="red" variant="light">
+                                                            ❌ Đã hủy
+                                                        </Badge>
+                                                    )}
+                                                    {order.status === "processing" && (
+                                                        <Badge color="blue" variant="light">
+                                                            🔄 Đang xử lý
+                                                        </Badge>
+                                                    )}
+                                                    {order.status === "pending" && (
+                                                        <Badge color="yellow" variant="light">
+                                                            ⏳ Chờ xử lý
+                                                        </Badge>
+                                                    )}
+                                                </td>
+                                                <td className="p-3 border text-gray-500">
+                                                    {order.note || "Không có ghi chú"}
+                                                </td>
+                                                <td className="p-3 border text-center">
+                                                    <button
+                                                        type="button"
+                                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                                                        onClick={() => navigate(`/main/orderdetail/${order.id}`)}
+                                                    >
+                                                        Xem
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
 
-                            </tbody>
-                        </table>
 
                         {/* Phân trang */}
                         <div className="flex justify-center mt-6 gap-4">

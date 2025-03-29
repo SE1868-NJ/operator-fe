@@ -16,13 +16,13 @@ import { useEffect } from "react";
 import { NEW_NOTIF } from "../../constants/socketMessage";
 import { useNotifications } from "../../hooks/useNotification";
 import socket from "../../lib/socket";
+import { modals } from "@mantine/modals";
 
 const Header = () => {
     const { data, loading, error } = useNotifications();
     const notifications = data?.notifications;
     const unReadMessage = data?.unReadMessage;
     const queryClient = useQueryClient();
-
 
     useEffect(() => {
         socket.on(NEW_NOTIF, () => {
@@ -31,6 +31,19 @@ const Header = () => {
             console.log("message");
         });
     }, [queryClient]);
+
+    const openModal = () => modals.openConfirmModal({
+        title: 'Please confirm your action',
+        children: (
+            <Text size="sm">
+                This action is so important that you are required to confirm it with a modal. Please click
+                one of these buttons to proceed.
+            </Text>
+        ),
+        labels: { confirm: 'Confirm', cancel: 'Cancel' },
+        onCancel: () => console.log('Cancel'),
+        onConfirm: () => console.log('Confirmed'),
+    });
 
     return (
         <div className="flex justify-between items-center h-full px-4">
@@ -69,7 +82,8 @@ const Header = () => {
                                     <UnstyledButton
                                         key={n.id}
                                         p="sm"
-                                        className="hover:bg-slate-300 rounded-md]"
+                                        onClick={openModal}
+                                        className="hover:bg-slate-300 rounded-md"
                                     >
                                         <Group wrap="nowrap" gap="sm">
                                             {n.type === "success" ? (

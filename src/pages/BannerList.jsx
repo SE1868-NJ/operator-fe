@@ -139,6 +139,14 @@ const BannerList = () => {
     if (!formData.startDate) errors.startDate = "Thời gian bắt đầu không được để trống"
     if (!formData.endDate) errors.endDate = "Thời gian kết thúc không được để trống"
 
+    if (formData.startDate && formData.endDate) {
+      const startDate = new Date(formData.startDate)
+      const endDate = new Date(formData.endDate)
+      if (endDate <= startDate) {
+        errors.endDate = "Thời gian kết thúc phải sau thời gian bắt đầu"
+      }
+    }
+    
     setFormErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -197,8 +205,8 @@ const BannerList = () => {
           className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           <option value="all">Tất cả trạng thái</option>
-          <option value="visible">Đang hiển thị</option>
-          <option value="hidden">Đang ẩn</option>
+          <option value="visible">Hiển thị</option>
+          <option value="hidden">Ẩn</option>
         </select>
       </div>
 

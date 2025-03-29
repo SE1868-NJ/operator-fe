@@ -44,19 +44,26 @@ const BanAccountForm = () => {
             "Không hỗ trợ khách hàng",
             "Tăng giá không hợp lý",
         ],
+        product: [
+            "Hàng giả, hàng nhái",
+            "Hết hạn sử dụng",
+            "Không đúng mô tả",
+            "Lỗi kỹ thuật hoặc hư hỏng",
+            "Giá không hợp lý",
+            "Không đạt tiêu chuẩn chất lượng",
+        ]
     };
 
-    // console.log(operatorId); // 4
+
     const [formData, setFormData] = useState({
         userId,
         operatorId,
         userType,
-        reason: "Bùng hàng nhiều lần",
+        reason: "",
         banStart: "",
         banEnd: "",
     });
 
-    console.log(formData);
     const [customReason, setCustomReason] = useState("");
 
     const [banStartDuration, setBanStartDuration] = useState("0"); //Default hiện tại

@@ -38,7 +38,7 @@ import ExportExcelButton from "./ExportExcelButton.jsx";
 export default function ShopsPage() {
     const navigate = useNavigate();
     const limit = 10;
-    const timeOut = 200;
+    const timeOut = 100;
     const [page, setPage] = useState(1);
     // const offset = (page - 1) * limit;
 
@@ -46,15 +46,16 @@ export default function ShopsPage() {
     const [searchOwnerName, setSearchOwnerName] = useDebouncedState("", timeOut);
     const [searchEmail, setSearchEmail] = useDebouncedState("", timeOut);
     const [searchPhone, setSearchPhone] = useDebouncedState("", timeOut);
-
+    const [searchStatus, setSearchStatus] = useState("");
     const filterData = useMemo(
         () => ({
             shopName: searchShopName,
             ownerName: searchOwnerName,
             shopEmail: searchEmail,
             shopPhone: searchPhone,
+            shopStatus: searchStatus,
         }),
-        [searchShopName, searchOwnerName, searchEmail, searchPhone],
+        [searchShopName, searchOwnerName, searchEmail, searchPhone, searchStatus],
     );
 
     const { data, isLoading, error } = useShops(page, limit, filterData);
@@ -222,6 +223,24 @@ export default function ShopsPage() {
                                 onChange={(e) => setSearchPhone(e.currentTarget.value)}
                             />
                         </div>
+                        <div>
+                            <label
+                                htmlFor="searchShopStatus"
+                                className="block text-gray-700 text-sm font-bold mb-2"
+                            >
+                                Tìm trạng thái cửa hàng 📦:
+                            </label>
+                            <select
+                                id="searchShopStatus"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                defaultValue={searchStatus}
+                                onChange={(e) => setSearchStatus(e.currentTarget.value)}
+                            >
+                                <option value="all">Tất cả</option>
+                                <option value="active">Hoạt động</option>
+                                <option value="suspended">Đình chỉ</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -242,69 +261,77 @@ export default function ShopsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.shops?.map((shop, index) => (
-                            <tr
-                                key={shop.shopID}
-                                className={`items-center border-b text-center hover:bg-gray-50 transition-all ${
-                                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                }`}
-                            >
-                                <td className="p-4">{shop.shopID}</td>
-                                <td className="p-4 font-medium text-gray-800 flex items-center justify-center gap-2">
-                                    {shop.shopName}
-                                </td>
-                                <td className="p-4">{shop.Owner.fullName}</td>
-                                <td className="p-4 text-blue-500 max-w-[150px] truncate">
-                                    {shop.shopEmail}
-                                </td>
-                                <td className="p-4">{shop.shopPhone}</td>
-                                <td
-                                    className="p-4 truncate max-w-[200px]"
-                                    title={shop.shopDescription}
-                                >
-                                    {shop.shopDescription}
-                                </td>
-                                <td className="p-4">{shop.shopPickUpAddress}</td>
-                                <td className="p-4">
-                                    {new Date(shop.shopJoinedDate).toLocaleDateString()}
-                                </td>
-                                <td className="p-4">
-                                    <span
-                                        className="flex items-center justify-center px-3 py-1 rounded-full text-white text-sm font-semibold w-24 whitespace-nowrap"
-                                        style={{
-                                            backgroundColor:
-                                                shop.shopStatus === "active"
-                                                    ? "#22C55E"
-                                                    : shop.shopStatus === "inactive"
-                                                      ? "#EF4444"
-                                                      : "#FACC15",
-                                        }}
-                                    >
-                                        {shop.shopStatus === "active"
-                                            ? "Hoạt động"
-                                            : shop.shopStatus === "inactive"
-                                              ? "Không hoạt động"
-                                              : "Đình chỉ"}
-                                    </span>
-                                </td>
-                                <td className="p-4">
-                                    <Button
-                                        color="blue"
-                                        size="sm"
-                                        radius="md"
-                                        variant="filled"
-                                        onClick={() => navigate(`/main/shop/${shop.shopID}`)}
-                                        styles={{
-                                            root: {
-                                                transition: "all 0.2s ease",
-                                            },
-                                        }}
-                                    >
-                                        Xem chi tiết
-                                    </Button>
+                        {data?.shops?.length === 0 ? (
+                            <tr>
+                                <td colSpan="10" className="text-center p-4 text-gray-500">
+                                    Không tìm thấy cửa hàng nào
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            data?.shops?.map((shop, index) => (
+                                <tr
+                                    key={shop.shopID}
+                                    className={`items-center border-b text-center hover:bg-gray-50 transition-all ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                        }`}
+                                >
+                                    <td className="p-4">{shop.shopID}</td>
+                                    <td className="p-4 font-medium text-gray-800 flex items-center justify-center gap-2">
+                                        {shop.shopName}
+                                    </td>
+                                    <td className="p-4">{shop.Owner.fullName}</td>
+                                    <td className="p-4 text-blue-500 max-w-[150px] truncate">
+                                        {shop.shopEmail}
+                                    </td>
+                                    <td className="p-4">{shop.shopPhone}</td>
+                                    <td
+                                        className="p-4 truncate max-w-[200px]"
+                                        title={shop.shopDescription}
+                                    >
+                                        {shop.shopDescription}
+                                    </td>
+                                    <td className="p-4">{shop.shopPickUpAddress}</td>
+                                    <td className="p-4">
+                                        {new Date(shop.shopJoinedDate).toLocaleDateString()}
+                                    </td>
+                                    <td className="p-4">
+                                        <span
+                                            className="flex items-center justify-center px-3 py-1 rounded-full text-white text-sm font-semibold w-24 whitespace-nowrap"
+                                            style={{
+                                                backgroundColor:
+                                                    shop.shopStatus === "active"
+                                                        ? "#22C55E"
+                                                        : shop.shopStatus === "inactive"
+                                                            ? "#EF4444"
+                                                            : "#FACC15",
+                                            }}
+                                        >
+                                            {shop.shopStatus === "active"
+                                                ? "Hoạt động"
+                                                : shop.shopStatus === "inactive"
+                                                    ? "Không hoạt động"
+                                                    : "Đình chỉ"}
+                                        </span>
+                                    </td>
+                                    <td className="p-4">
+                                        <Button
+                                            color="blue"
+                                            size="sm"
+                                            radius="md"
+                                            variant="filled"
+                                            onClick={() => navigate(`/main/shop/${shop.shopID}`)}
+                                            styles={{
+                                                root: {
+                                                    transition: "all 0.2s ease",
+                                                },
+                                            }}
+                                        >
+                                            Xem chi tiết
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+
                     </tbody>
                 </table>
 

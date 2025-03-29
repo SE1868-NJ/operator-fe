@@ -193,56 +193,65 @@ const ShopDetailStatistic = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {orders?.map((order) => (
-                                    <tr key={order.id} className="border hover:bg-gray-50">
-                                        <td className="p-3 border text-center">{order.id}</td>
-                                        <td className="p-3 border font-semibold">
-                                            {order.Customer.fullName}
-                                        </td>
-                                        <td className="p-3 border text-gray-600">
-                                            {order.Customer.userPhone}
-                                        </td>
-                                        <td className="p-3 border text-center font-semibold">
-                                            {Number(order.total).toLocaleString()} VND
-                                        </td>
-                                        <td className="p-3 border text-center font-semibold">
-                                            {order.status === "completed" && (
-                                                <Badge color="green" variant="light">
-                                                    ✅ Hoàn thành
-                                                </Badge>
-                                            )}
-                                            {order.status === "cancelled" && (
-                                                <Badge color="red" variant="light">
-                                                    ❌ Đã hủy
-                                                </Badge>
-                                            )}
-                                            {order.status === "processing" && (
-                                                <Badge color="blue" variant="light">
-                                                    🔄 Đang xử lý
-                                                </Badge>
-                                            )}
-                                            {order.status === "pending" && (
-                                                <Badge color="yellow" variant="light">
-                                                    ⏳ Chờ xử lý
-                                                </Badge>
-                                            )}
-                                        </td>{" "}
-                                        <td className="p-3 border text-gray-500">
-                                            {order.note || "Không có ghi chú"}
-                                        </td>
-                                        <td className="p-3 border text-center">
-                                            <button
-                                                type="button"
-                                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-                                                onClick={() =>
-                                                    navigate(`/main/orderdetail/${order.id}`)
-                                                }
-                                            >
-                                                Xem
-                                            </button>
+                                {orders?.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center p-4 text-gray-500">
+                                            Không tìm thấy đơn hàng nào
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    orders?.map((order) => (
+                                        <tr key={order.id} className="border hover:bg-gray-50">
+                                            <td className="p-3 border text-center">{order.id}</td>
+                                            <td className="p-3 border font-semibold">
+                                                {order.Customer.fullName}
+                                            </td>
+                                            <td className="p-3 border text-gray-600">
+                                                {order.Customer.userPhone}
+                                            </td>
+                                            <td className="p-3 border text-center font-semibold">
+                                                {Number(order.total).toLocaleString()} VND
+                                            </td>
+                                            <td className="p-3 border text-center font-semibold">
+                                                {order.status === "completed" && (
+                                                    <Badge color="green" variant="light">
+                                                        ✅ Hoàn thành
+                                                    </Badge>
+                                                )}
+                                                {order.status === "cancelled" && (
+                                                    <Badge color="red" variant="light">
+                                                        ❌ Đã hủy
+                                                    </Badge>
+                                                )}
+                                                {order.status === "processing" && (
+                                                    <Badge color="blue" variant="light">
+                                                        🔄 Đang xử lý
+                                                    </Badge>
+                                                )}
+                                                {order.status === "pending" && (
+                                                    <Badge color="yellow" variant="light">
+                                                        ⏳ Chờ xử lý
+                                                    </Badge>
+                                                )}
+                                            </td>
+                                            <td className="p-3 border text-gray-500">
+                                                {order.note || "Không có ghi chú"}
+                                            </td>
+                                            <td className="p-3 border text-center">
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                                                    onClick={() =>
+                                                        navigate(`/main/orderdetail/${order.id}`)
+                                                    }
+                                                >
+                                                    Xem
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+
                             </tbody>
                         </table>
 
@@ -335,65 +344,76 @@ const ShopDetailStatistic = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map((product, index) => {
-                                    const totalSold =
-                                        product.OrderItems?.reduce(
-                                            (sum, item) => item.quantity,
-                                            0,
-                                        ) || 0;
-                                    const feedbacks = product.OrderItems?.map(
-                                        (item) => item.Feedbacks?.star,
-                                    ).filter((star) => star !== undefined && star !== null);
-                                    const averageStars = feedbacks.length
-                                        ? (
-                                              feedbacks.reduce((sum, star) => sum + star, 0) /
-                                              feedbacks.length
-                                          ).toFixed(1)
-                                        : "Chưa có đánh giá";
+                                {products?.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center p-4 text-gray-500">
+                                            Không tìm thấy sản phẩm nào
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    products?.map((product, index) => {
+                                        const totalSold =
+                                            product.OrderItems?.reduce(
+                                                (sum, item) => sum + item.quantity,
+                                                0
+                                            ) || 0;
 
-                                    return (
-                                        <tr
-                                            key={product.product_id}
-                                            className="border-b hover:bg-gray-50"
-                                        >
-                                            <td className="p-3">
-                                                <img
-                                                    src={product.main_image}
-                                                    alt={product.product_name}
-                                                    className="w-20 h-20 object-cover rounded-lg border"
-                                                />
-                                            </td>
-                                            <td className="p-3 font-semibold">
-                                                {product.product_name}
-                                            </td>
-                                            <td className="p-3 text-gray-600">
-                                                {product.description}
-                                            </td>
-                                            <td className="p-3 text-center font-semibold">
-                                                {Number(product.price).toLocaleString()}
-                                            </td>
-                                            <td className="p-3 text-center text-blue-600">
-                                                {totalSold}
-                                            </td>
-                                            <td className="p-3 text-center text-yellow-500">
-                                                {averageStars} ⭐
-                                            </td>
-                                            <td className="p-3 text-center">
-                                                <button
-                                                    type="button"
-                                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-                                                    onClick={() =>
-                                                        navigate(
-                                                            `/main/shop/${id}/product/${product.product_id}`,
-                                                        )
-                                                    }
-                                                >
-                                                    Xem
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                        const feedbacks = product.OrderItems?.map(
+                                            (item) => item.Feedbacks?.star
+                                        ).filter((star) => star !== undefined && star !== null);
+
+                                        const averageStars = feedbacks.length
+                                            ? (
+                                                feedbacks.reduce((sum, star) => sum + star, 0) /
+                                                feedbacks.length
+                                            ).toFixed(1)
+                                            : "Chưa có đánh giá";
+
+                                        return (
+                                            <tr
+                                                key={product.product_id}
+                                                className="border-b hover:bg-gray-50"
+                                            >
+                                                <td className="p-3">
+                                                    <img
+                                                        src={product.main_image}
+                                                        alt={product.product_name}
+                                                        className="w-20 h-20 object-cover rounded-lg border"
+                                                    />
+                                                </td>
+                                                <td className="p-3 font-semibold">
+                                                    {product.product_name}
+                                                </td>
+                                                <td className="p-3 text-gray-600">
+                                                    {product.description}
+                                                </td>
+                                                <td className="p-3 text-center font-semibold">
+                                                    {Number(product.price).toLocaleString()}
+                                                </td>
+                                                <td className="p-3 text-center text-blue-600">
+                                                    {totalSold}
+                                                </td>
+                                                <td className="p-3 text-center text-yellow-500">
+                                                    {averageStars} ⭐
+                                                </td>
+                                                <td className="p-3 text-center">
+                                                    <button
+                                                        type="button"
+                                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/main/shop/${id}/product/${product.product_id}`
+                                                            )
+                                                        }
+                                                    >
+                                                        Xem
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
+
                             </tbody>
                         </table>
                         {/* Phân trang */}

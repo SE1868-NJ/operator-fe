@@ -38,7 +38,7 @@ const ShopDetailStatistic = () => {
     const offset2 = (page2 - 1) * limit2;
 
     //filter for products
-    const timeOut = 500;
+    const timeOut = 100;
 
     //Filter cho product
     const [searchProductName, setSearchProductName] = useDebouncedState("", timeOut);

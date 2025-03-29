@@ -295,7 +295,7 @@ const ShopProfileDetail = () => {
                                 type="button"
                                 onClick={() => navigate("/main/shops")}
                             >
-                                Back to List
+                                Quay lại danh sách shop
                             </Button>
                             <Button color="cyan" onClick={() => setModalOpened(true)}>
                                 📩 Gửi Email cho shop

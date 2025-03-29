@@ -314,7 +314,7 @@ const ShipperViewPage = () => {
       case 1:
         return `Ngày sinh: ${shipper.dateOfBirth}`;
       case 2:
-        return `Quê quán: ${shipper.address}`;
+        return `Quê quán: ${shipper.hometown}`;
       case 3:
         return `Địa chỉ: ${shipper.address}`;
       case 4:
@@ -322,7 +322,10 @@ const ShipperViewPage = () => {
       case 5:
         return `Số·điện thoại: ${shipper.phone}`;
       case 6:
-        return `Số tài khoản ngân hàng: ${shipper.bankAccount}` || "Chưa có";
+        return (
+          `Số tài khoản ngân hàng: ${shipper?.bankAccount} - ${shipper?.bankName}` ||
+          "Chưa có"
+        );
       case 7:
         return `Phạm vi hoạt động: ${shipper.activityArea}`;
       case 8:
@@ -395,7 +398,7 @@ const ShipperViewPage = () => {
           </>
         );
       case 15:
-        return `Ngày nộp đơn: ${shipper.submissionDate}` || "Chưa có";
+        return `Ngày nộp đơn: ${shipper?.createdAt}` || "Chưa có";
       case 16:
         return `Trạng thái trước đây: ${shipper.previousStatus}` || "Chưa có";
       case 17:
@@ -569,7 +572,7 @@ const ShipperViewPage = () => {
                 </Popover>{" "}
                 Quê quán:
               </strong>{" "}
-              <span>{shipper.address}</span>
+              <span>{shipper?.hometown}</span>
             </div>
             <div>
               <strong className={getColor(changedValue[3].status)}>
@@ -1119,7 +1122,7 @@ const ShipperViewPage = () => {
                 </Popover>{" "}
                 Ngày nộp đơn:
               </strong>{" "}
-              <span>{shipper.submissionDate || "Chưa có"}</span>
+              <span>{shipper?.createdAt || "Chưa có"}</span>
             </div>
             <div>
               <strong className={getColor(changedValue[16].status)}>

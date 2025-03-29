@@ -23,7 +23,7 @@ export default function OrderDetail() {
     }
 
     try {
-      if (order.status === "cancelled") {
+      if (order.status === "paused") {
         await OrderServices.reopenOrder(id, cancellationReason);
       } else {
         await OrderServices.cancelOrder(id, cancellationReason);
@@ -37,7 +37,7 @@ export default function OrderDetail() {
       navigate("/main/ordermanagement");
 
       // Hiển thị thông báo thành công
-      if (order.status === "cancelled") {
+      if (order.status === "paused") {
         notifications.show({
           color: "green",
           title: "Đơn hàng đã được mở",
@@ -243,11 +243,11 @@ export default function OrderDetail() {
           Quay lại
         </Button>
         <Button
-          color={order.status === "cancelled" ? "green" : "red"}
+          color={order.status === "paused" ? "green" : "red"}
           onClick={handleOpenModal} // Mở modal khi nhấn Hủy đơn hàng
           className="px-6 py-3 font-medium text-white bg-red-600 rounded-lg transition duration-200 hover:bg-red-500 w-full sm:w-auto"
         >
-          {order.status === "cancelled" ? "Mở đơn hàng" : "Tạm dừng để xử lý"}
+          {order.status === "paused" ? "Mở đơn hàng" : "Tạm dừng để xử lý"}
         </Button>
       </div>
 
@@ -263,7 +263,7 @@ export default function OrderDetail() {
         }}
       >
         <p className="font-semibold text-xl text-gray-800 mb-6">
-          {order.status === "cancelled"
+          {order.status === "paused"
             ? "Lý do mở đơn hàng"
             : "Lý do tạm dừng đơn hàng"}
         </p>
@@ -282,7 +282,7 @@ export default function OrderDetail() {
             Quay lại
           </Button>
           <Button
-            color={order.status === "cancelled" ? "green" : "red"}
+            color={order.status === "paused" ? "green" : "red"}
             onClick={handleCancelOrder} // Thực hiện hủy đơn hàng
             className="ml-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out"
           >

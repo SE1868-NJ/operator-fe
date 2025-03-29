@@ -78,7 +78,7 @@ const LoginPage = () => {
                         href="/forgotpass"
                         className="text-sm text-blue-600 hover:underline"
                     >
-                        Forgot Password?
+                        Quên mật khẩu?
                     </a>
                 </div>
 

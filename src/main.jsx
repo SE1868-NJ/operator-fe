@@ -6,7 +6,7 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/nprogress/styles.css";
-
+import { ModalsProvider } from '@mantine/modals';
 import { MantineProvider, createTheme } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
@@ -47,8 +47,31 @@ import ShopRevenueDetail from "./pages/ShopRevenueDetail.jsx";
 import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
+import { Button } from "@mantine/core";
 const theme = createTheme({
-    /** Put your mantine theme override here */
+    colors: {
+        // cGreen = custom green
+        cGreen: [
+            "#e8f5e9",
+            "#c8e6c9",
+            "#a5d6a7",
+            "#81c784",
+            "#4caf50",
+            "#1DB954",
+            "#18a74d",
+            "#12813a",
+            "#0c5b27",
+            "#063214",
+        ],
+    },
+    primaryColor: "cGreen",
+    components: {
+        Button: Button.extend({
+            defaultProps: {
+                radius: "xl",
+            },
+        }),
+    },
 });
 
 const router = createBrowserRouter([
@@ -203,19 +226,22 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
             {/* provider cua thu vien ui */}
             <MantineProvider theme={theme} defaultColorScheme="light">
-                <NavigationProgress />
-                {/* toast thong bao */}
-                <Notifications />
-                {/* routes */}
-                <DatesProvider
-                    settings={{
-                        locale: "vn",
-                        firstDayOfWeek: 1,
-                        timezone: "Asia/Ho_Chi_Minh",
-                    }}
-                >
-                    <RouterProvider router={router} />
-                </DatesProvider>
+                <ModalsProvider>
+
+                    <NavigationProgress />
+                    {/* toast thong bao */}
+                    <Notifications />
+                    {/* routes */}
+                    <DatesProvider
+                        settings={{
+                            locale: "vn",
+                            firstDayOfWeek: 1,
+                            timezone: "Asia/Ho_Chi_Minh",
+                        }}
+                    >
+                        <RouterProvider router={router} />
+                    </DatesProvider>
+                </ModalsProvider>
             </MantineProvider>
         </QueryClientProvider>
     </StrictMode>,

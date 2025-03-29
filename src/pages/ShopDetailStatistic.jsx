@@ -462,7 +462,7 @@ const ShopDetailStatistic = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowReview(true)}
-                                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition duration-300"
+                                className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition duration-300"
                             >
                                 Bạn có muốn xem nhận xét về shop từ AI?
                             </button>
@@ -470,7 +470,7 @@ const ShopDetailStatistic = () => {
 
                         {/* Đánh giá từ AI - chỉ hiển thị khi showReview = true */}
                         {showReview && (
-                            <div className="mt-1 bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative mb-6">
+                            <div className="mt-1 bg-gradient-to-r from-green-500 to-indigo-600 p-4 rounded-xl shadow-lg text-white text-lg italic relative mb-6">
                                 <span className="absolute top-0 left-0 w-full h-full bg-white opacity-10 blur-lg rounded-xl" />
                                 {feedbacks.aiReview === undefined ? (
                                     <p>Tạm thời cửa hàng chưa có đánh giá nào!!!</p>

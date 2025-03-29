@@ -7,6 +7,7 @@ export const useShops = (page, limit, filterData) => {
     return useQuery({
         queryKey: ["shops", page, limit, filterData],
         queryFn: () => ShopService.getAllShops(offset, limit, filterData),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };
 
@@ -15,6 +16,7 @@ export const useExportShops = (page, limit, filterData) => {
     return useQuery({
         queryKey: ["shops", page, limit, filterData],
         queryFn: () => ShopService.getAllShops(offset, limit, filterData),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };
 
@@ -54,6 +56,7 @@ export const useProduct = (id, pid) => {
     return useQuery({
         queryKey: ["product", id, pid],
         queryFn: () => ShopService.getProductById(id, pid),
+        keepPreviousData: true, // Giữ dữ liệu cũ khi chuyển trang (tránh flickering)
     });
 };
 

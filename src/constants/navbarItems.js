@@ -12,7 +12,6 @@ export const NAVBAR_ITEMS = [
     {
         label: "Cửa hàng",
         icon: IconNotes,
-        initiallyOpened: true,
         links: [
             { label: "Danh sách tất cả cửa hàng", link: "/main/shops" },
             { label: "Cửa hàng đang duyệt", link: "/main/pendingshops/" },
@@ -30,7 +29,7 @@ export const NAVBAR_ITEMS = [
     {
         label: "Quản lý đơn hàng",
         icon: IconNotes,
-        links: [{ label: "Danh sách tất cả các đơn hàng", link: "/main/ordermanagement" }],
+        link: "/main/ordermanagement",
     },
     { label: "Người dùng", icon: IconPresentationAnalytics, link: "/main/users" },
 
@@ -46,9 +45,7 @@ export const NAVBAR_ITEMS = [
         label: "Cài đặt",
         icon: IconSettings,
         links: [
-            { label: "Chung", link: "/main" },
             { label: "Phương thức vận chuyển", link: "/main/shipping-methods" },
-            { label: "Phương thức vận chuyển - Demo", link: "/main/shipping-methods/demo" },
         ],
     },
 ];

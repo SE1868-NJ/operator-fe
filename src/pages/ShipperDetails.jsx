@@ -1,4 +1,5 @@
 import { Button, Modal, Select, Textarea } from "@mantine/core";
+import { jwtDecode } from "jwt-decode";
 import { DatePicker } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -17,6 +18,15 @@ function translateStatus(status) {
     suspended: "Đình chỉ",
   };
   return statusMap[status] || status;
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString); // Chuyển về Date object
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // getUTCMonth() trả về 0-11 nên cần +1
+  const year = date.getUTCFullYear();
+
+  return `${day}-${month}-${year}`;
 }
 
 function translateGender(gender) {
@@ -46,13 +56,15 @@ export default function ShipperDetails() {
   const [banInfo, setBanInfo] = useState(null);
 
   useEffect(() => {
+    if (!shipper?.id) return;
     const fetchBanInfo = async () => {
-      if (!shipper?.id) return;
 
       try {
         const isUserBan = await BanService.getBanAccount(shipper.id, "shipper");
+        console.log("Ban info:", isUserBan);
         if (isUserBan) {
           setBanInfo(isUserBan);
+          console.log("Ban info:", isUserBan);
         }
       } catch (error) {
         console.error("Lỗi khi lấy thông tin ban:", error);
@@ -68,30 +80,32 @@ export default function ShipperDetails() {
     );
   }
 
-  const handleChangeStatus = async (status) => {
-    if (status === "inactive") {
+  const handleChangeStatus = async () => {
+    if (shipper.status === "active") {
+      const token = localStorage.getItem("token");
+      const operatorData = jwtDecode(token);
+  
       navigate(
-        `/main/ban_account?userId=${shipper.id}&operatorId=1&accountType=shipper`
+        `/main/ban_account?userId=${shipper.id}&userName=${shipper.name}&operatorId=${operatorData?.id}&accountType=shipper`
       );
     } else {
-      const confirmUnban = window.confirm(
-        "Bạn có muốn gỡ đình chỉ tài khoản này không?"
-      );
-
+      const confirmUnban = window.confirm("Bạn có muốn gỡ đình chỉ tài khoản này không?");
       if (confirmUnban) {
-        queryClient.setQueryData(["shipper", id], (oldData) => ({
-          ...oldData,
-          status: "Active",
-        }));
-
-        // Nếu người dùng nhấn "OK", tiến hành gỡ ban
-        await BanService.unbanAccountManually(shipper.id).then(() => {
-          queryClient.invalidateQueries(["shipper", id]);
-          queryClient.invalidateQueries(["shipper"]);
-        });
+        try {
+          const response = await BanService.unbanAccountManually(shipper.id, "shipper");
+          console.log("✅ Gỡ đình chỉ thành công:", response);
+  
+          await queryClient.invalidateQueries(["shipper", id]);
+          await queryClient.invalidateQueries(["shipper"]);
+          window.location.reload();
+        } catch (error) {
+          console.error("❌ Lỗi khi gỡ đình chỉ:", error);
+          alert("Không thể gỡ đình chỉ. Vui lòng thử lại!");
+        }
       }
     }
   };
+  
 
   const handleConfirmDeactivation = () => {
     setIsLoading(true);
@@ -176,7 +190,7 @@ export default function ShipperDetails() {
               </div>
               <div>
                 <span className="font-bold text-amber-700">Ngày sinh:</span>{" "}
-                {shipper.dateOfBirth}
+                {formatDate(shipper.dateOfBirth)}
               </div>
               <div>
                 <span className="font-bold text-amber-700">Quê quán:</span>{" "}
@@ -277,15 +291,15 @@ export default function ShipperDetails() {
             </h6>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <span className="font-bold">Họ và tên:</span>{" "}
+                <span className="font-bold text-amber-500">Họ và tên:</span>{" "}
                 {shipper?.EmergencyContact?.name || "N/A"}
               </div>
               <div>
-                <span className="font-bold">Mối quan hệ:</span>{" "}
+                <span className="font-bold text-amber-500">Mối quan hệ:</span>{" "}
                 {shipper?.EmergencyContact?.relation || "N/A"}
               </div>
               <div>
-                <span className="font-bold">SĐT:</span>{" "}
+                <span className="font-bold text-amber-500">SĐT:</span>{" "}
                 {shipper?.EmergencyContact?.phone || "N/A"}
               </div>
             </div>

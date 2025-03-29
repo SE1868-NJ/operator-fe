@@ -95,6 +95,7 @@ export default function ShipperDashboardChart() {
                             strokeDasharray: "5 5",
                         },
                     ]}
+                    tooltipProps={{ content: () => null }} 
                 />
             ) : (
                 <Text align="center" color="gray">

@@ -2,20 +2,22 @@ import { data } from "autoprefixer";
 import { instance } from "../lib/axios";
 
 const ShipperServices = {
-    async getAllShippers(offset, limit, search, status) {
-        const params = { offset, limit };
-        if (search) params.search = search;
-        if (status) params.status = status;
+    async getAllShippers(offset, limit, search, status, date) {
+        const params = { offset, limit, search, status, date };
 
         const shippers = await instance
-            .get("/shippers", { params })
-            .then(({ data }) => data.shippers);
+            .get("/shippers", { 
+                params: params 
+            })
+            .then(({ data }) => data);
+
+        console.log("--", shippers);
 
         return shippers;
     },
 
     async getOneShipper(id) {
-        const shipper = await instance.get(`/shippers/${id}`).then(({ data }) => data);
+        const shipper = await instance.get(`/shippers/${id}`).then(({ data }) => data.shipper);
         return shipper;
     },
 

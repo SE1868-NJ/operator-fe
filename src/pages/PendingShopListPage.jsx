@@ -83,24 +83,29 @@ const PendingShopListPage = () => {
             "",
             "Chủ cửa hàng:",
             "Ảnh chủ cửa hàng:",
-            "Email:",
+            "Email chủ cửa hàng:",
             "Số điện thoại:",
             "Ngày sinh:",
             "Giới tính:",
             "Địa chỉ thường trú:",
-            "Trạng thái:",
+            "Số CMND/CCCD:",
             "Mã số thuế:",
-            "Mã số CCCD:",
+            "Ảnh mặt trước CMND/CCCD:",
+            "Ảnh mặt sau CMND/CCCD:",
             "Tên cửa hàng:",
-            "Ảnh avatar cửa hàng:",
-            "Địa chỉ kinh doanh:",
-            "Ngày gửi:",
+            "Mô tả cửa hàng :",
+            "Ảnh đại diện cửa hàng:",
             "Ảnh chụp cửa hàng:",
-            "Số giấy phép kinh doanh:",
+            "Số điện thoại cửa hàng:",
+            "Email cửa hàng:",
             "Loại hình kinh doanh:",
+            "Địa chỉ kinh doanh:",
+            "Thời gian mở cửa:",
+            "Số giấy phép kinh doanh:",
+            "Ảnh giấy phép kinh doanh:",
+            "Ngày gửi yêu cầu:",
             "Số tài khoản ngân hàng:",
             "Tên ngân hàng:",
-            "Thời gian mở cửa:",
         ][index];
     };
 
@@ -114,8 +119,8 @@ const PendingShopListPage = () => {
                 return (
                     <img
                         className="w-24 h-24 rounded-full object-cover"
-                        src="https://nexus.edu.vn/wp-content/uploads/2024/11/hinh-nen-may-tinh-4k-thien-nhien-bien-ca-672553.webp"
-                        alt="Shop Logo"
+                        src={shop?.Owner?.avatar}
+                        alt="Owner Avatar"
                     />
                 );
             case 3:
@@ -123,58 +128,104 @@ const PendingShopListPage = () => {
             case 4:
                 return shop?.Owner?.userPhone;
             case 5:
-                return shop?.Owner?.dateOfBirth;
+                return new Date(shop?.Owner?.dateOfBirth).toLocaleDateString("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                });
             case 6:
-                return shop?.Owner?.gender;
+                return shop?.Owner?.gender === "female" ? "Nữ" : shop?.Owner?.gender === "male" ? "Nam" : "Khác";
             case 7:
                 return shop?.Owner?.userAddress;
             case 8:
-                return shop?.shopStatus;
+                return shop?.Owner?.identificationNumber;
             case 9:
                 return shop?.taxCode;
             case 10:
-                return shop?.Owner?.identificationNumber;
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src={shop?.Owner?.idCardFrontFile}
+                        alt="ID Card Front File"
+                    />
+                );
             case 11:
-                return shop?.shopName;
+                return (
+                    <img
+                        className="w-48 h-32 object-cover rounded-md"
+                        src={shop?.Owner?.idCardBackFile}
+                        alt="ID Card Back File"
+                    />
+                );
             case 12:
+                return shop?.shopName;
+            case 13:
+                return <p className="inline-block max-w-xs max-h-14 float-end overflow-hidden overflow-y-auto text-ellipsis whitespace-normal">{shop?.shopDescription}</p>;
+            case 14:
                 return (
                     <img
                         className="w-24 h-24 rounded-full object-cover"
-                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
-                        alt="Shop avatar"
+                        src={shop?.shopAvatar}
+                        alt="Shop Avatar"
                     />
                 );
-            case 13:
-                return shop?.shopPickUpAddress;
-            case 14:
-                return shop?.shopJoinedDate;
             case 15:
                 return (
-                    <img
+                <>
+                    {shop?.shopImage ? (<img
                         className="w-48 h-32 object-cover rounded-md"
-                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
+                        src={shop?.shopImage ||  "https://png.pngtree.com/png-clipart/20231003/original/pngtree-shop-cartoon-illustration-png-image_13083139.png"}
                         alt="Ảnh của cửa hàng"
-                    />
+                    />) : (<p className="text-red-500 text-xl font-bold">Chưa có hình ảnh</p>)}
+                    </>
                 );
             case 16:
-                return (
-                    <img
-                        className="w-48 h-32 object-cover rounded-md"
-                        src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/hinh-anh-thien-nhien-3d-dep-006.jpg"
-                        alt="Ảnh giấy phép kinh doanh"
-                    />
-                );
+                return shop?.shopPhone;
             case 17:
-                return shop?.businessType;
+                return shop?.shopEmail;
             case 18:
-                return shop?.shopBankAccountNumber;
+                return shop?.businessType;
             case 19:
-                return shop?.shopBankName;
+                return shop?.shopPickUpAddress;
             case 20:
                 return shop?.shopOperationHours;
+            case 21:
+                return (shop?.businessLicenseNumber || <p className="text-red-500 text-md font-semibold">Chưa có số giấy phép kinh doanh</p>);
+            case 22:
+                return (
+                    <>
+                        {shop?.businessLicenseImage ? (
+                            <img
+                                className="w-48 h-32 object-cover rounded-md"
+                                src={shop?.businessLicenseImage || "https://png.pngtree.com/png-clipart/20231003/original/pngtree-shop-cartoon-illustration-png-image_13083139.png"}
+                                alt="Shop Image"
+                            />
+                            ) : (<p className="text-red-500 text-xl font-bold">Chưa có hình ảnh</p>)
+                        }
+                    </>
+                );
+            case 23:
+                return FormatDate(shop?.createdAt);
+            case 24:
+                return shop?.shopBankAccountNumber;
+            case 25:
+                return shop?.shopBankName;
             default:
                 return null;
         }
+    };
+    const FormatDate = (date) => {
+        const olddate = new Date(date);
+        const formattedDate = olddate.toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        });
+
+        return <div>{formattedDate}</div>;
     };
 
     return (
@@ -399,8 +450,8 @@ const PendingShopListPage = () => {
                                             )}
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 {activeButton === "pending"
-                                                    ? shop.shopJoinedDate
-                                                    : shop.updatedAt}
+                                                    ? FormatDate(shop.shopJoinedDate)
+                                                    : FormatDate(shop.updatedAt)}
                                             </td>
                                             <td
                                                 hidden={activeButton === "pending"}
@@ -492,10 +543,7 @@ const PendingShopListPage = () => {
                                                                 {getValueForIndex(index)}
                                                             </strong>
                                                             <p className="text-md mt-1">
-                                                                Lý do: agfuafd helo helo hasd afsas
-                                                                asda gẻ ergv jkdbcs akjfbk agfuafd
-                                                                helo helo hasd afsas asda gẻ ergv
-                                                                jkdbcs akjfbk {item?.reason}
+                                                                Lý do: {item?.reason}
                                                             </p>
                                                         </div>
                                                         <div className="min-w-[100px] ml-2 flex justify-center">

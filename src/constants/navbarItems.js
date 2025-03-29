@@ -48,4 +48,11 @@ export const NAVBAR_ITEMS = [
             { label: "Phương thức vận chuyển", link: "/main/shipping-methods" },
         ],
     },
+    {
+        label: "Quản lý banner",
+        icon: IconNotes,
+        links: [
+            { label: "Danh sách tất cả banner", link: "/main/banners" }
+        ],
+    }
 ];

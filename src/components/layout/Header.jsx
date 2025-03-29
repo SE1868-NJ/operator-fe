@@ -31,7 +31,7 @@ const Header = () => {
     });
 
     return (
-        <div className="flex justify-between items-center h-full px-4">
+        <div className="flex items-center justify-between h-full px-4">
             <p className="text-2xl font-bold text-primary">eCMarket</p>
 
             {/* Notification Popup */}
@@ -39,7 +39,7 @@ const Header = () => {
                 <ActionIcon
                     size="lg"
                     radius="xl"
-                    className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                    className="transition-colors bg-gray-100 hover:bg-gray-200"
                     onClick={openModal}
                 >
                     <IconMail className="text-gray-700" size={20} />

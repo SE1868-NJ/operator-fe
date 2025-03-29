@@ -6,7 +6,7 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/nprogress/styles.css";
-import { ModalsProvider } from '@mantine/modals';
+
 import { MantineProvider, createTheme } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
@@ -28,7 +28,6 @@ import OrderDetail from "./pages/OrderDetail.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 import PendingShopDetail from "./pages/PendingShopDetailPage.jsx";
 import PendingShopListPage from "./pages/PendingShopListPage.jsx";
-import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import ReportCategoriesPage from "./pages/ReportCategories.jsx";
 import ReportDetailPage from "./pages/ReportDetailPage.jsx";
 import ReportsPage from "./pages/ReportsPage.jsx";
@@ -40,38 +39,12 @@ import ShippingMethodDetail from "./pages/ShippingMethodDetail.jsx";
 import ShippingMethods from "./pages/ShippingMethods.jsx";
 import ShopProfileDetail from "./pages/ShopProfileDetail.jsx";
 import ShopsPage from "./pages/ShopsPage.jsx";
-
-import OrderDetailPage from "./pages/OrderDetailPage.jsx";
-import ShopDetailStatistic from "./pages/ShopDetailStatistic.jsx";
-import ShopRevenueDetail from "./pages/ShopRevenueDetail.jsx";
-import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
-import { Button } from "@mantine/core";
+import BannerList from "./pages/BannerList.jsx";
+import BannerDetail from "./pages/BannerDetail.jsx";
 const theme = createTheme({
-    colors: {
-        // cGreen = custom green
-        cGreen: [
-            "#e8f5e9",
-            "#c8e6c9",
-            "#a5d6a7",
-            "#81c784",
-            "#4caf50",
-            "#1DB954",
-            "#18a74d",
-            "#12813a",
-            "#0c5b27",
-            "#063214",
-        ],
-    },
-    primaryColor: "cGreen",
-    components: {
-        Button: Button.extend({
-            defaultProps: {
-                radius: "xl",
-            },
-        }),
-    },
+    /** Put your mantine theme override here */
 });
 
 const router = createBrowserRouter([
@@ -105,18 +78,6 @@ const router = createBrowserRouter([
                 element: <ShopsPage />,
             },
             {
-                path: "/main/shops-revenue",
-                element: <ShopsRevenuePage />,
-            },
-            {
-                path: "/main/shops-revenue/:id",
-                element: <ShopRevenueDetail />,
-            },
-            {
-                path: "/main/shops-revenue/:id/:id",
-                element: <OrderDetailPage />,
-            },
-            {
                 path: "/main/shipperslist",
                 element: <ShipperList />,
             },
@@ -127,14 +88,6 @@ const router = createBrowserRouter([
             {
                 path: "/main/shop/:id",
                 element: <ShopProfileDetail />,
-            },
-            {
-                path: "/main/shop/:id/statistic",
-                element: <ShopDetailStatistic />,
-            },
-            {
-                path: "/main/shop/:id/product/:pid",
-                element: <ProductDetailPage />,
             },
             {
                 path: "/main/users",
@@ -208,6 +161,14 @@ const router = createBrowserRouter([
                 path: "*",
                 element: <ErrorPage />,
             },
+            {
+                path: "/main/banners",
+                element: <BannerList />,
+            },
+            {
+                path: "/main/banners/:id",
+                element: <BannerDetail />,
+            }
         ],
     },
 ]);
@@ -226,22 +187,19 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
             {/* provider cua thu vien ui */}
             <MantineProvider theme={theme} defaultColorScheme="light">
-                <ModalsProvider>
-
-                    <NavigationProgress />
-                    {/* toast thong bao */}
-                    <Notifications />
-                    {/* routes */}
-                    <DatesProvider
-                        settings={{
-                            locale: "vn",
-                            firstDayOfWeek: 1,
-                            timezone: "Asia/Ho_Chi_Minh",
-                        }}
-                    >
-                        <RouterProvider router={router} />
-                    </DatesProvider>
-                </ModalsProvider>
+                <NavigationProgress />
+                {/* toast thong bao */}
+                <Notifications />
+                {/* routes */}
+                <DatesProvider
+                    settings={{
+                        locale: "vn",
+                        firstDayOfWeek: 1,
+                        timezone: "Asia/Ho_Chi_Minh",
+                    }}
+                >
+                    <RouterProvider router={router} />
+                </DatesProvider>
             </MantineProvider>
         </QueryClientProvider>
     </StrictMode>,

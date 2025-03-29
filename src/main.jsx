@@ -48,6 +48,8 @@ import ShopsRevenuePage from "./pages/ShopsRevenuePage.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
 import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 import { Button } from "@mantine/core";
+import BannerList from "./pages/BannerList.jsx";
+import BannerDetail from "./pages/BannerDetail.jsx";
 const theme = createTheme({
     colors: {
         // cGreen = custom green
@@ -208,6 +210,14 @@ const router = createBrowserRouter([
                 path: "*",
                 element: <ErrorPage />,
             },
+            {
+                path: "/main/banners",
+                element: <BannerList />,
+            },
+            {
+                path: "/main/banners/:id",
+                element: <BannerDetail />,
+            }
         ],
     },
 ]);

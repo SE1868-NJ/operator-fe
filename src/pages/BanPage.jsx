@@ -105,7 +105,7 @@ const BanAccountForm = () => {
             banEndDate = new Date(`${customBanDate}T${customBanTime}:00`);
         } else {
             const today = new Date();
-            today.setDate(today.getDate() + Number.parseInt(banDuration));
+            today.setDate(today.getDate() + Number.parseInt(banStartDuration) + Number.parseInt(banDuration));
             banEndDate = today;
         }
 
@@ -138,7 +138,7 @@ const BanAccountForm = () => {
         };
 
         //Kiểm tra nếu banStart > banEnd
-        if (new Date(finalBanStart).getTime() > new Date(finalBanEnd).getTime) {
+        if (new Date(finalBanStart).getTime() > new Date(finalBanEnd).getTime()) {
             notifications.show({
                 title: "Lỗi!",
                 message: "Thời gian bắt đầu không thể lớn hơn thời gian kết thúc!",

@@ -32,12 +32,11 @@ export default function NewCustomerChartPage() {
     const fetchData = async () => {
       try {
         const data = await UserService.customerChart(timeGroup);
-        const formatData = Array.from({length: 7}, (_, index) => ({
-            date: data?.[index]?.date || "",
-            count: data?.[index]?.count || 0,
+        const formatData = Array.from({ length: 7 }, (_, index) => ({
+          date: data?.[index]?.date || "",
+          count: data?.[index]?.count || 0,
         }))
         setChartData(formatData);
-        console.log(formatData)
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu biểu đồ:", error);
       }
@@ -45,12 +44,12 @@ export default function NewCustomerChartPage() {
 
     fetchData();
   }, [timeGroup]);
-/*
-  const chartData = Array.from({ length: 4 }, (_, index) => ({
-    name: order?.[index]?.name || "",
-    orders: order?.[index]?.orders || 0,
-}));
-*/
+  /*
+    const chartData = Array.from({ length: 4 }, (_, index) => ({
+      name: order?.[index]?.name || "",
+      orders: order?.[index]?.orders || 0,
+  }));
+  */
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg">

@@ -12,7 +12,6 @@ export default function TopShippers() {
 
     const fetchTopShippers = async () => {
         let response = await ShipperServices.top5ShipperInMonth();
-        console.log(response)
         setShipper(response);
     }
 

@@ -44,7 +44,7 @@ const ForgotPassPage = () => {
         <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 bg-white p-8 shadow-lg rounded-lg">
                 <h2 className="text-center text-2xl font-bold tracking-wide text-gray-800">
-                    Forgot Password
+                    Quên mật khẩu
                 </h2>
                 <p className="text-center text-sm text-gray-600 mt-2">
                     Cung cấp địa chỉ email được liên kết với tài khoản của bạn để khôi phục mật

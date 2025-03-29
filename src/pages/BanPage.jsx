@@ -44,19 +44,26 @@ const BanAccountForm = () => {
             "Không hỗ trợ khách hàng",
             "Tăng giá không hợp lý",
         ],
+        product: [
+            "Hàng giả, hàng nhái",
+            "Hết hạn sử dụng",
+            "Không đúng mô tả",
+            "Lỗi kỹ thuật hoặc hư hỏng",
+            "Giá không hợp lý",
+            "Không đạt tiêu chuẩn chất lượng",
+        ]
     };
 
-    // console.log(operatorId); // 4
+
     const [formData, setFormData] = useState({
         userId,
         operatorId,
         userType,
-        reason: "Bùng hàng nhiều lần",
+        reason: reasonOptions[userType]?.[0] || "",
         banStart: "",
         banEnd: "",
     });
 
-    console.log(formData);
     const [customReason, setCustomReason] = useState("");
 
     const [banStartDuration, setBanStartDuration] = useState("0"); //Default hiện tại
@@ -98,7 +105,7 @@ const BanAccountForm = () => {
             banEndDate = new Date(`${customBanDate}T${customBanTime}:00`);
         } else {
             const today = new Date();
-            today.setDate(today.getDate() + Number.parseInt(banDuration));
+            today.setDate(today.getDate() + Number.parseInt(banStartDuration) + Number.parseInt(banDuration));
             banEndDate = today;
         }
 
@@ -131,7 +138,7 @@ const BanAccountForm = () => {
         };
 
         //Kiểm tra nếu banStart > banEnd
-        if (new Date(finalBanStart).getTime() > new Date(finalBanEnd).getTime) {
+        if (new Date(finalBanStart).getTime() > new Date(finalBanEnd).getTime()) {
             notifications.show({
                 title: "Lỗi!",
                 message: "Thời gian bắt đầu không thể lớn hơn thời gian kết thúc!",
@@ -168,6 +175,9 @@ const BanAccountForm = () => {
                 } else if (userType === "customer") {
                     queryClient.invalidateQueries(["user", userId]);
                     Navigate(`/main/user_detail/${userId}`);
+                } else if (userType === "product") {
+                    queryClient.invalidateQueries(["product", userId]);
+                    Navigate(`/main/shops`);
                 }
             } else {
                 notifications.show({

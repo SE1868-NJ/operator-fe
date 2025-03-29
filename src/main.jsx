@@ -50,6 +50,7 @@ import UserDetailPage from "./pages/ui-customer-detail/UserDetailPage.jsx";
 import { Button } from "@mantine/core";
 import BannerList from "./pages/BannerList.jsx";
 import BannerDetail from "./pages/BannerDetail.jsx";
+
 const theme = createTheme({
     colors: {
         // cGreen = custom green

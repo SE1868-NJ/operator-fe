@@ -59,7 +59,7 @@ const BanAccountForm = () => {
         userId,
         operatorId,
         userType,
-        reason: reasonOptions[userType]?.[0] || "",
+        reason: "Bùng hàng nhiều lần",
         banStart: "",
         banEnd: "",
     });
@@ -159,11 +159,14 @@ const BanAccountForm = () => {
             });
             return; // Dừng lại không tiếp tục gửi form
         }
-
+        console.log(new Date(finalBanStart).getTime())
+        console.log(new Date(finalBanEnd).getTime())
         try {
             // Gọi service để thực hiện hành động ban tài khoản
 
+            console.log(operatorId)
             const response = await BanService.banUser(payload);
+            
             if (response?.success) {
 
                 if (userType === "shipper") {

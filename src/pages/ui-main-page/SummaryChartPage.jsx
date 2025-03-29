@@ -21,10 +21,11 @@ export default function SummaryChart() {
         const fetchData = async () => {
             try {
                 const dataFetch = await OrderServices.getTotalSummaryChart(timeGroup);
+                console.log(dataFetch)
 
                 // Format lại dữ liệu để đảm bảo chuẩn xác
                 const formattedData = dataFetch.map(item => ({
-                    date: item.date, 
+                    date: item.date,
                     order: item.order,
                     income: Number(item.income) // Chuyển về số để đảm bảo tính toán đúng
                 }));
@@ -58,22 +59,20 @@ export default function SummaryChart() {
                     <button
                         type="button"
                         onClick={() => setChartType("line")}
-                        className={`px-4 py-2 rounded-md font-medium ml-2 ${
-                            chartType === "line"
+                        className={`px-4 py-2 rounded-md font-medium ml-2 ${chartType === "line"
                                 ? "bg-blue-500 text-white"
                                 : "bg-gray-200 text-gray-700"
-                        }`}
+                            }`}
                     >
                         Biểu đồ đường
                     </button>
                     <button
                         type="button"
                         onClick={() => setChartType("bar")}
-                        className={`px-4 py-2 rounded-md font-medium ml-2 ${
-                            chartType === "bar"
+                        className={`px-4 py-2 rounded-md font-medium ml-2 ${chartType === "bar"
                                 ? "bg-blue-500 text-white"
                                 : "bg-gray-200 text-gray-700"
-                        }`}
+                            }`}
                     >
                         Biểu đồ cột
                     </button>

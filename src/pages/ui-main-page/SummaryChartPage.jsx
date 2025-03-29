@@ -60,8 +60,8 @@ export default function SummaryChart() {
                         type="button"
                         onClick={() => setChartType("line")}
                         className={`px-4 py-2 rounded-md font-medium ml-2 ${chartType === "line"
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200 text-gray-700"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
                             }`}
                     >
                         Biểu đồ đường
@@ -70,8 +70,8 @@ export default function SummaryChart() {
                         type="button"
                         onClick={() => setChartType("bar")}
                         className={`px-4 py-2 rounded-md font-medium ml-2 ${chartType === "bar"
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200 text-gray-700"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
                             }`}
                     >
                         Biểu đồ cột

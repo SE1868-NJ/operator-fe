@@ -90,6 +90,8 @@ const ShipperViewPage = () => {
   const queryClient = useQueryClient();
   const [opened, { open, close }] = useDisclosure(false);
   const [onOpened, { open: onOpen, close: onClose }] = useDisclosure(false);
+  const [openedZoom, { open: openZoom, close: closeZoom }] =
+    useDisclosure(false);
   const [newStatus, setNewStatus] = useState("n");
   const [reason, setReason] = useState("");
   const [openInput, setOpenInput] = useState(false);
@@ -98,6 +100,7 @@ const ShipperViewPage = () => {
   const { data: responseData } = usePendingShipper(id);
   const shipper = responseData?.data || {};
   const [AILoading, setAILoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   if (isLoadData) {
     return <div>Đang tải dữ liệu...</div>;
@@ -311,7 +314,7 @@ const ShipperViewPage = () => {
       case 1:
         return `Ngày sinh: ${shipper.dateOfBirth}`;
       case 2:
-        return `Quê quán: ${shipper.address}`;
+        return `Quê quán: ${shipper.hometown}`;
       case 3:
         return `Địa chỉ: ${shipper.address}`;
       case 4:
@@ -319,7 +322,10 @@ const ShipperViewPage = () => {
       case 5:
         return `Số·điện thoại: ${shipper.phone}`;
       case 6:
-        return `Số tài khoản ngân hàng: ${shipper.bankAccount}` || "Chưa có";
+        return (
+          `Số tài khoản ngân hàng: ${shipper?.bankAccount} - ${shipper?.bankName}` ||
+          "Chưa có"
+        );
       case 7:
         return `Phạm vi hoạt động: ${shipper.activityArea}`;
       case 8:
@@ -333,17 +339,66 @@ const ShipperViewPage = () => {
       case 11:
         return `Biển số xe: ${shipper.vehicleNumber}` || "Chưa có";
       case 12:
-        return <img src={shipper.cccdImage} alt="Ảnh CCCD/CMND" />;
+        return (
+          <>
+            <p>Ảnh bằng lái xe:</p>
+            <img
+              onClick={() => zoomImage(shipper?.cccdFront)}
+              className="w-32 object-cover"
+              src={
+                shipper?.cccdFront ||
+                "https://cdn.thuvienphapluat.vn/tintuc/uploads/image/2021/01/27/can-cuoc-cong-dan-gan-chip-2(1).jpg"
+              }
+              alt="Ảnh CCCD/CMND front"
+            />
+            <img
+              className="w-32 object-cover"
+              onClick={() => zoomImage(shipper?.cccdFront)}
+              src={
+                shipper?.cccdBack ||
+                "https://baohagiang.vn/file/4028eaa4679b32c401679c0c74382a7e/4028eaa57d592b24017d5a5e979736bf/082022/105d2164453t74103l0_20220810143202.jpg"
+              }
+              alt="Ảnh CCCD/CMND back"
+            />
+          </>
+        );
       case 13:
-        return <img src={shipper.criminalRecord} alt="Ảnh lý lịch tư pháp" />;
+        return (
+          <img
+            onClick={() => zoomImage(shipper?.criminalRecord)}
+            className="w-32 object-cover"
+            src={
+              shipper?.criminalRecord ||
+              "https://www.tuvanvisa.com/wp-content/uploads/2020/06/Ly-lich-tu-phap-viet-nam.jpg"
+            }
+            alt="Ảnh lý lịch tư pháp"
+          />
+        );
       case 14:
-        return shipper.driverLicense ? (
-          <img src={shipper.driverLicense} alt="Ảnh bằng lái xe" />
-        ) : (
-          <span>Ảnh bằng lái xe</span>
+        return (
+          <>
+            <img
+              onClick={() => zoomImage(shipper?.driverLicenseFront)}
+              className="w-32 object-cover"
+              src={
+                shipper?.driverLicenseFront ||
+                "https://bizweb.dktcdn.net/100/242/347/files/anh-the-bang-lai-xe-6.jpg?v=1685530823732"
+              }
+              alt="Ảnh bằng lái xe"
+            />
+            <img
+              onClick={() => zoomImage(shipper?.driverLicenseBack)}
+              className="w-32 object-cover"
+              src={
+                shipper?.driverLicenseBack ||
+                "https://cdn.thuvienphapluat.vn//uploads/tintuc/2022/08/22/mat-sau-bang-lai-xe.jpg"
+              }
+              alt="Ảnh bằng lái xe"
+            />
+          </>
         );
       case 15:
-        return `Ngày nộp đơn: ${shipper.submissionDate}` || "Chưa có";
+        return `Ngày nộp đơn: ${shipper?.createdAt}` || "Chưa có";
       case 16:
         return `Trạng thái trước đây: ${shipper.previousStatus}` || "Chưa có";
       case 17:
@@ -374,6 +429,11 @@ const ShipperViewPage = () => {
     return changedValue.some((item) => item.status === status);
   };
 
+  const zoomImage = (src) => {
+    setSelectedImage(src);
+    openZoom();
+  };
+
   return (
     <div className="flex items-center justify-center pt-10">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
@@ -381,6 +441,12 @@ const ShipperViewPage = () => {
         <div className="bg-white p-5 rounded-lg shadow-md">
           <div className="text-center mt-4 container">
             <img
+              onClick={() =>
+                zoomImage(
+                  shipper?.avatar ||
+                    "https://xabuon.com/uploads1/news/31-10-18/xabuon-girl-xinh-haivl-xemvn-sex-31-10-20181540959376626.jpg"
+                )
+              }
               src={
                 shipper.avatar ||
                 "https://xabuon.com/uploads1/news/31-10-18/xabuon-girl-xinh-haivl-xemvn-sex-31-10-20181540959376626.jpg"
@@ -506,7 +572,7 @@ const ShipperViewPage = () => {
                 </Popover>{" "}
                 Quê quán:
               </strong>{" "}
-              <span>{shipper.address}</span>
+              <span>{shipper?.hometown}</span>
             </div>
             <div>
               <strong className={getColor(changedValue[3].status)}>
@@ -876,13 +942,31 @@ const ShipperViewPage = () => {
               </strong>{" "}
               <span className="flex justify-around pt-2">
                 <img
+                  onClick={() =>
+                    zoomImage(
+                      shipper?.cccdFront ||
+                        "https://cdn.thuvienphapluat.vn/tintuc/uploads/image/2021/01/27/can-cuoc-cong-dan-gan-chip-2(1).jpg"
+                    )
+                  }
                   className="max-w-60"
-                  src="https://cdn.thuvienphapluat.vn/tintuc/uploads/image/2021/01/27/can-cuoc-cong-dan-gan-chip-2(1).jpg"
+                  src={
+                    shipper?.cccdFront ||
+                    "https://cdn.thuvienphapluat.vn/tintuc/uploads/image/2021/01/27/can-cuoc-cong-dan-gan-chip-2(1).jpg"
+                  }
                   alt="Ảnh cccd mặt trước"
                 />
                 <img
+                  onClick={() =>
+                    zoomImage(
+                      shipper?.cccdBack ||
+                        "https://baohagiang.vn/file/4028eaa4679b32c401679c0c74382a7e/4028eaa57d592b24017d5a5e979736bf/082022/105d2164453t74103l0_20220810143202.jpg"
+                    )
+                  }
                   className="max-w-60"
-                  src="https://baohagiang.vn/file/4028eaa4679b32c401679c0c74382a7e/4028eaa57d592b24017d5a5e979736bf/082022/105d2164453t74103l0_20220810143202.jpg"
+                  src={
+                    shipper?.cccdBack ||
+                    "https://baohagiang.vn/file/4028eaa4679b32c401679c0c74382a7e/4028eaa57d592b24017d5a5e979736bf/082022/105d2164453t74103l0_20220810143202.jpg"
+                  }
                   alt="Ảnh cccd mặt sau"
                 />
               </span>
@@ -922,7 +1006,16 @@ const ShipperViewPage = () => {
               </strong>{" "}
               <span>
                 <img
-                  src="https://www.tuvanvisa.com/wp-content/uploads/2020/06/Ly-lich-tu-phap-viet-nam.jpg"
+                  onClick={() =>
+                    zoomImage(
+                      shipper?.criminalRecord ||
+                        "https://www.tuvanvisa.com/wp-content/uploads/2020/06/Ly-lich-tu-phap-viet-nam.jpg"
+                    )
+                  }
+                  src={
+                    shipper?.criminalRecord ||
+                    "https://www.tuvanvisa.com/wp-content/uploads/2020/06/Ly-lich-tu-phap-viet-nam.jpg"
+                  }
                   alt="Ảnh lý lịch tư pháp"
                   className="max-h-80"
                 />
@@ -963,13 +1056,31 @@ const ShipperViewPage = () => {
               </strong>{" "}
               <span className="flex justify-around pt-2">
                 <img
+                  onClick={() =>
+                    zoomImage(
+                      shipper?.driverLicenseFront ||
+                        "https://bizweb.dktcdn.net/100/242/347/files/anh-the-bang-lai-xe-6.jpg?v=1685530823732"
+                    )
+                  }
                   className="max-w-60"
-                  src="https://bizweb.dktcdn.net/100/242/347/files/anh-the-bang-lai-xe-6.jpg?v=1685530823732"
+                  src={
+                    shipper?.driverLicenseFront ||
+                    "https://bizweb.dktcdn.net/100/242/347/files/anh-the-bang-lai-xe-6.jpg?v=1685530823732"
+                  }
                   alt="Ảnh bằng lái xe mặt trước"
                 />
                 <img
+                  onClick={() =>
+                    zoomImage(
+                      shipper?.driverLicenseBack ||
+                        "https://cdn.thuvienphapluat.vn//uploads/tintuc/2022/08/22/mat-sau-bang-lai-xe.jpg"
+                    )
+                  }
                   className="max-w-60"
-                  src="https://cdn.thuvienphapluat.vn//uploads/tintuc/2022/08/22/mat-sau-bang-lai-xe.jpg"
+                  src={
+                    shipper?.driverLicenseBack ||
+                    "https://cdn.thuvienphapluat.vn//uploads/tintuc/2022/08/22/mat-sau-bang-lai-xe.jpg"
+                  }
                   alt="Ảnh bằng lái xe mặt sau"
                 />
               </span>
@@ -1011,7 +1122,7 @@ const ShipperViewPage = () => {
                 </Popover>{" "}
                 Ngày nộp đơn:
               </strong>{" "}
-              <span>{shipper.submissionDate || "Chưa có"}</span>
+              <span>{shipper?.createdAt || "Chưa có"}</span>
             </div>
             <div>
               <strong className={getColor(changedValue[16].status)}>
@@ -1361,6 +1472,18 @@ const ShipperViewPage = () => {
                 >
                   Gửi
                 </Button>
+              </div>
+            </Modal>
+            <Modal
+              opened={openedZoom}
+              size="xl"
+              padding="xl"
+              onClose={closeZoom}
+              withCloseButton={false}
+              centered
+            >
+              <div className="w-full h-full flex justify-center items-center">
+                <img src={selectedImage} alt="Zoom image" />
               </div>
             </Modal>
             <Button
